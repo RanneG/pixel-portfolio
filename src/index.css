@@ -83,6 +83,43 @@ body {
     0 0 24px rgba(255, 0, 170, 0.4);
 }
 
+/* Mobile-optimized glow effects (reduced intensity) */
+@media (max-width: 768px) {
+  .neon-glow-mobile {
+    text-shadow:
+      0 0 2px var(--color-primary),
+      0 0 4px var(--color-primary),
+      0 0 8px var(--color-primary);
+  }
+
+  .neon-glow-secondary-mobile {
+    text-shadow:
+      0 0 2px var(--color-secondary),
+      0 0 4px var(--color-secondary),
+      0 0 8px var(--color-secondary);
+  }
+
+  .box-glow-mobile {
+    box-shadow:
+      0 0 6px rgba(0, 255, 255, 0.3),
+      0 0 12px rgba(0, 255, 255, 0.2);
+  }
+}
+
+/* Touch-friendly hover alternatives for mobile */
+@media (hover: none) and (pointer: coarse) {
+  .retro-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 var(--color-muted);
+  }
+
+  /* Remove hover effects on touch devices */
+  a:hover,
+  button:hover {
+    /* Keep active states for touch feedback */
+  }
+}
+
 .retro-btn {
   position: relative;
   border-radius: 0;
@@ -384,6 +421,55 @@ body {
     animation: none;
   }
   
+  .float {
+    animation: none;
+  }
+
+  .typewriter {
+    animation: none;
+    border-right: none;
+    width: 100%;
+  }
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+  /* Reduce animation complexity on mobile */
+  .float {
+    animation-duration: 8s;
+  }
+
+  .crt-flicker {
+    animation-duration: 4s;
+  }
+
+  /* Optimize images for mobile */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  /* Reduce backdrop blur on mobile for performance */
+  .backdrop-blur {
+    backdrop-filter: blur(4px);
+  }
+}
+
+/* Small mobile devices (320px - 425px) */
+@media (max-width: 425px) {
+  /* Further reduce glow effects on very small screens */
+  .neon-glow-mobile {
+    text-shadow:
+      0 0 2px var(--color-primary),
+      0 0 4px var(--color-primary);
+  }
+
+  .box-glow-mobile {
+    box-shadow:
+      0 0 4px rgba(0, 255, 255, 0.2);
+  }
+
+  /* Simplify animations on small screens */
   .float {
     animation: none;
   }

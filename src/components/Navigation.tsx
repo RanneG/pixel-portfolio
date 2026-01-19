@@ -56,12 +56,12 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
         
         {/* Mobile menu button */}
         <button
-          className="md:hidden pixel-border bg-card p-2 text-primary hover:bg-card/80"
+          className="md:hidden pixel-border bg-card p-3 text-primary hover:bg-card/80 active:scale-95 transition-transform min-w-[48px] min-h-[48px] flex items-center justify-center"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle mobile menu"
           aria-expanded={isMobileMenuOpen}
         >
-          <span className="font-pixel text-xs">{isMobileMenuOpen ? "✕" : "☰"}</span>
+          <span className="font-pixel text-sm">{isMobileMenuOpen ? "✕" : "☰"}</span>
         </button>
 
         {/* Desktop menu */}
@@ -89,33 +89,35 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
         </ul>
 
         {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <div className="absolute top-full left-0 right-0 bg-bg border-b border-muted md:hidden">
-            <ul className="flex flex-col p-4 gap-2 text-xs font-pixel">
-              {items.map((item) => {
-                const sectionId = item.href.substring(1);
-                const isActive = activeSection === sectionId;
-                return (
-                  <li key={item.href}>
-                    <a
-                      href={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`block px-4 py-3 pixel-border bg-card min-h-[44px] flex items-center gap-2 ${
-                        isActive ? "text-primary" : "text-foreground"
-                      }`}
-                      aria-current={isActive ? "page" : undefined}
-                    >
-                      <span className={isActive ? "text-primary" : "text-muted"}>
-                        &gt;
-                      </span>
-                      <span>{item.label}</span>
-                    </a>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        )}
+        <div
+          className={`absolute top-full left-0 right-0 bg-bg border-b border-muted md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+            isMobileMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+          }`}
+        >
+          <ul className="flex flex-col p-4 gap-3 text-sm font-pixel">
+            {items.map((item) => {
+              const sectionId = item.href.substring(1);
+              const isActive = activeSection === sectionId;
+              return (
+                <li key={item.href}>
+                  <a
+                    href={item.href}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block px-4 py-4 pixel-border bg-card min-h-[48px] flex items-center gap-3 active:scale-[0.98] transition-transform ${
+                      isActive ? "text-primary" : "text-foreground"
+                    }`}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    <span className={isActive ? "text-primary text-base" : "text-muted"}>
+                      &gt;
+                    </span>
+                    <span>{item.label}</span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </nav>
     </header>
   );

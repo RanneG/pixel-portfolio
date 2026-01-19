@@ -29,30 +29,19 @@ const Hero: React.FC<HeroProps> = ({
         <div className="h-full w-full bg-[linear-gradient(90deg,_rgba(255,255,255,0.05)_1px,_transparent_1px),linear-gradient(180deg,_rgba(255,255,255,0.05)_1px,_transparent_1px)] bg-[size:32px_32px]" />
       </div>
 
-      {/* HP/MP bars - Mobile friendly redesign */}
-      <div className="absolute left-3 top-20 w-24 md:w-32">
-        <div className="hp-bar h-3 md:h-4">
-          <div className="hp-bar-inner" style={{ width: "78%" }} aria-label="Health Points: 78%" />
+      {/* HP/MP bars - Stack vertically on mobile */}
+      <div className="absolute left-3 top-20 flex flex-col gap-3 md:flex-row md:gap-0 md:right-auto md:bottom-auto">
+        <div className="w-24 md:w-32">
+          <div className="hp-bar h-3 md:h-4">
+            <div className="hp-bar-inner" style={{ width: "78%" }} aria-label="Health Points: 78%" />
+          </div>
+          <p className="mt-1 text-[9px] md:text-[10px] font-pixel text-pixelOrange">HP 078/100</p>
         </div>
-        <p className="mt-1 text-[9px] md:text-[10px] font-pixel text-pixelOrange">HP 078/100</p>
-      </div>
-
-      <div className="absolute right-3 bottom-6 w-24 md:w-32">
-        <div className="mp-bar h-3 md:h-4">
-          <div className="mp-bar-inner" style={{ width: "62%" }} aria-label="Magic Points: 62%" />
-        </div>
-        <p className="mt-1 text-[9px] md:text-[10px] font-pixel text-pixelBlue">MP 062/100</p>
-      </div>
-
-      {/* Mobile stats alternative */}
-      <div className="absolute top-24 right-3 flex flex-col gap-2 md:hidden">
-        <div className="pixel-border bg-card/90 p-2 text-center">
-          <p className="text-[8px] font-pixel text-muted">PROJECTS</p>
-          <p className="text-xs font-pixel text-primary">{stats.projects}+</p>
-        </div>
-        <div className="pixel-border bg-card/90 p-2 text-center">
-          <p className="text-[8px] font-pixel text-muted">LEVEL</p>
-          <p className="text-xs font-pixel text-secondary">{stats.level}</p>
+        <div className="w-24 md:w-32 md:absolute md:right-3 md:bottom-6 md:top-auto md:left-auto">
+          <div className="mp-bar h-3 md:h-4">
+            <div className="mp-bar-inner" style={{ width: "62%" }} aria-label="Magic Points: 62%" />
+          </div>
+          <p className="mt-1 text-[9px] md:text-[10px] font-pixel text-pixelBlue">MP 062/100</p>
         </div>
       </div>
 
@@ -70,10 +59,10 @@ const Hero: React.FC<HeroProps> = ({
         </div>
 
         <div className="space-y-3 md:space-y-4">
-          <p className="text-[10px] md:text-xs lg:text-sm font-pixel tracking-[0.25em] text-secondary neon-glow-secondary">
+          <p className="text-[10px] md:text-xs lg:text-sm font-pixel tracking-[0.25em] text-secondary neon-glow-secondary-mobile">
             HELLO, I&apos;M
           </p>
-          <h1 className="font-pixel text-lg md:text-xl lg:text-3xl xl:text-4xl leading-tight text-primary neon-glow">
+          <h1 className="font-pixel text-lg md:text-xl lg:text-3xl xl:text-4xl leading-tight text-primary neon-glow-mobile">
             {name}
           </h1>
           <p className="mx-auto max-w-xl text-xs md:text-sm lg:text-base text-foreground/80">
@@ -83,22 +72,22 @@ const Hero: React.FC<HeroProps> = ({
           </p>
         </div>
 
-        <div className="grid gap-3 md:gap-4 text-left text-[10px] md:text-[11px] lg:text-xs md:grid-cols-3">
-          <div className="pixel-border box-glow bg-card/90 p-3">
+        <div className="grid gap-3 md:gap-4 text-left text-[10px] md:text-[11px] lg:text-xs grid-cols-1 md:grid-cols-3">
+          <div className="pixel-border box-glow-mobile bg-card/90 p-3">
             <p className="font-pixel text-[9px] md:text-[10px] text-muted">PROJECTS</p>
             <p className="mt-2 font-pixel text-base md:text-lg text-primary">{stats.projects}+</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-foreground/70">
               Web apps, experimental UIs, and creative tools.
             </p>
           </div>
-          <div className="pixel-border box-glow bg-card/90 p-3">
+          <div className="pixel-border box-glow-mobile bg-card/90 p-3">
             <p className="font-pixel text-[9px] md:text-[10px] text-muted">LEVEL</p>
             <p className="mt-2 font-pixel text-base md:text-lg text-secondary">{stats.level}</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-foreground/70">
               Focused on crafting delightful experiences.
             </p>
           </div>
-          <div className="pixel-border box-glow bg-card/90 p-3">
+          <div className="pixel-border box-glow-mobile bg-card/90 p-3">
             <p className="font-pixel text-[9px] md:text-[10px] text-muted">CREATIVITY</p>
             <p className="mt-2 font-pixel text-base md:text-lg text-accent">{stats.creativity}</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-foreground/70">

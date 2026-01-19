@@ -143,13 +143,13 @@ const SavePoint: React.FC<SavePointProps> = ({
                   onChange={handleChange}
                   className={`w-full border ${
                     errors.name ? "border-secondary" : "border-muted"
-                  } bg-bg px-2 py-2 md:py-1 text-xs outline-none focus:border-primary min-h-[44px]`}
+                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary min-h-[48px] md:min-h-[44px]`}
                   placeholder="ENTER NAME..."
                   aria-invalid={errors.name ? "true" : "false"}
                   aria-describedby={errors.name ? "name-error" : undefined}
                 />
                 {errors.name && (
-                  <p id="name-error" className="text-[9px] text-secondary font-pixel" role="alert">
+                  <p id="name-error" className="text-xs md:text-[9px] text-secondary font-pixel mt-1" role="alert">
                     {errors.name}
                   </p>
                 )}
@@ -166,13 +166,13 @@ const SavePoint: React.FC<SavePointProps> = ({
                   onChange={handleChange}
                   className={`w-full border ${
                     errors.email ? "border-secondary" : "border-muted"
-                  } bg-bg px-2 py-2 md:py-1 text-xs outline-none focus:border-primary min-h-[44px]`}
+                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary min-h-[48px] md:min-h-[44px]`}
                   placeholder="ENTER EMAIL..."
                   aria-invalid={errors.email ? "true" : "false"}
                   aria-describedby={errors.email ? "email-error" : undefined}
                 />
                 {errors.email && (
-                  <p id="email-error" className="text-[9px] text-secondary font-pixel" role="alert">
+                  <p id="email-error" className="text-xs md:text-[9px] text-secondary font-pixel mt-1" role="alert">
                     {errors.email}
                   </p>
                 )}
@@ -189,13 +189,13 @@ const SavePoint: React.FC<SavePointProps> = ({
                   onChange={handleChange}
                   className={`w-full border ${
                     errors.message ? "border-secondary" : "border-muted"
-                  } bg-bg px-2 py-2 md:py-1 text-xs outline-none focus:border-primary resize-y min-h-[120px]`}
+                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary resize-y min-h-[120px]`}
                   placeholder="DESCRIBE YOUR QUEST..."
                   aria-invalid={errors.message ? "true" : "false"}
                   aria-describedby={errors.message ? "message-error" : undefined}
                 />
                 {errors.message && (
-                  <p id="message-error" className="text-[9px] text-secondary font-pixel" role="alert">
+                  <p id="message-error" className="text-xs md:text-[9px] text-secondary font-pixel mt-1" role="alert">
                     {errors.message}
                   </p>
                 )}
@@ -203,7 +203,7 @@ const SavePoint: React.FC<SavePointProps> = ({
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="retro-btn retro-btn-primary mt-2 px-4 py-2.5 md:py-2 font-pixel text-[9px] md:text-[10px] uppercase tracking-widest min-h-[44px] w-full disabled:opacity-50 disabled:cursor-not-allowed"
+                className="retro-btn retro-btn-primary mt-2 px-4 py-3 md:py-2 font-pixel text-sm md:text-[10px] uppercase tracking-widest min-h-[48px] md:min-h-[44px] w-full disabled:opacity-50 disabled:cursor-not-allowed"
                 aria-label="Submit contact form"
               >
                 {status === "loading" ? "SAVING..." : "SAVE GAME"}
