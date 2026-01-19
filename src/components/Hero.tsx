@@ -1,4 +1,5 @@
 import React from "react";
+import { soundManager } from "../utils/soundManager";
 
 interface HeroProps {
   name?: string;
@@ -8,6 +9,8 @@ interface HeroProps {
     level: string;
     creativity: string;
   };
+  onPressStart?: () => void;
+  isGameActive?: boolean;
 }
 
 const Hero: React.FC<HeroProps> = ({
@@ -17,7 +20,9 @@ const Hero: React.FC<HeroProps> = ({
     projects: 24,
     level: "DEV 07",
     creativity: "MAX"
-  }
+  },
+  onPressStart,
+  isGameActive = false
 }) => {
   return (
     <section
@@ -38,10 +43,21 @@ const Hero: React.FC<HeroProps> = ({
       </div>
 
       <div className="relative z-10 mx-auto flex max-w-4xl flex-col gap-6 md:gap-8 px-4 pt-20 pb-16 text-center md:px-6 md:pt-28 md:pb-24">
-        <div className="inline-flex items-center justify-center gap-2 self-center rounded-none bg-card/80 px-3 py-1 font-pixel text-[9px] md:text-[10px] uppercase tracking-widest pixel-border">
-          <span className="h-2 w-2 animate-pulse rounded-none bg-accent" aria-hidden="true" />
-          <span className="text-accent">PRESS START</span>
-        </div>
+        <button
+          onClick={() => {
+            soundManager.click();
+            if (onPressStart) {
+              onPressStart();
+            }
+          }}
+          className="inline-flex items-center justify-center gap-2 self-center rounded-none bg-card/80 px-3 py-1 font-pixel text-[9px] md:text-[10px] uppercase tracking-widest pixel-border cursor-pointer hover:bg-card transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 min-h-[44px]"
+          aria-label={isGameActive ? "Game is active" : "Press start to play Snake game"}
+        >
+          <span className={`h-2 w-2 rounded-none ${isGameActive ? "bg-secondary" : "bg-accent"} ${!isGameActive && "animate-pulse"}`} aria-hidden="true" />
+          <span className={isGameActive ? "text-secondary" : "text-accent"}>
+            {isGameActive ? "GAME ACTIVE" : "PRESS START"}
+          </span>
+        </button>
 
         <div className="space-y-3 md:space-y-4">
           <p className="text-[10px] md:text-xs lg:text-sm font-pixel tracking-[0.25em] text-secondary neon-glow-secondary-mobile">
@@ -58,21 +74,33 @@ const Hero: React.FC<HeroProps> = ({
         </div>
 
         <div className="grid gap-3 md:gap-4 text-left text-[10px] md:text-[11px] lg:text-xs grid-cols-1 md:grid-cols-3">
-          <div className="pixel-border box-glow-mobile bg-card/90 p-3">
+          <div 
+            className="pixel-border box-glow-mobile bg-card/90 p-3 snake-food"
+            data-snake-food="true"
+            data-food-id="projects-card"
+          >
             <p className="font-pixel text-[9px] md:text-[10px] text-muted">PROJECTS</p>
             <p className="mt-2 font-pixel text-base md:text-lg text-primary">{stats.projects}+</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-foreground/70">
               Web apps, experimental UIs, and creative tools.
             </p>
           </div>
-          <div className="pixel-border box-glow-mobile bg-card/90 p-3">
+          <div 
+            className="pixel-border box-glow-mobile bg-card/90 p-3 snake-food"
+            data-snake-food="true"
+            data-food-id="level-card"
+          >
             <p className="font-pixel text-[9px] md:text-[10px] text-muted">LEVEL</p>
             <p className="mt-2 font-pixel text-base md:text-lg text-secondary">{stats.level}</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-foreground/70">
               Focused on crafting delightful experiences.
             </p>
           </div>
-          <div className="pixel-border box-glow-mobile bg-card/90 p-3">
+          <div 
+            className="pixel-border box-glow-mobile bg-card/90 p-3 snake-food"
+            data-snake-food="true"
+            data-food-id="creativity-card"
+          >
             <p className="font-pixel text-[9px] md:text-[10px] text-muted">CREATIVITY</p>
             <p className="mt-2 font-pixel text-base md:text-lg text-accent">{stats.creativity}</p>
             <p className="mt-1 text-[9px] md:text-[10px] text-foreground/70">
@@ -84,7 +112,9 @@ const Hero: React.FC<HeroProps> = ({
         <div className="flex flex-wrap justify-center gap-3 md:gap-4">
           <a
             href="#quests"
-            className="retro-btn retro-btn-primary px-4 py-2.5 md:py-2 font-pixel text-[10px] uppercase tracking-widest min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+            className="retro-btn retro-btn-primary px-4 py-2.5 md:py-2 font-pixel text-[10px] uppercase tracking-widest min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 snake-food"
+            data-snake-food="true"
+            data-food-id="quest-button"
             aria-label="View projects in quest log"
           >
             VIEW QUESTS

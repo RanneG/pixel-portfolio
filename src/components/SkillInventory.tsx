@@ -23,9 +23,22 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
   const progressColor =
     color === "secondary" ? "secondary" : color === "accent" ? "accent" : "primary";
 
+  const foodIdMap: Record<string, string> = {
+    "FRONTEND": "frontend-header",
+    "BACKEND": "backend-header",
+    "DESIGN": "design-header",
+    "OTHER": "other-header"
+  };
+
+  const foodId = foodIdMap[title.toUpperCase()] || title.toLowerCase() + "-header";
+
   return (
     <div className={`${borderClass} bg-card p-4 md:p-6 space-y-3`}>
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+      <div 
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 snake-food"
+        data-snake-food="true"
+        data-food-id={foodId}
+      >
         <p className="font-pixel text-[10px] md:text-xs text-foreground">{title}</p>
         <p className="text-[9px] md:text-[10px] font-pixel text-muted">
           MASTERY {mastery}% XP

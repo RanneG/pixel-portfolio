@@ -99,10 +99,34 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({
                 CORE ATTRIBUTES
               </p>
               <div className="space-y-3">
-                <StatBar label="STR" value={attributes.STR} color="accent" />
-                <StatBar label="DEX" value={attributes.DEX} color="secondary" />
-                <StatBar label="INT" value={attributes.INT} color="primary" />
-                <StatBar label="CHA" value={attributes.CHA} color="secondary" />
+                <div 
+                  className="snake-food"
+                  data-snake-food="true"
+                  data-food-id="str-bar"
+                >
+                  <StatBar label="STR" value={attributes.STR} color="accent" />
+                </div>
+                <div 
+                  className="snake-food"
+                  data-snake-food="true"
+                  data-food-id="dex-bar"
+                >
+                  <StatBar label="DEX" value={attributes.DEX} color="secondary" />
+                </div>
+                <div 
+                  className="snake-food"
+                  data-snake-food="true"
+                  data-food-id="int-bar"
+                >
+                  <StatBar label="INT" value={attributes.INT} color="primary" />
+                </div>
+                <div 
+                  className="snake-food"
+                  data-snake-food="true"
+                  data-food-id="cha-bar"
+                >
+                  <StatBar label="CHA" value={attributes.CHA} color="secondary" />
+                </div>
               </div>
             </div>
 

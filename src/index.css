@@ -279,6 +279,127 @@ body {
   }
 }
 
+/* Snake Food Glow Animation */
+@keyframes snake-food-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 2px var(--color-secondary),
+      0 0 4px var(--color-secondary),
+      0 0 8px var(--color-secondary),
+      inset 0 0 2px var(--color-secondary);
+  }
+  50% {
+    box-shadow:
+      0 0 4px var(--color-secondary),
+      0 0 8px var(--color-secondary),
+      0 0 16px var(--color-secondary),
+      inset 0 0 4px var(--color-secondary);
+  }
+}
+
+.snake-food[data-snake-food="true"] {
+  position: relative;
+  animation: snake-food-glow 2s ease-in-out infinite;
+  transition: all 0.3s ease;
+}
+
+.snake-food[data-snake-food="true"]::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 1px solid var(--color-secondary);
+  opacity: 0.6;
+  pointer-events: none;
+  animation: snake-food-glow 2s ease-in-out infinite;
+  z-index: -1;
+}
+
+/* Snake Food Active (when element becomes food) */
+@keyframes snake-food-active-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 8px var(--color-accent),
+      0 0 16px var(--color-accent),
+      0 0 24px var(--color-accent),
+      inset 0 0 4px var(--color-accent);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow:
+      0 0 12px var(--color-accent),
+      0 0 24px var(--color-accent),
+      0 0 32px var(--color-accent),
+      inset 0 0 6px var(--color-accent);
+    transform: scale(1.02);
+  }
+}
+
+.snake-food-active {
+  animation: snake-food-active-pulse 0.5s ease-in-out infinite !important;
+  position: relative;
+  z-index: 10;
+}
+
+.snake-food-active::before {
+  border-color: var(--color-accent) !important;
+  opacity: 0.9 !important;
+  animation: snake-food-active-pulse 0.5s ease-in-out infinite !important;
+}
+
+/* Snake Food Eaten (after being consumed) */
+@keyframes snake-food-eaten-flash {
+  0% {
+    filter: brightness(3) blur(2px);
+    opacity: 1;
+  }
+  50% {
+    filter: brightness(1) blur(0px);
+    opacity: 0.5;
+  }
+  100% {
+    filter: brightness(1) blur(0px);
+    opacity: 0.3;
+  }
+}
+
+.snake-food-eaten {
+  animation: snake-food-eaten-flash 0.3s ease-out forwards;
+  pointer-events: none;
+  position: relative;
+}
+
+.snake-food-eaten::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  animation: snake-food-eaten-flash 0.3s ease-out forwards;
+  pointer-events: none;
+}
+
+/* Point Popup Animation */
+@keyframes point-popup {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(1.5);
+  }
+}
+
+.point-popup {
+  position: fixed;
+  pointer-events: none;
+  font-family: "Press Start 2P", monospace;
+  font-size: 16px;
+  z-index: 10000;
+  animation: point-popup 0.8s ease-out forwards;
+  text-shadow: 0 0 4px currentColor;
+}
+
 .typewriter {
   overflow: hidden;
   white-space: nowrap;

@@ -9,6 +9,7 @@ import { PortfolioDataProvider, usePortfolioData } from "./contexts/PortfolioDat
 import { AchievementsProvider } from "./contexts/AchievementsContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { KonamiCode } from "./components/KonamiCode";
+import { SnakeGame } from "./components/SnakeGame";
 import { SkipToContent } from "./components/SkipToContent";
 import { InstallPrompt } from "./components/InstallPrompt";
 import { AchievementManager } from "./components/AchievementManager";
@@ -26,6 +27,17 @@ const QuestLog = lazy(() => import("./components/QuestLog"));
 const AppContent: React.FC = () => {
   const { settings } = useSettings();
   const { data, config } = usePortfolioData();
+  const [isSnakeGamePlaying, setIsSnakeGamePlaying] = React.useState(false);
+
+  const handlePressStart = React.useCallback(() => {
+    setIsSnakeGamePlaying(true);
+    analytics.trackEvent("snake_game_started");
+  }, []);
+
+  const handleCloseGame = React.useCallback(() => {
+    setIsSnakeGamePlaying(false);
+    analytics.trackEvent("snake_game_closed");
+  }, []);
 
   // Initialize SEO and Web Vitals
   React.useEffect(() => {
@@ -71,16 +83,36 @@ const AppContent: React.FC = () => {
     <>
       <SkipToContent />
       <KonamiCode />
+      <SnakeGame
+        isPlaying={isSnakeGamePlaying}
+        onGameOver={(score) => {
+          analytics.trackEvent("snake_game_over", { score });
+        }}
+        onClose={handleCloseGame}
+      />
       <InstallPrompt />
       <AchievementManager />
       {import.meta.env.DEV && <AdminPanel />}
       <Suspense fallback={null}>
         <SettingsPanel />
       </Suspense>
-      <div className={`min-h-screen bg-bg text-foreground crt-flicker ${settings.scanlinesEnabled ? "scanlines" : ""}`}>
+      <div 
+        className={`min-h-screen bg-bg text-foreground crt-flicker ${settings.scanlinesEnabled ? "scanlines" : ""} transition-all duration-300`}
+        style={{
+          filter: isSnakeGamePlaying ? 'blur(2px)' : 'none',
+          opacity: isSnakeGamePlaying ? 0.5 : 1,
+          pointerEvents: isSnakeGamePlaying ? 'none' : 'auto',
+        }}
+      >
         <Navigation name={data.name} />
         <main id="main-content">
-          <Hero name={data.name} subtitle={data.subtitle} stats={data.stats} />
+          <Hero 
+            name={data.name} 
+            subtitle={data.subtitle} 
+            stats={data.stats}
+            onPressStart={handlePressStart}
+            isGameActive={isSnakeGamePlaying}
+          />
           <CharacterStats
             name={`${data.name} / DEV`}
             title={data.title}

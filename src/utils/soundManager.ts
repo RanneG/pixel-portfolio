@@ -143,6 +143,16 @@ class SoundManager {
     this.init();
     this.playTone(200, 0.2, "sawtooth");
   }
+
+  // Power-up/eat element sound (higher pitch)
+  eatElement() {
+    this.init();
+    // Play a pleasant higher-pitched melody for eating element food
+    const notes = [523.25, 659.25, 783.99]; // C, E, G
+    notes.forEach((freq, i) => {
+      setTimeout(() => this.playTone(freq * 1.5, 0.1, "square"), i * 80);
+    });
+  }
 }
 
 export const soundManager = new SoundManager();
