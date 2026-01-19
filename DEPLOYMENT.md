@@ -245,6 +245,21 @@ vercel logs
 - Ensure CORS is configured
 - Test endpoint manually
 
+## 📧 Formspree Email Configuration
+
+### Setting Up Outlook Email
+
+To receive form submissions in your Outlook email:
+
+1. Go to [Formspree Dashboard](https://formspree.io)
+2. Log in and find your form (ID: `xeeegyek`)
+3. Go to **Settings** → **Email Notifications**
+4. Add your Outlook email address
+5. Enable email notifications
+6. Verify email if prompted
+
+**Note:** The email displayed on your website (`rannegerodias@gmail.com`) is for display. Form submissions will be sent to the email configured in Formspree.
+
 ## 🔐 Security
 
 ### Best Practices
