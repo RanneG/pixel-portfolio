@@ -13,15 +13,72 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2  # Need at least 2 commits to check for merge commit
+      
       - name: Check if push is from PR merge
         run: |
-          if [ "${{ github.event.head_commit.author.name }}" != "GitHub" ]; then
+          # Check if this is a merge commit (has multiple parents)
+          # Merge commits from PRs will have 2+ parents
+          COMMIT_SHA="${{ github.event.head_commit.id }}"
+          
+          # Get commit message
+          COMMIT_MSG=$(git log -1 --format=%B $COMMIT_SHA)
+          
+          # Check if commit has multiple parents (merge commit)
+          PARENTS=$(git show --format=%P --no-patch $COMMIT_SHA)
+          
+          # Count parents by splitting on spaces
+          if [ -z "$PARENTS" ]; then
+            PARENT_COUNT=0
+          else
+            # Replace spaces with newlines and count lines
+            PARENT_COUNT=$(echo "$PARENTS" | tr ' ' '\n' | grep -c . || echo "1")
+          fi
+          
+          # Check various indicators of a merged PR
+          IS_MERGE_COMMIT=false
+          IS_MERGED_PR=false
+          
+          # Check if it's a merge commit (2+ parents)
+          if [ "$PARENT_COUNT" -gt 1 ]; then
+            IS_MERGE_COMMIT=true
+          fi
+          
+          # Check commit message for merge patterns
+          if echo "$COMMIT_MSG" | grep -qE "^(Merge pull request|Merge branch|Merge commit)"; then
+            IS_MERGED_PR=true
+          fi
+          
+          # Check for squash merge patterns (GitHub squash merges often have PR number)
+          if echo "$COMMIT_MSG" | grep -qE "\(#\d+\)"; then
+            IS_MERGED_PR=true
+          fi
+          
+          # Allow merge commits and commits with merge patterns
+          if [ "$IS_MERGE_COMMIT" = true ] || [ "$IS_MERGED_PR" = true ]; then
+            echo "✅ Push is from merged PR (allowed)"
+            if [ "$IS_MERGE_COMMIT" = true ]; then
+              echo "   Reason: Merge commit detected ($PARENT_COUNT parents)"
+            else
+              echo "   Reason: Merge pattern detected in commit message"
+            fi
+          elif echo "$COMMIT_MSG" | grep -qE "^(Revert|cherry picked from)"; then
+            echo "✅ Push is from revert or cherry-pick (allowed)"
+          else
             echo "❌ Direct push to main branch detected!"
             echo "⚠️  Main branch is protected. Please use pull requests."
             echo "📝 Create a branch and submit a PR instead."
+            echo ""
+            echo "Commit details:"
+            echo "  SHA: $COMMIT_SHA"
+            echo "  Author: ${{ github.event.head_commit.author.name }}"
+            echo "  Parents: $PARENT_COUNT"
+            echo "  Message: $(echo "$COMMIT_MSG" | head -1)"
             exit 1
           fi
-          echo "✅ Push is from merged PR (allowed)"
 
   validate-pr:
     name: Validate Pull Request
