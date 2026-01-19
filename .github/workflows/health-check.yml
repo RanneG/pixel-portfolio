@@ -41,7 +41,15 @@ jobs:
             echo "This may be expected if the API endpoint is not yet deployed."
             # Don't fail the workflow for this, just warn
           else
-            echo "✅ Site is healthy: Main site (HTTP $site_response), Health endpoint (HTTP $health_response)"
+            # Determine which health endpoint succeeded
+            if [ "$health_response" == "200" ]; then
+              health_status="Health endpoint (HTTP $health_response)"
+            elif [ "$health_json_response" == "200" ]; then
+              health_status="Health endpoint (fallback, HTTP $health_json_response)"
+            else
+              health_status="Health endpoint (HTTP $health_response, fallback: HTTP $health_json_response)"
+            fi
+            echo "✅ Site is healthy: Main site (HTTP $site_response), $health_status"
           fi
 
       - name: Check Core Web Vitals
