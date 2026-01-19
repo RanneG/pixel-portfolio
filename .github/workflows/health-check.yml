@@ -29,9 +29,13 @@ jobs:
           health_json_response=$(curl -sL -o /dev/null -w "%{http_code}" https://rannegerodias.com/api/health.json || echo "000")
           echo "Health JSON: HTTP $health_json_response"
           
-          # Accept 200 or 301/302 (redirects) as OK for main site
-          if [ "$site_response" != "200" ] && [ "$site_response" != "301" ] && [ "$site_response" != "302" ]; then
+          # With -L flag, curl follows redirects, so 301/302 indicates redirect failure
+          # Only accept 200 as healthy (redirects should complete successfully)
+          if [ "$site_response" != "200" ]; then
             echo "❌ Main site check failed: HTTP $site_response"
+            if [ "$site_response" == "301" ] || [ "$site_response" == "302" ]; then
+              echo "⚠️  Redirect loop or invalid redirect target detected (curl -L should follow redirects to completion)"
+            fi
             exit 1
           fi
           
