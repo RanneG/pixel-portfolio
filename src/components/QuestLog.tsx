@@ -149,6 +149,7 @@ const QuestLog: React.FC<QuestLogProps> = ({
         <h2 id="quests-heading" className="mb-6 font-pixel text-xs md:text-sm text-secondary neon-glow-secondary">
           &gt; QUEST LOG
         </h2>
+        <p className="sr-only">Browse through completed and in-progress projects</p>
         <div className="grid gap-4 md:gap-5 md:grid-cols-2">
           {projects.map((project) => (
             <ProjectCard key={project.title} {...project} />
