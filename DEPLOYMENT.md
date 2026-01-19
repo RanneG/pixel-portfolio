@@ -100,11 +100,32 @@ The project includes GitHub Actions workflows:
 
 ### Setup
 
-1. **Add Vercel Secrets:**
-   - Go to Repository Settings → Secrets
-   - Add `VERCEL_TOKEN`
-   - Add `VERCEL_ORG_ID`
-   - Add `VERCEL_PROJECT_ID`
+1. **Get Vercel Secrets:**
+
+   **VERCEL_TOKEN:**
+   - Go to [Vercel Account Settings → Tokens](https://vercel.com/account/tokens)
+   - Click "Create Token"
+   - Give it a name (e.g., "GitHub Actions")
+   - Copy the token (you won't see it again!)
+
+   **VERCEL_ORG_ID:**
+   - Go to your Vercel project settings
+   - Or run: `vercel link` locally and check `.vercel/project.json`
+   - The `orgId` field contains your organization ID
+
+   **VERCEL_PROJECT_ID:**
+   - Go to your Vercel project settings
+   - Or run: `vercel link` locally and check `.vercel/project.json`
+   - The `projectId` field contains your project ID
+
+2. **Add Secrets to GitHub:**
+   - Go to your repository on GitHub
+   - Navigate to: **Settings → Secrets and variables → Actions**
+   - Click **"New repository secret"**
+   - Add each secret:
+     - Name: `VERCEL_TOKEN`, Value: (your token)
+     - Name: `VERCEL_ORG_ID`, Value: (your org ID)
+     - Name: `VERCEL_PROJECT_ID`, Value: (your project ID)
 
 2. **Enable GitHub Actions:**
    - Actions are enabled by default
