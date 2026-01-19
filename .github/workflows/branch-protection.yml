@@ -1,0 +1,94 @@
+name: Enforce Branch Protection
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-protection:
+    name: Verify Branch Protection Rules
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Check if push is from PR merge
+        run: |
+          if [ "${{ github.event.head_commit.author.name }}" != "GitHub" ]; then
+            echo "❌ Direct push to main branch detected!"
+            echo "⚠️  Main branch is protected. Please use pull requests."
+            echo "📝 Create a branch and submit a PR instead."
+            exit 1
+          fi
+          echo "✅ Push is from merged PR (allowed)"
+
+  validate-pr:
+    name: Validate Pull Request
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR requirements
+        run: |
+          echo "## 📋 Pull Request Validation"
+          echo ""
+          echo "**PR:** #${{ github.event.pull_request.number }}"
+          echo "**Author:** ${{ github.event.pull_request.user.login }}"
+          echo "**Base:** ${{ github.event.pull_request.base.ref }}"
+          echo "**Head:** ${{ github.event.pull_request.head.ref }}"
+          echo ""
+          
+          # Check if PR is targeting main
+          if [ "${{ github.event.pull_request.base.ref }}" != "main" ]; then
+            echo "⚠️  Warning: This PR is not targeting main branch"
+          fi
+          
+          # Check if PR has description
+          if [ -z "${{ github.event.pull_request.body }}" ]; then
+            echo "⚠️  Warning: PR description is empty"
+          else
+            echo "✅ PR has description"
+          fi
+          
+          # Check if PR is draft
+          if [ "${{ github.event.pull_request.draft }}" == "true" ]; then
+            echo "ℹ️  This is a draft PR"
+          fi
+          
+          echo ""
+          echo "**Status:** Ready for review ✅"
+
+      - name: Check for breaking changes
+        run: |
+          # Check commit messages for breaking changes
+          COMMITS=$(git log ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }} --pretty=format:"%s")
+          
+          if echo "$COMMITS" | grep -qi "BREAKING CHANGE\|BREAKING:"; then
+            echo "⚠️  Breaking changes detected in commits!"
+            echo "Please ensure PR description clearly documents breaking changes."
+          fi
+
+      - name: Validate file changes
+        run: |
+          # Check for sensitive files
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }})
+          
+          SENSITIVE_FILES=(".env" "secrets" "credentials")
+          for file in $CHANGED_FILES; do
+            for sensitive in "${SENSITIVE_FILES[@]}"; do
+              if [[ "$file" == *"$sensitive"* ]]; then
+                echo "❌ Error: Sensitive file detected: $file"
+                echo "Please remove sensitive files from PR"
+                exit 1
+              fi
+            done
+          done
+          
+          echo "✅ No sensitive files detected"
+

@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main, develop]
 
+# Prevent direct pushes to main (enforced by branch protection)
+# This workflow will still run but branch protection will block merges
+
 jobs:
   test:
     name: Test & Lint
