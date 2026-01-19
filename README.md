@@ -9,9 +9,9 @@ A responsive, retro gaming-themed personal portfolio website built with React, T
 
 ## 🚀 Live Demo
 
-**🌐 Primary:** [yourdomain.com](https://yourdomain.com) *(Coming soon)*
+**🌐 Live:** [rannegerodias.com](https://rannegerodias.com)
 
-**⚡ Vercel:** [pixel-portfolio.vercel.app](https://pixel-portfolio.vercel.app) *(After deployment)*
+**⚡ Vercel:** [rannegerodias.vercel.app](https://rannegerodias.vercel.app)
 
 ## ⚡ Quick Deploy
 
