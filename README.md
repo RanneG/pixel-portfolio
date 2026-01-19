@@ -1,6 +1,31 @@
 # 8-Bit Retro Portfolio Website
 
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
+
 A responsive, retro gaming-themed personal portfolio website built with React, TypeScript, and Tailwind CSS. Features a classic NES/arcade game interface with modern functionality.
+
+## 🚀 Live Demo
+
+**🌐 Primary:** [yourdomain.com](https://yourdomain.com) *(Coming soon)*
+
+**⚡ Vercel:** [pixel-portfolio.vercel.app](https://pixel-portfolio.vercel.app) *(After deployment)*
+
+## ⚡ Quick Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/RanneG/pixel-portfolio)
+
+**One-click deploy to Vercel** - Click the button above to deploy this portfolio to Vercel instantly!
+
+## 📸 Screenshots
+
+| Desktop View | Mobile View |
+|--------------|-------------|
+| ![Desktop Screenshot](screenshots/desktop.png) | ![Mobile Screenshot](screenshots/mobile.png) |
+
+> **Note:** Add actual screenshots to `/screenshots` folder after deployment
 
 ## Features
 
@@ -23,8 +48,8 @@ A responsive, retro gaming-themed personal portfolio website built with React, T
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
-cd portfolio-8bit
+git clone https://github.com/RanneG/pixel-portfolio.git
+cd pixel-portfolio
 ```
 
 2. Install dependencies:
@@ -183,6 +208,20 @@ MIT License - feel free to use this for your own portfolio!
 
 - Fonts: [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P), [VT323](https://fonts.google.com/specimen/VT323)
 - Design inspiration: Classic NES/Arcade games
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/RanneG/pixel-portfolio/issues).
+
+### How to Contribute
+
+1. **Fork the repository**
+2. **Create your feature branch** (`git checkout -b feature/AmazingFeature`)
+3. **Commit your changes** (`git commit -m 'Add some AmazingFeature'`)
+4. **Push to the branch** (`git push origin feature/AmazingFeature`)
+5. **Open a Pull Request**
+
+Don't forget to give the project a star ⭐ if you find it helpful!
 
 ---
 
