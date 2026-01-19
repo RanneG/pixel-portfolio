@@ -107,9 +107,9 @@ const defaultData: PortfolioData = {
     }
   ],
   contact: {
-    email: "player.one@example.dev",
-    location: "NEAR A TERMINAL, SOMEWHERE ONLINE",
-    timezone: "UTC+08 (MOSTLY AWAKE AT NIGHT)"
+    email: "rannegerodias@gmail.com",
+    location: "UNITED KINGDOM",
+    timezone: "UTC+0 (GMT/BST)"
   },
   socialLinks: [
     { name: "GITHUB", url: "https://github.com/RanneG" },
