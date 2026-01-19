@@ -70,11 +70,10 @@ function reportMetric(metric: WebVitalMetric) {
 
   // Log to console in development
   if (import.meta.env.DEV) {
-    console.log(`[Web Vital] ${metric.name}:`, {
-      value: metric.value,
-      rating: metric.rating,
-      delta: metric.delta
-    });
+    const valueFormatted = typeof metric.value === "number" 
+      ? `${Math.round(metric.value)}${metric.name === "CLS" ? "" : "ms"}` 
+      : metric.value;
+    console.log(`[Web Vital] ${metric.name}: ${valueFormatted} (${metric.rating})`);
   }
 
   // Store in localStorage for monitoring
