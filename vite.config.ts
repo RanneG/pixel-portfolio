@@ -6,6 +6,8 @@ export default defineConfig({
   server: {
     port: 5173
   },
+  // Copy data files to dist for runtime loading
+  publicDir: "public",
   build: {
     rollupOptions: {
       output: {

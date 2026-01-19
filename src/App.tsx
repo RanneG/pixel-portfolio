@@ -10,6 +10,7 @@ import { KonamiCode } from "./components/KonamiCode";
 import { SkipToContent } from "./components/SkipToContent";
 import { InstallPrompt } from "./components/InstallPrompt";
 import { QuestLogSkeleton, SkillInventorySkeleton } from "./components/LoadingSkeleton";
+import AdminPanel from "./components/AdminPanel";
 
 // Lazy load heavy components for code splitting with prefetching
 const SettingsPanel = lazy(() => import("./components/SettingsPanel"));
@@ -18,13 +19,14 @@ const QuestLog = lazy(() => import("./components/QuestLog"));
 
 const AppContent: React.FC = () => {
   const { settings } = useSettings();
-  const { data } = usePortfolioData();
+  const { data, config } = usePortfolioData();
   
   return (
     <>
       <SkipToContent />
       <KonamiCode />
       <InstallPrompt />
+      {import.meta.env.DEV && <AdminPanel />}
       <Suspense fallback={null}>
         <SettingsPanel />
       </Suspense>
@@ -50,7 +52,7 @@ const AppContent: React.FC = () => {
             contactInfo={data.contact}
             socialLinks={data.socialLinks}
             availableForHire={data.availableForHire}
-            formspreeId={import.meta.env.VITE_FORMSPREE_ID || "xeeegyek"}
+            formspreeId={import.meta.env.VITE_FORMSPREE_ID || config?.site?.formspreeId || "xeeegyek"}
           />
         </main>
         <Footer name={data.name} />

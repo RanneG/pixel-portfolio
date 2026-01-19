@@ -1,0 +1,16 @@
+{
+  "projects": 3,
+  "level": "DEV 28",
+  "creativity": "MAX",
+  "attributes": {
+    "STR": 70,
+    "DEX": 84,
+    "INT": 92,
+    "CHA": 78
+  },
+  "experience": {
+    "current": 13420,
+    "max": 20000
+  }
+}
+

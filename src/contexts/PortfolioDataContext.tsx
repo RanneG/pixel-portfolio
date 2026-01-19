@@ -1,6 +1,8 @@
-import React, { createContext, useContext, ReactNode } from "react";
-import type { PortfolioData } from "../types";
+import React, { createContext, useContext, ReactNode, useState, useEffect } from "react";
+import type { PortfolioData, SiteConfig } from "../types";
+import { loadConfig, mergePortfolioData } from "../utils/configLoader";
 
+// Fallback data if JSON files fail to load
 const defaultData: PortfolioData = {
   name: "RANNE GERODIAS",
   title: "Tech Professional crafting retro-futuristic interfaces and playful experiences.",
@@ -119,6 +121,9 @@ const defaultData: PortfolioData = {
 
 interface PortfolioDataContextType {
   data: PortfolioData;
+  config: SiteConfig;
+  isLoading: boolean;
+  reload: () => Promise<void>;
 }
 
 const PortfolioDataContext = createContext<PortfolioDataContextType | undefined>(undefined);
@@ -126,11 +131,64 @@ const PortfolioDataContext = createContext<PortfolioDataContextType | undefined>
 export const PortfolioDataProvider: React.FC<{
   children: ReactNode;
   data?: Partial<PortfolioData>;
-}> = ({ children, data }) => {
-  const mergedData: PortfolioData = { ...defaultData, ...data };
+}> = ({ children, data: overrideData }) => {
+  const [portfolioData, setPortfolioData] = useState<PortfolioData>(defaultData);
+  const [config, setConfig] = useState<SiteConfig>({
+    site: { title: "", description: "", logo: "<DEV/>", formspreeId: "" },
+    theme: { default: "nes", available: [] },
+    features: { konamiCode: true, settingsPanel: true, installPrompt: true, analytics: false }
+  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  const loadData = async () => {
+    try {
+      setIsLoading(true);
+      const loadedConfig = await loadConfig();
+      
+      // Merge loaded data
+      const merged = mergePortfolioData(
+        loadedConfig.personal,
+        loadedConfig.stats,
+        loadedConfig.skills,
+        loadedConfig.projects
+      );
+      
+      // Apply any override data passed as props
+      const finalData = overrideData ? { ...merged, ...overrideData } : merged;
+      
+      setPortfolioData(finalData);
+      setConfig(loadedConfig.config);
+    } catch (error) {
+      console.error("Error loading config:", error);
+      // Use defaults on error
+      setPortfolioData(defaultData);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+    
+    // Hot-reload in development
+    if (import.meta.env.DEV) {
+      const interval = setInterval(() => {
+        loadData();
+      }, 5000); // Check every 5 seconds in dev
+      
+      return () => clearInterval(interval);
+    }
+  }, [overrideData]);
 
   return (
-    <PortfolioDataContext.Provider value={{ data: mergedData }}>
+    <PortfolioDataContext.Provider
+      value={{
+        data: portfolioData,
+        config,
+        isLoading,
+        reload: loadData
+      }}
+    >
       {children}
     </PortfolioDataContext.Provider>
   );

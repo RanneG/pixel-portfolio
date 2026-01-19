@@ -75,3 +75,69 @@ export interface PortfolioData {
   availableForHire: boolean;
 }
 
+// Config file types
+export interface SiteConfig {
+  site: {
+    title: string;
+    description: string;
+    logo: string;
+    formspreeId: string;
+  };
+  theme: {
+    default: string;
+    available: string[];
+  };
+  features: {
+    konamiCode: boolean;
+    settingsPanel: boolean;
+    installPrompt: boolean;
+    analytics: boolean;
+  };
+}
+
+export interface PersonalData {
+  name: string;
+  title: string;
+  subtitle: string;
+  bio: string[];
+  statusBadges: string[];
+  contact: ContactInfo;
+  socialLinks: SocialLink[];
+  availableForHire: boolean;
+}
+
+export interface StatsData {
+  projects: number;
+  level: string;
+  creativity: string;
+  attributes: {
+    STR: number;
+    DEX: number;
+    INT: number;
+    CHA: number;
+  };
+  experience: {
+    current: number;
+    max: number;
+  };
+}
+
+export interface SkillsData {
+  categories: SkillCategoryProps[];
+  specialAbilities: string[];
+}
+
+export interface ProjectsData {
+  projects: Project[];
+}
+
+export interface EnvironmentOverrides {
+  overrides: {
+    personal?: Partial<PersonalData>;
+    stats?: Partial<StatsData>;
+    skills?: Partial<SkillsData>;
+    projects?: Partial<ProjectsData>;
+    config?: Partial<SiteConfig>;
+  };
+}
+
