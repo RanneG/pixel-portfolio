@@ -27,6 +27,45 @@ body {
   color: var(--color-foreground);
 }
 
+/* Accessibility: Focus indicators */
+*:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 0;
+}
+
+/* Skip link styling */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 9999;
+  width: auto;
+  height: auto;
+  padding: 1rem;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+  font-weight: bold;
+  text-decoration: none;
+  border: 2px solid var(--color-bg);
+}
+
 .font-pixel {
   font-family: "Press Start 2P", system-ui, sans-serif;
 }
@@ -130,6 +169,18 @@ body {
     background-color 0.15s ease-out,
     color 0.15s ease-out;
   will-change: transform, box-shadow;
+}
+
+.retro-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 4px 4px 0 var(--color-muted), 0 0 0 3px var(--color-primary);
+}
+
+.retro-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .retro-btn:active {

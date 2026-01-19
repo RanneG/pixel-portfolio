@@ -99,15 +99,15 @@ const Hero: React.FC<HeroProps> = ({
         <div className="flex flex-wrap justify-center gap-3 md:gap-4">
           <a
             href="#quests"
-            className="retro-btn retro-btn-primary px-4 py-2.5 md:py-2 font-pixel text-[10px] uppercase tracking-widest min-h-[44px] flex items-center justify-center"
-            aria-label="View projects"
+            className="retro-btn retro-btn-primary px-4 py-2.5 md:py-2 font-pixel text-[10px] uppercase tracking-widest min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+            aria-label="View projects in quest log"
           >
             VIEW QUESTS
           </a>
           <a
             href="#save-point"
-            className="retro-btn retro-btn-secondary px-4 py-2.5 md:py-2 font-pixel text-[10px] uppercase tracking-widest min-h-[44px] flex items-center justify-center"
-            aria-label="Contact me"
+            className="retro-btn retro-btn-secondary px-4 py-2.5 md:py-2 font-pixel text-[10px] uppercase tracking-widest min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary focus-visible:outline-offset-2"
+            aria-label="Go to contact form"
           >
             SAVE PROGRESS
           </a>

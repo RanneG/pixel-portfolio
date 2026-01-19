@@ -134,6 +134,7 @@ const SavePoint: React.FC<SavePointProps> = ({
         <h2 id="save-point-heading" className="mb-6 font-pixel text-xs md:text-sm text-secondary neon-glow-secondary">
           &gt; SAVE POINT
         </h2>
+        <p className="sr-only">Contact form and social media links</p>
 
         <div className="grid gap-6 md:gap-8 md:grid-cols-[minmax(0,_3fr)_minmax(0,_2fr)]">
           <div className="pixel-border bg-card p-4 md:p-6 box-glow">
@@ -141,8 +142,9 @@ const SavePoint: React.FC<SavePointProps> = ({
             <form onSubmit={handleSubmit} className="space-y-3 text-xs" noValidate>
               <div className="space-y-1">
                 <label className="font-pixel text-[9px] md:text-[10px]" htmlFor="name">
-                  PLAYER NAME
+                  PLAYER NAME <span className="text-secondary" aria-label="required">*</span>
                 </label>
+                <span id="name-desc" className="sr-only">Required field</span>
                 <input
                   id="name"
                   name="name"
@@ -151,10 +153,11 @@ const SavePoint: React.FC<SavePointProps> = ({
                   onChange={handleChange}
                   className={`w-full border ${
                     errors.name ? "border-secondary" : "border-muted"
-                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary min-h-[48px] md:min-h-[44px]`}
+                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 min-h-[48px] md:min-h-[44px]`}
                   placeholder="ENTER NAME..."
                   aria-invalid={errors.name ? "true" : "false"}
-                  aria-describedby={errors.name ? "name-error" : undefined}
+                  aria-describedby={errors.name ? "name-error name-desc" : "name-desc"}
+                  aria-required="true"
                 />
                 {errors.name && (
                   <p id="name-error" className="text-xs md:text-[9px] text-secondary font-pixel mt-1" role="alert">
@@ -164,8 +167,9 @@ const SavePoint: React.FC<SavePointProps> = ({
               </div>
               <div className="space-y-1">
                 <label className="font-pixel text-[9px] md:text-[10px]" htmlFor="email">
-                  SAVE SLOT (EMAIL)
+                  SAVE SLOT (EMAIL) <span className="text-secondary" aria-label="required">*</span>
                 </label>
+                <span id="email-desc" className="sr-only">Required field</span>
                 <input
                   id="email"
                   name="email"
@@ -174,10 +178,11 @@ const SavePoint: React.FC<SavePointProps> = ({
                   onChange={handleChange}
                   className={`w-full border ${
                     errors.email ? "border-secondary" : "border-muted"
-                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary min-h-[48px] md:min-h-[44px]`}
+                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 min-h-[48px] md:min-h-[44px]`}
                   placeholder="ENTER EMAIL..."
                   aria-invalid={errors.email ? "true" : "false"}
-                  aria-describedby={errors.email ? "email-error" : undefined}
+                  aria-describedby={errors.email ? "email-error email-desc" : "email-desc"}
+                  aria-required="true"
                 />
                 {errors.email && (
                   <p id="email-error" className="text-xs md:text-[9px] text-secondary font-pixel mt-1" role="alert">
@@ -187,8 +192,9 @@ const SavePoint: React.FC<SavePointProps> = ({
               </div>
               <div className="space-y-1">
                 <label className="font-pixel text-[9px] md:text-[10px]" htmlFor="message">
-                  MESSAGE DATA
+                  MESSAGE DATA <span className="text-secondary" aria-label="required">*</span>
                 </label>
+                <span id="message-desc" className="sr-only">Required field</span>
                 <textarea
                   id="message"
                   name="message"
@@ -197,10 +203,11 @@ const SavePoint: React.FC<SavePointProps> = ({
                   onChange={handleChange}
                   className={`w-full border ${
                     errors.message ? "border-secondary" : "border-muted"
-                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary resize-y min-h-[120px]`}
+                  } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 resize-y min-h-[120px]`}
                   placeholder="DESCRIBE YOUR QUEST..."
                   aria-invalid={errors.message ? "true" : "false"}
-                  aria-describedby={errors.message ? "message-error" : undefined}
+                  aria-describedby={errors.message ? "message-error message-desc" : "message-desc"}
+                  aria-required="true"
                 />
                 {errors.message && (
                   <p id="message-error" className="text-xs md:text-[9px] text-secondary font-pixel mt-1" role="alert">
@@ -211,8 +218,9 @@ const SavePoint: React.FC<SavePointProps> = ({
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className="retro-btn retro-btn-primary mt-2 px-4 py-3 md:py-2 font-pixel text-sm md:text-[10px] uppercase tracking-widest min-h-[48px] md:min-h-[44px] w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Submit contact form"
+                className="retro-btn retro-btn-primary mt-2 px-4 py-3 md:py-2 font-pixel text-sm md:text-[10px] uppercase tracking-widest min-h-[48px] md:min-h-[44px] w-full disabled:opacity-50 disabled:cursor-not-allowed focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+                aria-label={status === "loading" ? "Submitting form, please wait" : "Submit contact form"}
+                aria-busy={status === "loading"}
               >
                 {status === "loading" ? "SAVING..." : "SAVE GAME"}
               </button>

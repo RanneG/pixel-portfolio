@@ -117,6 +117,7 @@ const SkillInventory: React.FC<SkillInventoryProps> = ({
         <h2 id="skills-heading" className="mb-6 font-pixel text-xs md:text-sm text-secondary neon-glow-secondary">
           &gt; SKILL INVENTORY
         </h2>
+        <p className="sr-only">Browse through different skill categories and proficiency levels</p>
 
         <div className="grid gap-4 md:gap-5 md:grid-cols-2">
           {skills.map((category) => (

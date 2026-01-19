@@ -105,10 +105,11 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
                 <a
                   href={item.href}
                   {...prefetchProps}
-                  className={`flex items-center gap-1 transition-colors min-h-[44px] min-w-[44px] items-center justify-center ${
+                  className={`flex items-center gap-1 transition-colors min-h-[44px] min-w-[44px] items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ${
                     isActive ? "text-primary" : "text-foreground hover:text-primary"
                   }`}
                   aria-current={isActive ? "page" : undefined}
+                  aria-label={`Navigate to ${item.label}`}
                 >
                   <span className={isActive ? "opacity-100 text-primary" : "opacity-0 group-hover:opacity-100 text-primary"}>
                     &gt;
@@ -121,10 +122,12 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
         </ul>
 
         {/* Mobile menu */}
-        <div
+        <nav
           className={`absolute top-full left-0 right-0 bg-bg border-b border-muted md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
             isMobileMenuOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
           }`}
+          aria-label="Mobile navigation menu"
+          aria-hidden={!isMobileMenuOpen}
         >
           <ul className="flex flex-col p-4 gap-3 text-sm font-pixel">
             {items.map((item) => {
@@ -135,10 +138,11 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
                   <a
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block px-4 py-4 pixel-border bg-card min-h-[48px] flex items-center gap-3 active:scale-[0.98] transition-transform ${
+                    className={`block px-4 py-4 pixel-border bg-card min-h-[48px] flex items-center gap-3 active:scale-[0.98] transition-transform focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 ${
                       isActive ? "text-primary" : "text-foreground"
                     }`}
                     aria-current={isActive ? "page" : undefined}
+                    aria-label={`Navigate to ${item.label}`}
                   >
                     <span className={isActive ? "text-primary text-base" : "text-muted"}>
                       &gt;
@@ -149,7 +153,7 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
               );
             })}
           </ul>
-        </div>
+        </nav>
       </nav>
     </header>
   );

@@ -78,6 +78,8 @@ const ProjectCard: React.FC<Project> = ({
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
+              className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+              aria-label={`View ${title} source code on GitHub`}
               className="retro-btn retro-btn-primary px-3 py-1.5 md:py-1 font-pixel min-h-[44px] flex items-center justify-center"
               aria-label={`View ${title} on GitHub`}
             >
@@ -141,6 +143,7 @@ const QuestLog: React.FC<QuestLogProps> = ({
   return (
     <section
       id="quests"
+      aria-labelledby="quests-heading"
       className="bg-bg py-12 md:py-16 lg:py-24 border-t border-muted"
       aria-labelledby="quests-heading"
     >

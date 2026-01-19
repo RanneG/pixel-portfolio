@@ -50,6 +50,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({
         <h2 id="character-heading" className="mb-6 font-pixel text-xs md:text-sm text-secondary neon-glow-secondary">
           &gt; CHARACTER STATS
         </h2>
+        <p className="sr-only">View character information, bio, attributes, and experience level</p>
 
         <div className="grid gap-6 md:gap-8 md:grid-cols-[minmax(0,_2fr)_minmax(0,_3fr)]">
           <div className="pixel-border bg-card p-4 md:p-6 box-glow">
