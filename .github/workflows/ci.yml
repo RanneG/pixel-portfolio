@@ -139,9 +139,9 @@ jobs:
         id: check-secrets
         run: |
           if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
-            echo "❌ Vercel secrets are required for production deployment!"
+            echo "⚠️  Vercel secrets are not configured. Production deployment will be skipped."
             echo ""
-            echo "Please add these secrets to your repository:"
+            echo "To enable production deployments, add these secrets to your repository:"
             echo "1. Go to: Settings → Secrets and variables → Actions"
             echo "2. Add the following repository secrets:"
             echo "   - VERCEL_TOKEN: Get from https://vercel.com/account/tokens"
@@ -149,27 +149,33 @@ jobs:
             echo "   - VERCEL_PROJECT_ID: Get from Vercel project settings"
             echo ""
             echo "See DEPLOYMENT.md for detailed setup instructions."
-            exit 1
+            echo "skip_deployment=true" >> $GITHUB_OUTPUT
+            exit 0
           else
             echo "✅ Vercel secrets are configured"
+            echo "skip_deployment=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Install Vercel CLI
+        if: steps.check-secrets.outputs.skip_deployment == 'false'
         run: npm install -g vercel@latest
 
       - name: Pull Vercel Environment Information
+        if: steps.check-secrets.outputs.skip_deployment == 'false'
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Build Project
+        if: steps.check-secrets.outputs.skip_deployment == 'false'
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploy to Vercel Production
+        if: steps.check-secrets.outputs.skip_deployment == 'false'
         id: deploy
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
@@ -177,7 +183,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Create GitHub Release
-        if: success()
+        if: steps.check-secrets.outputs.skip_deployment == 'false' && success()
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
