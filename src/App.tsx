@@ -89,6 +89,7 @@ const AppContent: React.FC = () => {
           analytics.trackEvent("snake_game_over", { score });
         }}
         onClose={handleCloseGame}
+        experimentalMode={false} // Set to true to enable "eats website" mode
       />
       <InstallPrompt />
       <AchievementManager />

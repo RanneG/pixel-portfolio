@@ -378,6 +378,46 @@ body {
   pointer-events: none;
 }
 
+/* Snake Body Segment (experimental mode - cloned elements) */
+.snake-body-segment {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: transform;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: brightness(0.9) saturate(1.1);
+}
+
+/* Element Bite Animation (for experimental mode) */
+@keyframes element-bite {
+  0% {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    opacity: 1;
+  }
+  50% {
+    clip-path: polygon(0 0, 60% 0, 60% 100%, 0 100%);
+    opacity: 0.7;
+  }
+  100% {
+    clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+    opacity: 0.3;
+  }
+}
+
+.snake-food-eaten {
+  animation: element-bite 0.5s ease-out forwards, snake-food-eaten-flash 0.3s ease-out forwards;
+  filter: grayscale(1) brightness(0.5) !important;
+}
+
+/* Snake Head Styling (experimental mode) */
+.snake-head {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  will-change: transform;
+  transition: none; /* No transition for smooth movement */
+}
+
 /* Point Popup Animation */
 @keyframes point-popup {
   0% {

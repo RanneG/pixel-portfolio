@@ -1,12 +1,14 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import { soundManager } from "../utils/soundManager";
 import { useSnakeFoodMapper } from "../hooks/useSnakeFoodMapper";
+import { WebsiteEatingSnake } from "./WebsiteEatingSnake";
 
 interface SnakeGameProps {
   isPlaying: boolean;
   onGameOver?: (score: number) => void;
   onClose?: () => void;
   debug?: boolean;
+  experimentalMode?: boolean; // Toggle between classic and experimental
 }
 
 interface Position {
@@ -39,7 +41,19 @@ export const SnakeGame: React.FC<SnakeGameProps> = ({
   onGameOver,
   onClose,
   debug = false, // Disable debug by default
+  experimentalMode = false, // Default to classic mode
 }) => {
+  // If experimental mode, render WebsiteEatingSnake instead
+  if (experimentalMode) {
+    return (
+      <WebsiteEatingSnake
+        isPlaying={isPlaying}
+        onGameOver={onGameOver}
+        onClose={onClose}
+        mode="mouse" // Can be "mouse" or "arrow"
+      />
+    );
+  }
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameRef = useRef<number | null>(null);
   const gameLoopRef = useRef<number | null>(null);
