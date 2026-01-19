@@ -151,7 +151,6 @@ const QuestLog: React.FC<QuestLogProps> = ({
   return (
     <section
       id="quests"
-      aria-labelledby="quests-heading"
       className="bg-bg py-12 md:py-16 lg:py-24 border-t border-muted"
       aria-labelledby="quests-heading"
     >
