@@ -1,0 +1,30 @@
+# Code Owners
+# This file defines code ownership for the repository
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+* @RanneG
+
+# Configuration files
+/.github/ @RanneG
+/vercel.json @RanneG
+/package.json @RanneG
+/vite.config.ts @RanneG
+/tailwind.config.cjs @RanneG
+
+# Documentation
+/*.md @RanneG
+/docs/ @RanneG
+
+# Source code
+/src/ @RanneG
+
+# Public assets
+/public/ @RanneG
+
+# Scripts
+/scripts/ @RanneG
+
+# CI/CD
+/.github/workflows/ @RanneG
+

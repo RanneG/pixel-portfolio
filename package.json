@@ -10,9 +10,13 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "echo \"no linter configured\"",
+    "test": "echo \"no tests configured\"",
     "vercel-build": "npm run build",
     "analyze": "npm run build && node scripts/analyze-bundle.js",
-    "bundle-size": "npm run analyze"
+    "bundle-size": "npm run analyze",
+    "deploy": "node scripts/deploy.js",
+    "deploy:prod": "node scripts/deploy.js --production",
+    "health-check": "curl -f https://yourdomain.com/api/health || exit 1"
   },
   "dependencies": {
     "react": "^18.3.1",
