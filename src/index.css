@@ -1,0 +1,393 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: hsl(240 10% 4%);
+  --color-foreground: hsl(180 100% 95%);
+  --color-primary: hsl(180 100% 50%);
+  --color-secondary: hsl(320 100% 60%);
+  --color-accent: hsl(120 100% 50%);
+  --color-muted: hsl(240 10% 15%);
+  --color-card: hsl(240 10% 8%);
+  --color-pixel-yellow: hsl(50 100% 50%);
+  --color-pixel-orange: hsl(30 100% 55%);
+  --color-pixel-blue: hsl(220 100% 60%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  @apply font-retro;
+  background-color: var(--color-bg);
+  color: var(--color-foreground);
+}
+
+.font-pixel {
+  font-family: "Press Start 2P", system-ui, sans-serif;
+}
+
+.font-retro {
+  font-family: "VT323", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.neon-glow {
+  text-shadow:
+    0 0 4px var(--color-primary),
+    0 0 8px var(--color-primary),
+    0 0 16px var(--color-primary),
+    0 0 32px var(--color-primary);
+}
+
+.neon-glow-secondary {
+  text-shadow:
+    0 0 4px var(--color-secondary),
+    0 0 8px var(--color-secondary),
+    0 0 16px var(--color-secondary),
+    0 0 32px var(--color-secondary);
+}
+
+.neon-glow-accent {
+  text-shadow:
+    0 0 4px var(--color-accent),
+    0 0 8px var(--color-accent),
+    0 0 16px var(--color-accent),
+    0 0 32px var(--color-accent);
+}
+
+.pixel-border {
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-primary);
+}
+
+.pixel-border-secondary {
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-secondary);
+}
+
+.box-glow {
+  box-shadow:
+    0 0 12px rgba(0, 255, 255, 0.5),
+    0 0 24px rgba(0, 255, 255, 0.3);
+}
+
+.box-glow-secondary {
+  box-shadow:
+    0 0 12px rgba(255, 0, 170, 0.6),
+    0 0 24px rgba(255, 0, 170, 0.4);
+}
+
+.retro-btn {
+  position: relative;
+  border-radius: 0;
+  box-shadow: 4px 4px 0 var(--color-muted);
+  transition:
+    transform 0.1s ease-out,
+    box-shadow 0.1s ease-out,
+    background-color 0.15s ease-out,
+    color 0.15s ease-out;
+}
+
+.retro-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--color-muted);
+}
+
+.retro-btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.retro-btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+.retro-btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-bg);
+}
+
+.retro-btn-secondary:hover {
+  filter: brightness(1.05);
+}
+
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.4),
+    rgba(0, 0, 0, 0.4) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.35;
+}
+
+.crt-flicker {
+  animation: crt-flicker 2.5s infinite;
+}
+
+@keyframes crt-flicker {
+  0%,
+  19%,
+  21%,
+  23%,
+  25%,
+  54%,
+  56%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  24%,
+  55% {
+    opacity: 0.92;
+  }
+}
+
+.float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.pixel-fade-in {
+  animation: pixel-fade-in 0.9s ease-out both;
+}
+
+@keyframes pixel-fade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.typewriter {
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 2px solid var(--color-primary);
+  animation:
+    typewriter 4s steps(28, end) 0.5s 1 normal both,
+    blink-cursor 0.9s step-end infinite;
+}
+
+@keyframes typewriter {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink-cursor {
+  0%,
+  49% {
+    border-color: var(--color-primary);
+  }
+  50%,
+  100% {
+    border-color: transparent;
+  }
+}
+
+.hp-bar,
+.mp-bar {
+  position: relative;
+  background-color: var(--color-muted);
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-card);
+}
+
+.hp-bar-inner {
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-pixel-orange),
+    var(--color-pixel-orange) 6px,
+    transparent 6px,
+    transparent 8px
+  );
+}
+
+.mp-bar-inner {
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-pixel-blue),
+    var(--color-pixel-blue) 6px,
+    transparent 6px,
+    transparent 8px
+  );
+}
+
+.pixel-progress-track {
+  background-color: var(--color-muted);
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px var(--color-card);
+}
+
+.pixel-progress-fill {
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-primary),
+    var(--color-primary) 8px,
+    transparent 8px,
+    transparent 10px
+  );
+}
+
+.pixel-progress-fill-secondary {
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-secondary),
+    var(--color-secondary) 8px,
+    transparent 8px,
+    transparent 10px
+  );
+}
+
+.pixel-progress-fill-accent {
+  height: 100%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--color-accent),
+    var(--color-accent) 8px,
+    transparent 8px,
+    transparent 10px
+  );
+}
+
+.konami-hint::before {
+  content: "HINT: TRY THE KONAMI CODE";
+  letter-spacing: 0.1em;
+}
+
+/* Konami Code Animation */
+.konami-activated {
+  animation: konami-celebration 0.5s ease-out;
+}
+
+@keyframes konami-celebration {
+  0%, 100% {
+    filter: hue-rotate(0deg);
+  }
+  25% {
+    filter: hue-rotate(90deg);
+  }
+  50% {
+    filter: hue-rotate(180deg);
+  }
+  75% {
+    filter: hue-rotate(270deg);
+  }
+}
+
+/* High Contrast Mode */
+.high-contrast {
+  --color-bg: hsl(0 0% 0%);
+  --color-foreground: hsl(0 0% 100%);
+  --color-primary: hsl(180 100% 60%);
+  --color-secondary: hsl(320 100% 70%);
+  --color-accent: hsl(120 100% 60%);
+}
+
+.high-contrast .pixel-border {
+  box-shadow:
+    0 0 0 3px var(--color-bg),
+    0 0 0 6px var(--color-primary);
+}
+
+/* Theme Variations */
+[data-theme="gameboy"] {
+  --color-bg: hsl(120 20% 15%);
+  --color-foreground: hsl(120 20% 85%);
+  --color-primary: hsl(120 50% 50%);
+  --color-secondary: hsl(60 50% 50%);
+  --color-accent: hsl(120 70% 60%);
+}
+
+[data-theme="arcade"] {
+  --color-bg: hsl(240 30% 5%);
+  --color-foreground: hsl(0 0% 95%);
+  --color-primary: hsl(0 100% 60%);
+  --color-secondary: hsl(240 100% 60%);
+  --color-accent: hsl(60 100% 60%);
+}
+
+/* Screen reader only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* Performance: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .crt-flicker {
+    animation: none;
+  }
+  
+  .float {
+    animation: none;
+  }
+}
+
+
+
