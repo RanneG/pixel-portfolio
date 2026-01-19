@@ -78,10 +78,8 @@ const ProjectCard: React.FC<Project> = ({
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
+              className="retro-btn retro-btn-primary px-3 py-1.5 md:py-1 font-pixel min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               aria-label={`View ${title} source code on GitHub`}
-              className="retro-btn retro-btn-primary px-3 py-1.5 md:py-1 font-pixel min-h-[44px] flex items-center justify-center"
-              aria-label={`View ${title} on GitHub`}
             >
               GITHUB
             </a>
@@ -91,7 +89,7 @@ const ProjectCard: React.FC<Project> = ({
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="retro-btn retro-btn-secondary px-3 py-1.5 md:py-1 font-pixel min-h-[44px] flex items-center justify-center"
+              className="retro-btn retro-btn-secondary px-3 py-1.5 md:py-1 font-pixel min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary focus-visible:outline-offset-2"
               aria-label={`View live demo of ${title}`}
             >
               LIVE DEMO
