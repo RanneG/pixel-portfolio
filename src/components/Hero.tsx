@@ -29,37 +29,6 @@ const Hero: React.FC<HeroProps> = ({
         <div className="h-full w-full bg-[linear-gradient(90deg,_rgba(255,255,255,0.05)_1px,_transparent_1px),linear-gradient(180deg,_rgba(255,255,255,0.05)_1px,_transparent_1px)] bg-[size:32px_32px]" />
       </div>
 
-      {/* HP/MP bars - Stack vertically on mobile */}
-      <div className="absolute left-3 top-20 flex flex-col gap-3 md:flex-row md:gap-0 md:right-auto md:bottom-auto">
-        <div className="w-24 md:w-32">
-          <div className="hp-bar h-3 md:h-4 relative">
-            <div 
-              className="hp-bar-inner" 
-              style={{ width: "78%" }} 
-              aria-label="Health Points: 78%"
-              role="progressbar"
-              aria-valuenow={78}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            />
-          </div>
-          <p className="mt-1 text-[9px] md:text-[10px] font-pixel text-pixelOrange">HP 078/100</p>
-        </div>
-        <div className="w-24 md:w-32 md:absolute md:right-3 md:bottom-6 md:top-auto md:left-auto">
-          <div className="mp-bar h-3 md:h-4 relative">
-            <div 
-              className="mp-bar-inner" 
-              style={{ width: "62%" }} 
-              aria-label="Magic Points: 62%"
-              role="progressbar"
-              aria-valuenow={62}
-              aria-valuemin={0}
-              aria-valuemax={100}
-            />
-          </div>
-          <p className="mt-1 text-[9px] md:text-[10px] font-pixel text-pixelBlue">MP 062/100</p>
-        </div>
-      </div>
 
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="float absolute left-10 top-24 h-3 w-3 bg-pixelYellow pixel-border" />
