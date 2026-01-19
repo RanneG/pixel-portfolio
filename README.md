@@ -96,7 +96,87 @@ Create a `.env` file for sensitive configuration:
 
 ```env
 VITE_FORMSPREE_ID=your-formspree-id
+VITE_ANALYTICS_PROVIDER=plausible
+VITE_PLAUSIBLE_DOMAIN=yourdomain.com
 ```
+
+## 📊 Analytics & SEO
+
+### Analytics Setup
+
+This portfolio includes privacy-friendly analytics using **Plausible Analytics** (or Google Analytics 4).
+
+#### Plausible Analytics (Recommended)
+
+1. Sign up at [Plausible.io](https://plausible.io)
+2. Add your domain
+3. Set environment variables:
+   ```env
+   VITE_ANALYTICS_PROVIDER=plausible
+   VITE_PLAUSIBLE_DOMAIN=yourdomain.com
+   ```
+
+#### Google Analytics 4
+
+1. Create a GA4 property in [Google Analytics](https://analytics.google.com)
+2. Get your Measurement ID (G-XXXXXXXXXX)
+3. Set environment variables:
+   ```env
+   VITE_ANALYTICS_PROVIDER=ga4
+   VITE_GA4_ID=G-XXXXXXXXXX
+   ```
+
+### Tracked Events
+
+The portfolio automatically tracks:
+- **Project clicks** - When users click GitHub/Live Demo links
+- **Contact form submissions** - Form submissions
+- **Konami code activations** - Secret code entries
+- **Theme changes** - When users switch themes
+- **Section views** - Navigation between sections
+- **Share events** - Social sharing and link copying
+- **Web Vitals** - Core Web Vitals (LCP, FID, CLS, FCP)
+
+### Privacy & GDPR Compliance
+
+- ✅ Respects **Do Not Track** (DNT) header
+- ✅ **No cookies** used (Plausible)
+- ✅ **IP anonymization** enabled (GA4)
+- ✅ **GDPR compliant** - No personal data collected
+- ✅ Users can opt-out via browser settings
+
+### SEO Features
+
+- ✅ **Open Graph** meta tags for social sharing
+- ✅ **Twitter Card** support
+- ✅ **Structured Data** (JSON-LD) for search engines
+- ✅ **Sitemap.xml** for search engine indexing
+- ✅ **Robots.txt** for crawler control
+- ✅ **Semantic HTML** for better indexing
+
+### Performance Monitoring
+
+- ✅ **Core Web Vitals** tracking (LCP, FID, CLS, FCP)
+- ✅ Real User Monitoring (RUM)
+- ✅ Performance metrics stored locally
+- ✅ Analytics integration for performance data
+
+### Social Sharing
+
+- ✅ **Share buttons** on project cards
+- ✅ **Web Share API** support (native sharing)
+- ✅ **Copy link** functionality
+- ✅ **Social preview images** (Open Graph)
+
+### Analytics Dashboard
+
+View your analytics at:
+- **Plausible**: [yourdomain.com/plausible](https://plausible.io) (if using Plausible)
+- **Google Analytics**: [analytics.google.com](https://analytics.google.com) (if using GA4)
+
+### Updating SEO Data
+
+Edit `src/App.tsx` to update SEO meta tags and structured data, or modify `public/data/config.json` for site-wide settings.
 
 ## Project Structure
 

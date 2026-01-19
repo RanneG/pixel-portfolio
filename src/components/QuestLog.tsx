@@ -1,5 +1,7 @@
 import React from "react";
 import type { Project } from "../types";
+import { ShareButton } from "./ShareButton";
+import { analytics } from "../utils/analytics";
 
 interface QuestLogProps {
   projects?: Project[];
@@ -72,12 +74,13 @@ const ProjectCard: React.FC<Project> = ({
         </div>
       </div>
       <footer className="mt-1 flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-2 text-[9px] md:text-[10px]">
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2 flex-wrap items-center">
           {githubUrl && (
             <a
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => analytics.trackEvent("project_click", { project: title, type: "github" })}
               className="retro-btn retro-btn-primary px-3 py-1.5 md:py-1 font-pixel min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2"
               aria-label={`View ${title} source code on GitHub`}
             >
@@ -89,6 +92,7 @@ const ProjectCard: React.FC<Project> = ({
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => analytics.trackEvent("project_click", { project: title, type: "live" })}
               className="retro-btn retro-btn-secondary px-3 py-1.5 md:py-1 font-pixel min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary focus-visible:outline-offset-2"
               aria-label={`View live demo of ${title}`}
             >
@@ -100,6 +104,12 @@ const ProjectCard: React.FC<Project> = ({
               LINKS COMING SOON
             </span>
           )}
+          <ShareButton
+            title={title}
+            text={`Check out ${title}: ${description}`}
+            url={liveUrl || githubUrl || window.location.href}
+            projectTitle={title}
+          />
         </div>
         <span className="text-muted font-pixel">QUEST ID {questId || `#${xp}`}</span>
       </footer>

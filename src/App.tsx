@@ -14,6 +14,8 @@ import { InstallPrompt } from "./components/InstallPrompt";
 import { AchievementManager } from "./components/AchievementManager";
 import { QuestLogSkeleton, SkillInventorySkeleton } from "./components/LoadingSkeleton";
 import AdminPanel from "./components/AdminPanel";
+import { initWebVitals } from "./utils/webVitals";
+import { updateMetaTags, generateStructuredData, injectStructuredData } from "./utils/seo";
 
 // Lazy load heavy components for code splitting with prefetching
 const SettingsPanel = lazy(() => import("./components/SettingsPanel"));
@@ -23,6 +25,46 @@ const QuestLog = lazy(() => import("./components/QuestLog"));
 const AppContent: React.FC = () => {
   const { settings } = useSettings();
   const { data, config } = usePortfolioData();
+
+  // Initialize SEO and Web Vitals
+  React.useEffect(() => {
+    // Update meta tags
+    const siteUrl = window.location.origin;
+    updateMetaTags({
+      title: config?.site?.title || `${data.name} | 8-Bit Portfolio`,
+      description: config?.site?.description || data.title,
+      url: siteUrl,
+      image: `${siteUrl}/og-image.png`, // Update with actual image path
+      siteName: config?.site?.title || "8-Bit Portfolio",
+      type: "website"
+    });
+
+    // Inject structured data
+    const structuredData = generateStructuredData({
+      name: data.name,
+      title: data.title,
+      description: data.bio.join(" "),
+      url: siteUrl,
+      email: data.contact.email,
+      socialLinks: data.socialLinks,
+      projects: data.projects.map((p) => ({
+        title: p.title,
+        description: p.description,
+        url: p.liveUrl || p.githubUrl
+      }))
+    });
+    injectStructuredData(structuredData);
+
+    // Initialize Web Vitals tracking
+    initWebVitals();
+  }, [data, config]);
+
+  // Track theme changes
+  React.useEffect(() => {
+    if (settings.theme) {
+      analytics.trackEvent("theme_change", { theme: settings.theme });
+    }
+  }, [settings.theme]);
   
   return (
     <>
