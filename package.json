@@ -2,11 +2,15 @@
   "name": "portfolio-8bit",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "echo \"no linter configured\""
+    "lint": "echo \"no linter configured\"",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "react": "^18.3.1",
