@@ -129,6 +129,7 @@ body {
     box-shadow 0.1s ease-out,
     background-color 0.15s ease-out,
     color 0.15s ease-out;
+  will-change: transform, box-shadow;
 }
 
 .retro-btn:active {
@@ -199,6 +200,7 @@ body {
 
 .float {
   animation: float 6s ease-in-out infinite;
+  will-change: transform;
 }
 
 @keyframes float {

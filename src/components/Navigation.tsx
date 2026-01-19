@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { debounce } from "../utils/debounce";
+import { usePrefetch } from "../hooks/usePrefetch";
 
 interface NavItem {
   href: string;
@@ -12,6 +14,16 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+
+  // Prefetch components on hover for better performance
+  const prefetchSkills = usePrefetch(
+    () => import("../components/SkillInventory"),
+    true
+  );
+  const prefetchQuests = usePrefetch(
+    () => import("../components/QuestLog"),
+    true
+  );
 
   const items: NavItem[] = [
     { href: "#hero", label: "HOME" },
@@ -38,9 +50,12 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    // Debounce scroll events for better performance
+    const debouncedScroll = debounce(handleScroll, 10);
+
+    window.addEventListener("scroll", debouncedScroll, { passive: true });
+    return () => window.removeEventListener("scroll", debouncedScroll);
+  }, [items]);
 
   return (
     <header className="fixed inset-x-0 top-0 z-40 bg-bg/90 backdrop-blur border-b border-muted" role="banner">
@@ -69,10 +84,18 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
           {items.map((item) => {
             const sectionId = item.href.substring(1);
             const isActive = activeSection === sectionId;
+            // Prefetch on hover for skills and quests
+            const prefetchProps =
+              sectionId === "skills"
+                ? prefetchSkills
+                : sectionId === "quests"
+                  ? prefetchQuests
+                  : {};
             return (
               <li key={item.href}>
                 <a
                   href={item.href}
+                  {...prefetchProps}
                   className={`flex items-center gap-1 transition-colors min-h-[44px] min-w-[44px] items-center justify-center ${
                     isActive ? "text-primary" : "text-foreground hover:text-primary"
                   }`}

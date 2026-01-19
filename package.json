@@ -10,7 +10,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "lint": "echo \"no linter configured\"",
-    "vercel-build": "npm run build"
+    "vercel-build": "npm run build",
+    "analyze": "npm run build && node scripts/analyze-bundle.js",
+    "bundle-size": "npm run analyze"
   },
   "dependencies": {
     "react": "^18.3.1",

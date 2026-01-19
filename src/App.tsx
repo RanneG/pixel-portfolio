@@ -2,17 +2,19 @@ import React, { Suspense, lazy } from "react";
 import Navigation from "./components/Navigation";
 import Hero from "./components/Hero";
 import CharacterStats from "./components/CharacterStats";
-import SkillInventory from "./components/SkillInventory";
-import QuestLog from "./components/QuestLog";
 import SavePoint from "./components/SavePoint";
 import Footer from "./components/Footer";
 import { SettingsProvider, useSettings } from "./contexts/SettingsContext";
 import { PortfolioDataProvider, usePortfolioData } from "./contexts/PortfolioDataContext";
 import { KonamiCode } from "./components/KonamiCode";
 import { SkipToContent } from "./components/SkipToContent";
+import { InstallPrompt } from "./components/InstallPrompt";
+import { QuestLogSkeleton, SkillInventorySkeleton } from "./components/LoadingSkeleton";
 
-// Lazy load heavy components for code splitting
+// Lazy load heavy components for code splitting with prefetching
 const SettingsPanel = lazy(() => import("./components/SettingsPanel"));
+const SkillInventory = lazy(() => import("./components/SkillInventory"));
+const QuestLog = lazy(() => import("./components/QuestLog"));
 
 const AppContent: React.FC = () => {
   const { settings } = useSettings();
@@ -22,6 +24,7 @@ const AppContent: React.FC = () => {
     <>
       <SkipToContent />
       <KonamiCode />
+      <InstallPrompt />
       <Suspense fallback={null}>
         <SettingsPanel />
       </Suspense>
@@ -37,8 +40,12 @@ const AppContent: React.FC = () => {
             attributes={data.attributes}
             experience={data.experience}
           />
-          <SkillInventory skills={data.skills} />
-          <QuestLog projects={data.projects} />
+          <Suspense fallback={<SkillInventorySkeleton />}>
+            <SkillInventory skills={data.skills} />
+          </Suspense>
+          <Suspense fallback={<QuestLogSkeleton />}>
+            <QuestLog projects={data.projects} />
+          </Suspense>
           <SavePoint
             contactInfo={data.contact}
             socialLinks={data.socialLinks}
