@@ -16,6 +16,7 @@ import { QuestLogSkeleton, SkillInventorySkeleton } from "./components/LoadingSk
 import AdminPanel from "./components/AdminPanel";
 import { initWebVitals } from "./utils/webVitals";
 import { updateMetaTags, generateStructuredData, injectStructuredData } from "./utils/seo";
+import { analytics } from "./utils/analytics";
 
 // Lazy load heavy components for code splitting with prefetching
 const SettingsPanel = lazy(() => import("./components/SettingsPanel"));
