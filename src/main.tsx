@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import "./index.css";
-import { initWebVitals } from "./utils/webVitals";
 
 // Register service worker for PWA
 if ("serviceWorker" in navigator) {
@@ -17,9 +16,6 @@ if ("serviceWorker" in navigator) {
       });
   });
 }
-
-// Initialize Web Vitals tracking early
-initWebVitals();
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
