@@ -311,32 +311,48 @@ body {
 .hp-bar,
 .mp-bar {
   position: relative;
+  width: 100%;
   background-color: var(--color-muted);
   box-shadow:
     0 0 0 2px var(--color-bg),
     0 0 0 4px var(--color-card);
+  overflow: hidden;
 }
 
 .hp-bar-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
+  min-width: 0;
+  background-color: hsl(30 100% 55%);
   background-image: repeating-linear-gradient(
     90deg,
-    var(--color-pixel-orange),
-    var(--color-pixel-orange) 6px,
+    hsl(30 100% 55%),
+    hsl(30 100% 55%) 6px,
     transparent 6px,
     transparent 8px
   );
+  transition: width 0.3s ease;
+  z-index: 1;
 }
 
 .mp-bar-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
+  min-width: 0;
+  background-color: hsl(220 100% 60%);
   background-image: repeating-linear-gradient(
     90deg,
-    var(--color-pixel-blue),
-    var(--color-pixel-blue) 6px,
+    hsl(220 100% 60%),
+    hsl(220 100% 60%) 6px,
     transparent 6px,
     transparent 8px
   );
+  transition: width 0.3s ease;
+  z-index: 1;
 }
 
 .pixel-progress-track {
