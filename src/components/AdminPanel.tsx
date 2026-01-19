@@ -3,7 +3,7 @@ import { usePortfolioData } from "../contexts/PortfolioDataContext";
 import type { PortfolioData, PersonalData, StatsData, SkillsData, ProjectsData } from "../types";
 
 const AdminPanel: React.FC = () => {
-  const { data, reload, isLoading } = usePortfolioData();
+  const { data, reload, isLoading, config } = usePortfolioData();
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"personal" | "stats" | "skills" | "projects">("personal");
   const [localData, setLocalData] = useState<Partial<PortfolioData>>({});

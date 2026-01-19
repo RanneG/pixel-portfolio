@@ -1,4 +1,7 @@
 import React, { useState, FormEvent } from "react";
+import { soundManager } from "../utils/soundManager";
+import { useAchievementTracker } from "../hooks/useAchievementTracker";
+import { analytics } from "../utils/analytics";
 
 interface SavePointProps {
   contactInfo?: {
@@ -33,6 +36,7 @@ const SavePoint: React.FC<SavePointProps> = ({
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { trackFormSubmission } = useAchievementTracker();
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -86,6 +90,9 @@ const SavePoint: React.FC<SavePointProps> = ({
 
         if (response.ok) {
           setStatus("success");
+        soundManager.submit();
+        trackFormSubmission();
+        analytics.trackEvent("contact_form_submitted", { formId: formspreeId });
           setFormData({ name: "", email: "", message: "" });
           // Reset success message after 5 seconds
           setTimeout(() => setStatus("idle"), 5000);
@@ -98,7 +105,8 @@ const SavePoint: React.FC<SavePointProps> = ({
       }
     } catch (error) {
       console.error("Form submission error:", error);
-      setStatus("error");
+        setStatus("error");
+        soundManager.error();
       setTimeout(() => setStatus("idle"), 5000);
     }
   };

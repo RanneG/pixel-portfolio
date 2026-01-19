@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from "react";
+import { soundManager } from "../utils/soundManager";
+import { useAchievementTracker } from "../hooks/useAchievementTracker";
+import { analytics } from "../utils/analytics";
 
 const KONAMI_CODE = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown", "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight", "KeyB", "KeyA"];
 
 export const KonamiCode: React.FC = () => {
   const [sequence, setSequence] = useState<string[]>([]);
   const [activated, setActivated] = useState(false);
+  const { trackKonamiCode } = useAchievementTracker();
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -17,6 +21,9 @@ export const KonamiCode: React.FC = () => {
       if (newSequence.length === KONAMI_CODE.length) {
         if (newSequence.every((key, index) => key === KONAMI_CODE[index])) {
           setActivated(true);
+          soundManager.konami();
+          trackKonamiCode();
+          analytics.trackEvent("konami_code_activated");
           // Trigger celebration animation
           document.body.classList.add("konami-activated");
           setTimeout(() => {

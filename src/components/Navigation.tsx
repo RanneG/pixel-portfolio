@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { debounce } from "../utils/debounce";
 import { usePrefetch } from "../hooks/usePrefetch";
+import { useAchievementTracker } from "../hooks/useAchievementTracker";
+import { soundManager } from "../utils/soundManager";
+import { analytics } from "../utils/analytics";
 
 interface NavItem {
   href: string;
@@ -14,6 +17,7 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
+  const { trackSectionVisit } = useAchievementTracker();
 
   // Prefetch components on hover for better performance
   const prefetchSkills = usePrefetch(
@@ -43,6 +47,11 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
         if (element) {
           const { offsetTop, offsetHeight } = element;
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            if (activeSection !== section) {
+              soundManager.transition();
+              trackSectionVisit(section);
+              analytics.trackEvent("section_viewed", { section });
+            }
             setActiveSection(section);
             break;
           }

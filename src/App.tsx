@@ -6,9 +6,12 @@ import SavePoint from "./components/SavePoint";
 import Footer from "./components/Footer";
 import { SettingsProvider, useSettings } from "./contexts/SettingsContext";
 import { PortfolioDataProvider, usePortfolioData } from "./contexts/PortfolioDataContext";
+import { AchievementsProvider } from "./contexts/AchievementsContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import { KonamiCode } from "./components/KonamiCode";
 import { SkipToContent } from "./components/SkipToContent";
 import { InstallPrompt } from "./components/InstallPrompt";
+import { AchievementManager } from "./components/AchievementManager";
 import { QuestLogSkeleton, SkillInventorySkeleton } from "./components/LoadingSkeleton";
 import AdminPanel from "./components/AdminPanel";
 
@@ -26,6 +29,7 @@ const AppContent: React.FC = () => {
       <SkipToContent />
       <KonamiCode />
       <InstallPrompt />
+      <AchievementManager />
       {import.meta.env.DEV && <AdminPanel />}
       <Suspense fallback={null}>
         <SettingsPanel />
@@ -63,11 +67,15 @@ const AppContent: React.FC = () => {
 
 const App: React.FC = () => {
   return (
-    <SettingsProvider>
-      <PortfolioDataProvider>
-        <AppContent />
-      </PortfolioDataProvider>
-    </SettingsProvider>
+    <LanguageProvider>
+      <SettingsProvider>
+        <AchievementsProvider>
+          <PortfolioDataProvider>
+            <AppContent />
+          </PortfolioDataProvider>
+        </AchievementsProvider>
+      </SettingsProvider>
+    </LanguageProvider>
   );
 };
 

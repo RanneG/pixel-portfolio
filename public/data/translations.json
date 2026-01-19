@@ -1,0 +1,81 @@
+{
+  "en": {
+    "nav": {
+      "home": "HOME",
+      "character": "CHARACTER STATS",
+      "skills": "SKILL INVENTORY",
+      "quests": "QUEST LOG",
+      "save": "SAVE POINT"
+    },
+    "hero": {
+      "pressStart": "PRESS START",
+      "hello": "HELLO, I'M",
+      "subtitle": "DEVELOPER // DESIGNER // CREATOR"
+    },
+    "achievements": {
+      "title": "ACHIEVEMENTS",
+      "unlocked": "UNLOCKED",
+      "locked": "LOCKED",
+      "progress": "PROGRESS"
+    },
+    "settings": {
+      "title": "SETTINGS",
+      "sound": "SOUND EFFECTS",
+      "volume": "VOLUME",
+      "language": "LANGUAGE"
+    }
+  },
+  "es": {
+    "nav": {
+      "home": "INICIO",
+      "character": "ESTADÍSTICAS",
+      "skills": "HABILIDADES",
+      "quests": "PROYECTOS",
+      "save": "CONTACTO"
+    },
+    "hero": {
+      "pressStart": "PRESIONA START",
+      "hello": "HOLA, SOY",
+      "subtitle": "DESARROLLADOR // DISEÑADOR // CREADOR"
+    },
+    "achievements": {
+      "title": "LOGROS",
+      "unlocked": "DESBLOQUEADO",
+      "locked": "BLOQUEADO",
+      "progress": "PROGRESO"
+    },
+    "settings": {
+      "title": "CONFIGURACIÓN",
+      "sound": "EFECTOS DE SONIDO",
+      "volume": "VOLUMEN",
+      "language": "IDIOMA"
+    }
+  },
+  "ja": {
+    "nav": {
+      "home": "ホーム",
+      "character": "キャラクター",
+      "skills": "スキル",
+      "quests": "プロジェクト",
+      "save": "連絡先"
+    },
+    "hero": {
+      "pressStart": "スタート",
+      "hello": "こんにちは、私は",
+      "subtitle": "開発者 // デザイナー // クリエイター"
+    },
+    "achievements": {
+      "title": "実績",
+      "unlocked": "解除済み",
+      "locked": "ロック",
+      "progress": "進捗"
+    },
+    "settings": {
+      "title": "設定",
+      "sound": "効果音",
+      "volume": "音量",
+      "language": "言語"
+    }
+  }
+}
+

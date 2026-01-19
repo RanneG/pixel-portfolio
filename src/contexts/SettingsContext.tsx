@@ -5,6 +5,7 @@ export type Theme = "nes" | "gameboy" | "arcade";
 interface Settings {
   scanlinesEnabled: boolean;
   soundEnabled: boolean;
+  soundVolume: number;
   highContrast: boolean;
   theme: Theme;
 }
@@ -18,6 +19,7 @@ interface SettingsContextType {
 const defaultSettings: Settings = {
   scanlinesEnabled: true,
   soundEnabled: false,
+  soundVolume: 0.3,
   highContrast: false,
   theme: "nes"
 };
@@ -44,6 +46,14 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }
     
     // Apply theme class
     document.documentElement.setAttribute("data-theme", settings.theme);
+    
+    // Update sound manager
+    if (typeof window !== "undefined") {
+      import("../utils/soundManager").then(({ soundManager }) => {
+        soundManager.setEnabled(settings.soundEnabled);
+        soundManager.setVolume(settings.soundVolume);
+      });
+    }
     
     // Apply high contrast
     if (settings.highContrast) {

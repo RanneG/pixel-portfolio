@@ -1,0 +1,32 @@
+{
+  "name": "RANNE GERODIAS",
+  "title": "Tech Professional crafting retro-futuristic interfaces and playful experiences.",
+  "subtitle": "DEVELOPER // DESIGNER // CREATOR",
+  "bio": [
+    "> Loves combining design, code, and nostalgia.",
+    "> Specializes in TypeScript, React, and delightful details.",
+    "> Currently grinding XP in UI engineering and motion design."
+  ],
+  "statusBadges": ["CAFFEINATED", "MOTIVATED", "CREATIVE"],
+  "contact": {
+    "email": "player.one@example.dev",
+    "location": "NEAR A TERMINAL, SOMEWHERE ONLINE",
+    "timezone": "UTC+08 (MOSTLY AWAKE AT NIGHT)"
+  },
+  "socialLinks": [
+    {
+      "name": "GITHUB",
+      "url": "https://github.com/RanneG"
+    },
+    {
+      "name": "LINKEDIN",
+      "url": "https://www.linkedin.com/in/ranne-gerodias-809460108/"
+    },
+    {
+      "name": "DRIBBBLE",
+      "url": "https://dribbble.com/ranne-gerodias"
+    }
+  ],
+  "availableForHire": true
+}
+

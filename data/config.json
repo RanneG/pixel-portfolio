@@ -1,0 +1,19 @@
+{
+  "site": {
+    "title": "Ranne Gerodias | 8-Bit Portfolio",
+    "description": "8-bit retro-themed interactive portfolio website",
+    "logo": "<DEV/>",
+    "formspreeId": "xeeegyek"
+  },
+  "theme": {
+    "default": "nes",
+    "available": ["nes", "gameboy", "arcade"]
+  },
+  "features": {
+    "konamiCode": true,
+    "settingsPanel": true,
+    "installPrompt": true,
+    "analytics": false
+  }
+}
+
