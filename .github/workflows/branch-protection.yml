@@ -53,7 +53,8 @@ jobs:
           fi
           
           # Check for squash merge patterns (GitHub squash merges often have PR number)
-          if echo "$COMMIT_MSG" | grep -qE "\(#\d+\)"; then
+          # Note: Using [0-9] instead of \d because grep -E uses ERE where \d has no special meaning
+          if echo "$COMMIT_MSG" | grep -qE "\(#[0-9]+\)"; then
             IS_MERGED_PR=true
           fi
           
@@ -65,7 +66,7 @@ jobs:
             else
               echo "   Reason: Merge pattern detected in commit message"
             fi
-          elif echo "$COMMIT_MSG" | grep -qE "^(Revert|cherry picked from)"; then
+          elif echo "$COMMIT_MSG" | grep -qE "^(Revert|\(cherry picked from)"; then
             echo "✅ Push is from revert or cherry-pick (allowed)"
           else
             echo "❌ Direct push to main branch detected!"
