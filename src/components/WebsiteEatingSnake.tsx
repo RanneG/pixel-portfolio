@@ -51,8 +51,10 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   const [segments, setSegments] = useState<SnakeSegment[]>([]);
   const [score, setScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
+  const [gameOverReason, setGameOverReason] = useState<string>("unknown");
   const [direction, setDirection] = useState<Position>({ x: 0, y: 0 });
   const [trail, setTrail] = useState<Array<{x: number, y: number}>>([]); // Head position trail
+  const [debugVisible, setDebugVisible] = useState<boolean>(import.meta.env.DEV);
   
   const animationFrameRef = useRef<number | null>(null);
   const segmentUpdateFrameRef = useRef<number | null>(null);
@@ -80,9 +82,59 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     }
   }, [isPlaying]);
 
-  // Handle keyboard input for arrow key mode
+  // Add test segment function
+  const addTestSegment = useCallback(() => {
+    const testElementId = `test-segment-${segments.length + 1}`;
+    const colors = ["var(--color-secondary)", "var(--color-primary)", "var(--color-accent)", "#FF5555"];
+    const color = colors[segments.length % colors.length];
+    
+    // Calculate target position from trail
+    const currentSegments = segments.length;
+    const trailIndex = Math.min(5 + (currentSegments * 5), trail.length - 1);
+    const attachPosition = trail[trailIndex] || trail[trail.length - 1] || headPosition;
+    const targetX = attachPosition.x;
+    const targetY = attachPosition.y;
+    
+    // Create visual element
+    const visualEl = document.createElement("div");
+    visualEl.className = "snake-body-segment test-segment";
+    visualEl.setAttribute("data-snake-segment", testElementId);
+    visualEl.setAttribute("data-segment-index", currentSegments.toString());
+    visualEl.style.cssText = `
+      position: fixed !important;
+      left: ${targetX}px !important;
+      top: ${targetY}px !important;
+      width: ${SEGMENT_SIZE}px !important;
+      height: ${SEGMENT_SIZE}px !important;
+      background: linear-gradient(135deg, ${color} 70%, var(--color-primary) 30%) !important;
+      border: 2px solid black !important;
+      border-radius: 3px !important;
+      opacity: 0.9 !important;
+      z-index: 9999 !important;
+      pointer-events: none !important;
+      background-image: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 2px, transparent 3px) !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+      transition: none !important;
+    `;
+    document.body.appendChild(visualEl);
+    
+    const newSegment: SnakeSegment = {
+      id: `test-segment-${Date.now()}-${segmentCounterRef.current++}`,
+      elementId: testElementId,
+      element: visualEl,
+      currentPosition: { x: targetX, y: targetY },
+      targetPosition: { x: targetX, y: targetY },
+      offset: currentSegments + 1,
+    };
+    
+    setSegments((prev) => [...prev, newSegment]);
+    setScore((prev) => prev + 20);
+    console.log(`✅ Test segment added. Total segments: ${segments.length + 1}`);
+  }, [segments, trail, headPosition]);
+
+  // Handle keyboard input for arrow key mode and test shortcuts
   useEffect(() => {
-    if (!isPlaying || mode !== "arrow") return;
+    if (!isPlaying) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -90,7 +142,42 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         return;
       }
 
+      // Test mode shortcuts (work even during game over)
+      if (e.key === "t" || e.key === "T") {
+        e.preventDefault();
+        if (!gameOver) {
+          addTestSegment();
+        }
+        return;
+      }
+      
+      if (e.key === "r" || e.key === "R") {
+        e.preventDefault();
+        // Clean up all segments
+        document.querySelectorAll('[data-snake-segment]').forEach((el) => {
+          if (el.parentNode) {
+            el.parentNode.removeChild(el);
+          }
+        });
+        setSegments([]);
+        setScore(0);
+        eatenElementsRef.current.clear();
+        segmentCounterRef.current = 0;
+        console.log("🔄 Segments reset");
+        return;
+      }
+      
+      if (e.key === "i" || e.key === "I") {
+        e.preventDefault();
+        setDebugVisible((prev) => !prev);
+        console.log("🔍 Debug overlay:", !debugVisible);
+        return;
+      }
+
       if (gameOver) return;
+      
+      // Arrow key mode handling
+      if (mode !== "arrow") return;
 
       // Prevent default arrow key behavior
       if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
@@ -122,7 +209,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isPlaying, mode, gameOver, onClose]);
+  }, [isPlaying, mode, gameOver, onClose, addTestSegment, debugVisible]);
 
   // Handle mouse movement for mouse mode
   useEffect(() => {
@@ -432,23 +519,70 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     const gameLoop = () => {
       updateHeadPosition();
       
-      // Check for self-collision (head hitting body)
-      if (headRef.current && segments.length > 3) {
+      // Check for self-collision (head hitting body) - with debug logging
+      if (headRef.current && segments.length >= 3) {
         const headRect = headRef.current.getBoundingClientRect();
-        const collision = segments.some((segment) => {
-          if (!segment.element || !document.contains(segment.element)) return false;
+        const headPos = { x: headRect.left + headRect.width / 2, y: headRect.top + headRect.height / 2 };
+        
+        // Check self-collision with improved detection (skip first 2 segments - neck area)
+        let collisionDetected = false;
+        let collisionSegment = -1;
+        let collisionDistance = Infinity;
+        
+        for (let i = 2; i < segments.length; i++) {
+          const segment = segments[i];
+          if (!segment.element || !document.contains(segment.element)) continue;
+          
           const segmentRect = segment.element.getBoundingClientRect();
-          return checkCollision(headRect, segmentRect);
-        });
+          const segmentPos = { 
+            x: segmentRect.left + segmentRect.width / 2, 
+            y: segmentRect.top + segmentRect.height / 2 
+          };
+          
+          // Calculate distance between centers
+          const distance = Math.sqrt(
+            Math.pow(headPos.x - segmentPos.x, 2) + 
+            Math.pow(headPos.y - segmentPos.y, 2)
+          );
+          
+          // Collision if distance is less than combined radii (20px threshold)
+          if (distance < 20) {
+            collisionDetected = true;
+            collisionSegment = i;
+            collisionDistance = distance;
+            break;
+          }
+        }
 
-        if (collision) {
+        if (collisionDetected) {
+          console.log("🚨 === GAME OVER CHECK ===");
+          console.log("Reason: Self-collision detected");
+          console.log("Score:", score);
+          console.log("Segments:", segments.length);
+          console.log("Collision with segment:", collisionSegment);
+          console.log("Collision distance:", collisionDistance.toFixed(2), "px");
+          console.log("Head position:", headPos);
+          console.log("Segment position:", segments[collisionSegment]?.currentPosition);
+          
           soundManager.error();
+          setGameOverReason(`Self-collision with segment ${collisionSegment} (distance: ${collisionDistance.toFixed(1)}px)`);
           setGameOver(true);
           if (onGameOver) {
             onGameOver(score);
           }
           return;
         }
+      }
+      
+      // Debug logging every 60 frames (once per second at 60fps)
+      if (animationFrameRef.current && animationFrameRef.current % 60 === 0) {
+        console.log("🐍 Game state:", {
+          score,
+          segments: segments.length,
+          trailLength: trail.length,
+          headPosition,
+          gameOver: false
+        });
       }
 
       animationFrameRef.current = requestAnimationFrame(gameLoop);
@@ -642,12 +776,29 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         </p>
       </div>
 
-      {/* Debug: Segment count (development only) */}
-      {import.meta.env.DEV && (
-        <div className="fixed top-4 right-4 bg-black/80 text-white p-2 rounded z-[10000] font-pixel text-[8px]">
-          Segments: {segments.length}
-          <br />
-          In DOM: {document.querySelectorAll('[data-snake-segment]').length}
+      {/* Debug: Enhanced debug overlay */}
+      {debugVisible && (
+        <div className="fixed top-4 left-4 bg-black/90 text-white p-3 rounded z-[10001] font-pixel text-[8px] border-2 border-white">
+          <div className="space-y-1">
+            <div className="text-green-400 font-bold">DEBUG MODE</div>
+            <div>Segments: {segments.length}</div>
+            <div>Trail length: {trail.length}</div>
+            <div>Score: {score}</div>
+            <div>Head: ({Math.round(headPosition.x)}, {Math.round(headPosition.y)})</div>
+            {gameOver && (
+              <div className="text-red-400 mt-2">
+                GAME OVER
+                <br />
+                Reason: {gameOverReason}
+              </div>
+            )}
+            <div className="mt-3 pt-2 border-t border-white/30 text-green-300 text-[7px]">
+              <div>T = Add segment</div>
+              <div>R = Reset</div>
+              <div>I = Toggle debug</div>
+              <div>ESC = Exit</div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -674,6 +825,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
                     }
                   });
                   setGameOver(false);
+                  setGameOverReason("unknown");
                   setScore(0);
                   setSegments([]);
                   eatenElementsRef.current.clear();
