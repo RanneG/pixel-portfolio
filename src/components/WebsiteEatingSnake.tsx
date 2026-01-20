@@ -52,6 +52,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   const [score, setScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
   const [direction, setDirection] = useState<Position>({ x: 0, y: 0 });
+  const [trail, setTrail] = useState<Array<{x: number, y: number}>>([]); // Head position trail
   
   const animationFrameRef = useRef<number | null>(null);
   const segmentUpdateFrameRef = useRef<number | null>(null);
@@ -59,15 +60,23 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   const keyDirectionRef = useRef<Position>({ x: 1, y: 0 });
   const eatenElementsRef = useRef<Set<string>>(new Set());
   const segmentCounterRef = useRef<number>(0);
+  const lastHeadPositionRef = useRef<Position>({ x: 100, y: 100 });
+  
+  // Trail length based on number of segments eaten
+  const getTrailLength = () => Math.max(segments.length + 5, 20); // At least 20 positions in trail
 
-  // Initialize head position
+  // Initialize head position and trail
   useEffect(() => {
     if (isPlaying && headRef.current) {
       const rect = headRef.current.getBoundingClientRect();
       const initialPos = { x: rect.left, y: rect.top };
       setHeadPosition(initialPos);
+      lastHeadPositionRef.current = initialPos;
       mousePositionRef.current = initialPos;
-      console.log("🟢 INITIALIZED head position:", initialPos);
+      // Initialize trail with current position repeated
+      const trailLength = getTrailLength();
+      setTrail(Array(trailLength).fill(initialPos).map(() => ({ ...initialPos })));
+      console.log("🟢 INITIALIZED head position and trail:", initialPos);
     }
   }, [isPlaying]);
 
@@ -222,15 +231,19 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     console.log("✅ Clone added to DOM. Document contains?", document.contains(clone));
     console.log("Clone element:", clone);
 
-    // 5. Create segment object with currentPosition
+    // 5. Create segment object with currentPosition (start at attach position from trail)
     const newSegment: SnakeSegment = {
       id: `segment-${Date.now()}-${segmentCounterRef.current++}`,
       elementId: elementId,
       element: clone,
-      currentPosition: { x: rect.left, y: rect.top }, // Start at original position
+      currentPosition: { x: targetX, y: targetY }, // Start at trail position (instant)
       targetPosition: { x: targetX, y: targetY },
       offset: currentSegments + 1,
     };
+    
+    // Set initial DOM position immediately
+    clone.style.left = `${targetX}px`;
+    clone.style.top = `${targetY}px`;
 
     // 6. Update state
     setSegments((prev) => {
@@ -278,7 +291,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     });
   }, [checkCollision, eatElement, gameOver]);
 
-  // Update head position based on mode
+  // Update head position based on mode and update trail
   const updateHeadPosition = useCallback(() => {
     if (!headRef.current || gameOver) return;
 
@@ -308,7 +321,20 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       newY = Math.max(0, Math.min(window.innerHeight - HEAD_SIZE, newY));
     }
 
-    setHeadPosition({ x: newX, y: newY });
+    // Only update if position actually changed
+    if (newX !== headPosition.x || newY !== headPosition.y) {
+      const newPosition = { x: newX, y: newY };
+      setHeadPosition(newPosition);
+      
+      // Update trail: add new position to front, remove oldest
+      setTrail(prev => {
+        const newTrail = [newPosition, ...prev];
+        const trailLength = getTrailLength();
+        return newTrail.slice(0, trailLength);
+      });
+      
+      lastHeadPositionRef.current = newPosition;
+    }
 
     // Update head DOM position
     if (headRef.current) {
@@ -320,11 +346,11 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     requestAnimationFrame(() => {
       checkElementCollisions();
     });
-  }, [headPosition, mode, gameOver, checkElementCollisions]);
+  }, [headPosition, mode, gameOver, checkElementCollisions, segments.length]);
 
-  // Update body segments to follow head - FIXED VERSION
+  // Update body segments to follow trail instantly (no lerp, classic snake movement)
   useEffect(() => {
-    if (!isPlaying || segments.length === 0 || gameOver) {
+    if (!isPlaying || segments.length === 0 || gameOver || trail.length === 0) {
       if (segmentUpdateFrameRef.current) {
         cancelAnimationFrame(segmentUpdateFrameRef.current);
         segmentUpdateFrameRef.current = null;
@@ -336,33 +362,28 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       setSegments((prevSegments) => {
         const updatedSegments = [...prevSegments];
         
-        // Update each segment to follow the one before it
+        // Each segment instantly takes position from trail at fixed intervals
         for (let i = 0; i < updatedSegments.length; i++) {
           const segment = updatedSegments[i];
           
-          // Determine target to follow
-          const targetToFollow = i === 0 
-            ? { x: headPosition.x - SEGMENT_SPACING, y: headPosition.y } // First segment follows head
-            : { 
-                x: updatedSegments[i - 1].currentPosition.x - SEGMENT_SPACING, 
-                y: updatedSegments[i - 1].currentPosition.y 
-              }; // Others follow previous segment
+          // Calculate which trail position this segment should use
+          // Segment 0 uses trail[5], segment 1 uses trail[10], etc.
+          // This creates fixed spacing between segments
+          const trailIndex = Math.min(5 + (i * 5), trail.length - 1);
+          const trailPosition = trail[trailIndex] || trail[trail.length - 1] || headPosition;
           
-          // Smooth interpolation (easing) - use lerp
-          const lerpFactor = 0.3;
-          segment.currentPosition.x += (targetToFollow.x - segment.currentPosition.x) * lerpFactor;
-          segment.currentPosition.y += (targetToFollow.y - segment.currentPosition.y) * lerpFactor;
+          // INSTANT position update (no lerp - classic snake movement)
+          segment.currentPosition = { x: trailPosition.x, y: trailPosition.y };
+          segment.targetPosition = { x: trailPosition.x, y: trailPosition.y };
           
-          // Update targetPosition
-          segment.targetPosition = targetToFollow;
-          
-          // Update DOM element position (no rotation, keep uniform square appearance)
+          // Update DOM element position instantly
           if (segment.element && segment.element.parentNode) {
-            segment.element.style.left = `${segment.currentPosition.x}px`;
-            segment.element.style.top = `${segment.currentPosition.y}px`;
-            // Keep uniform size and appearance (no transform)
+            segment.element.style.left = `${trailPosition.x}px`;
+            segment.element.style.top = `${trailPosition.y}px`;
             segment.element.style.width = `${SEGMENT_SIZE}px`;
             segment.element.style.height = `${SEGMENT_SIZE}px`;
+            // Remove any transitions for instant movement
+            segment.element.style.transition = "none";
           } else {
             console.warn(`⚠️ Segment ${segment.id} element not in DOM`);
           }
@@ -381,7 +402,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         cancelAnimationFrame(segmentUpdateFrameRef.current);
       }
     };
-  }, [isPlaying, headPosition, segments.length, gameOver]);
+  }, [isPlaying, trail, segments.length, gameOver, headPosition]);
 
   // Debug: Log segment rendering
   useEffect(() => {
@@ -479,6 +500,15 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       eatenElementsRef.current.clear();
       segmentCounterRef.current = 0;
       
+      // Reset trail
+      if (headRef.current) {
+        const rect = headRef.current.getBoundingClientRect();
+        const initialPos = { x: rect.left, y: rect.top };
+        const trailLength = getTrailLength();
+        setTrail(Array(trailLength).fill(initialPos).map(() => ({ ...initialPos })));
+        lastHeadPositionRef.current = initialPos;
+      }
+      
       // Remove eaten classes from all elements
       document.querySelectorAll(".snake-food-eaten").forEach((el) => {
         el.classList.remove("snake-food-eaten");
@@ -490,13 +520,13 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
 
   if (!isPlaying) return null;
 
-  // Calculate connector line positions
+  // Calculate connector line positions (use currentPosition directly for instant updates)
   const getSegmentCenter = (segment: SnakeSegment) => {
-    const rect = segment.element?.getBoundingClientRect();
-    if (rect) {
-      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
-    }
-    return { x: segment.currentPosition.x, y: segment.currentPosition.y };
+    // Use currentPosition directly (no need for getBoundingClientRect - positions update instantly)
+    return { 
+      x: segment.currentPosition.x + SEGMENT_SIZE / 2, 
+      y: segment.currentPosition.y + SEGMENT_SIZE / 2 
+    };
   };
 
   const headCenter = { 
@@ -650,6 +680,14 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
                   setSegments([]);
                   eatenElementsRef.current.clear();
                   segmentCounterRef.current = 0;
+                  // Reset trail
+                  if (headRef.current) {
+                    const rect = headRef.current.getBoundingClientRect();
+                    const initialPos = { x: rect.left, y: rect.top };
+                    const trailLength = getTrailLength();
+                    setTrail(Array(trailLength).fill(initialPos).map(() => ({ ...initialPos })));
+                    lastHeadPositionRef.current = initialPos;
+                  }
                   document.querySelectorAll(".snake-food-eaten").forEach((el) => {
                     el.classList.remove("snake-food-eaten");
                     (el as HTMLElement).style.filter = "";
