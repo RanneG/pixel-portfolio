@@ -489,6 +489,40 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     };
   }, [isPlaying, trail, segments.length, gameOver, headPosition]);
 
+  // Monitor score changes - DEBUG for 80-point bug
+  useEffect(() => {
+    if (score === 80) {
+      console.log("🧨 === SCORE 80 REACHED - FULL STATE DUMP ===");
+      console.log("Score:", score);
+      console.log("Segments:", segments.length);
+      console.log("Game Over:", gameOver);
+      console.log("Is Playing:", isPlaying);
+      console.log("Trail length:", trail.length);
+      console.log("Head position:", headPosition);
+      console.log("Game Over Reason:", gameOverReason);
+      
+      // Check for any hidden state or storage
+      console.log("localStorage check:", {
+        snakeScore: localStorage.getItem("snakeScore"),
+        snakeHighScore: localStorage.getItem("snakeHighScore"),
+        achievements: localStorage.getItem("portfolio-achievements"),
+      });
+      
+      // Check window state
+      console.log("window.gameState:", (window as any).gameState);
+      
+      // Dump all segment positions
+      segments.forEach((seg, i) => {
+        console.log(`Segment ${i}:`, {
+          position: seg.currentPosition,
+          element: seg.element?.getBoundingClientRect(),
+        });
+      });
+      
+      console.log("🧨 === END STATE DUMP ===");
+    }
+  }, [score, gameOver, segments, trail, headPosition, gameOverReason, isPlaying]);
+
   // Debug: Log segment rendering
   useEffect(() => {
     if (import.meta.env.DEV && segments.length > 0) {
@@ -563,11 +597,15 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
           console.log("Collision distance:", collisionDistance.toFixed(2), "px");
           console.log("Head position:", headPos);
           console.log("Segment position:", segments[collisionSegment]?.currentPosition);
+          console.log("⚠️ CRITICAL: Is this a false positive?");
+          console.log("  - If score is 80, this might be the bug!");
+          console.log("  - Check if segments are too close due to trail spacing");
           
           soundManager.error();
           setGameOverReason(`Self-collision with segment ${collisionSegment} (distance: ${collisionDistance.toFixed(1)}px)`);
           setGameOver(true);
           if (onGameOver) {
+            console.log("📞 Calling onGameOver callback with score:", score);
             onGameOver(score);
           }
           return;
@@ -783,8 +821,11 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
             <div className="text-green-400 font-bold">DEBUG MODE</div>
             <div>Segments: {segments.length}</div>
             <div>Trail length: {trail.length}</div>
-            <div>Score: {score}</div>
+            <div className={score >= 80 ? "text-red-400 font-bold" : ""}>
+              Score: {score} {score === 80 && "🚨 AT 80!"}
+            </div>
             <div>Head: ({Math.round(headPosition.x)}, {Math.round(headPosition.y)})</div>
+            <div>Game Over: {gameOver ? "YES ❌" : "NO ✅"}</div>
             {gameOver && (
               <div className="text-red-400 mt-2">
                 GAME OVER
@@ -797,6 +838,76 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
               <div>R = Reset</div>
               <div>I = Toggle debug</div>
               <div>ESC = Exit</div>
+            </div>
+            {score >= 80 && !gameOver && (
+              <div className="mt-2 p-2 bg-yellow-900/50 border border-yellow-500 text-yellow-300 text-[7px]">
+                ⚠️ Score at/above 80 but game NOT over
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      
+      {/* Test button for 80-point bug */}
+      {import.meta.env.DEV && !gameOver && (
+        <button
+          onClick={() => {
+            console.log("🧪 TEST: Setting score to 79, then 80");
+            setScore(79);
+            setTimeout(() => {
+              console.log("🧪 TEST: Setting score to 80");
+              setScore(80);
+              // Check if game over triggered
+              setTimeout(() => {
+                console.log("🧪 TEST: After 1 second, gameOver =", gameOver);
+              }, 1000);
+            }, 1000);
+          }}
+          className="fixed bottom-24 right-4 z-[10001] bg-purple-600 hover:bg-purple-700 text-white p-2 rounded font-pixel text-[8px] border-2 border-purple-400"
+        >
+          🧪 Test 80 Bug
+        </button>
+      )}
+      
+      {/* Force continue button if game over at 80 */}
+      {gameOver && score >= 80 && (
+        <div className="fixed inset-0 z-[100000] flex items-center justify-center bg-black/95">
+          <div className="bg-black border-2 border-red-500 p-6 rounded-lg max-w-md font-pixel text-white">
+            <h2 className="text-xl text-red-400 mb-4">⚠️ DEBUG: Game Over at {score} Points</h2>
+            <p className="text-sm mb-4">Reason: {gameOverReason}</p>
+            <div className="space-y-2">
+              <button
+                onClick={() => {
+                  console.log("🔧 FORCE CONTINUE: Resetting game over");
+                  setGameOver(false);
+                  setGameOverReason("force-continue");
+                  setScore(79); // Reset to 79
+                }}
+                className="w-full p-3 bg-green-600 hover:bg-green-700 rounded font-pixel text-xs"
+              >
+                Continue Anyway (Reset to 79)
+              </button>
+              <button
+                onClick={() => {
+                  console.log("🔧 FORCE CONTINUE: Keeping score at 80");
+                  setGameOver(false);
+                  setGameOverReason("force-continue-keep-score");
+                }}
+                className="w-full p-3 bg-blue-600 hover:bg-blue-700 rounded font-pixel text-xs"
+              >
+                Continue & Keep Score at {score}
+              </button>
+              {onClose && (
+                <button
+                  onClick={() => {
+                    soundManager.click();
+                    onClose();
+                  }}
+                  className="w-full p-3 bg-gray-600 hover:bg-gray-700 rounded font-pixel text-xs"
+                >
+                  Exit Game
+                </button>
+              )}
             </div>
           </div>
         </div>
