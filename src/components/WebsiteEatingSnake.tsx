@@ -801,30 +801,41 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       setSegments((prevSegments) => {
         const updatedSegments = [...prevSegments];
         
-        // Each segment instantly takes position from trail at fixed intervals
+        // ✅ CORRECT: Proper snake following pattern with 1-frame delay
+        // Each segment follows its predecessor's PREVIOUS position
+        // Update in proper order to avoid overwriting positions we need
+        
+        // Store positions BEFORE updating (need previous positions)
+        const previousPositions: Position[] = [];
+        for (let i = 0; i < updatedSegments.length; i++) {
+          previousPositions.push({ ...updatedSegments[i].currentPosition });
+        }
+        
+        // Segment 0 follows where head WAS (from trail)
+        // Use trail[1] as head's previous position (trail[0] is current head position)
+        if (updatedSegments.length > 0 && trail.length > 1) {
+          const headPreviousPos = trail[1]; // Head's previous position
+          updatedSegments[0].currentPosition = { x: headPreviousPos.x, y: headPreviousPos.y };
+          updatedSegments[0].targetPosition = { x: headPreviousPos.x, y: headPreviousPos.y };
+        }
+        
+        // Update remaining segments (each follows predecessor's previous position)
+        for (let i = 1; i < updatedSegments.length; i++) {
+          // Move segment to where its predecessor WAS (from previousPositions)
+          const predecessorPreviousPos = previousPositions[i - 1];
+          updatedSegments[i].currentPosition = { x: predecessorPreviousPos.x, y: predecessorPreviousPos.y };
+          updatedSegments[i].targetPosition = { x: predecessorPreviousPos.x, y: predecessorPreviousPos.y };
+        }
+        
+        // Update DOM elements instantly (no transitions)
         for (let i = 0; i < updatedSegments.length; i++) {
           const segment = updatedSegments[i];
-          
-          // Calculate which trail position this segment should use
-          // Segment 0 uses trail[5], segment 1 uses trail[10], etc.
-          // This creates fixed spacing between segments
-          const trailIndex = Math.min(5 + (i * 5), trail.length - 1);
-          const trailPosition = trail[trailIndex] || trail[trail.length - 1] || headPosition;
-          
-          // INSTANT position update (no lerp - classic snake movement)
-          segment.currentPosition = { x: trailPosition.x, y: trailPosition.y };
-          segment.targetPosition = { x: trailPosition.x, y: trailPosition.y };
-          
-          // Update DOM element position instantly
           if (segment.element && segment.element.parentNode) {
-            segment.element.style.left = `${trailPosition.x}px`;
-            segment.element.style.top = `${trailPosition.y}px`;
+            segment.element.style.left = `${segment.currentPosition.x}px`;
+            segment.element.style.top = `${segment.currentPosition.y}px`;
             segment.element.style.width = `${SEGMENT_SIZE}px`;
             segment.element.style.height = `${SEGMENT_SIZE}px`;
-            // Remove any transitions for instant movement
             segment.element.style.transition = "none";
-          } else {
-            console.warn(`⚠️ Segment ${segment.id} element not in DOM`);
           }
         }
         
