@@ -212,7 +212,16 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   
-  const [headPosition, setHeadPosition] = useState<Position>({ x: 100, y: 100 });
+  // Initialize head position to center of screen for visibility
+  const [headPosition, setHeadPosition] = useState<Position>(() => {
+    if (typeof window !== 'undefined') {
+      return { 
+        x: window.innerWidth / 2 - HEAD_SIZE / 2, 
+        y: window.innerHeight / 2 - HEAD_SIZE / 2 
+      };
+    }
+    return { x: 400, y: 300 }; // Fallback for SSR
+  });
   const [segments, setSegments] = useState<SnakeSegment[]>([]);
   const [score, setScore] = useState<number>(0);
   const [gameOver, setGameOver] = useState<boolean>(false);
@@ -245,9 +254,12 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
 
       // Initialize head position and trail
   useEffect(() => {
-    if (isPlaying && headRef.current) {
-      const rect = headRef.current.getBoundingClientRect();
-      const initialPos = { x: rect.left, y: rect.top };
+    if (isPlaying) {
+      // Initialize head position to center of screen (visible position)
+      const initialPos = { 
+        x: window.innerWidth / 2 - HEAD_SIZE / 2, 
+        y: window.innerHeight / 2 - HEAD_SIZE / 2 
+      };
       setHeadPosition(initialPos);
       lastHeadPositionRef.current = initialPos;
       prevHeadPositionRef.current = initialPos; // Initialize previous position
@@ -256,6 +268,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       const trailLength = getTrailLength();
       setTrail(Array(trailLength).fill(initialPos).map(() => ({ ...initialPos })));
       console.log("🟢 INITIALIZED head position and trail:", initialPos);
+      console.log("🟢 Window size:", { width: window.innerWidth, height: window.innerHeight });
     }
   }, [isPlaying]);
 
@@ -1029,7 +1042,10 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     <div
       ref={containerRef}
       className="fixed inset-0 z-50 pointer-events-none"
-      style={{ overflow: "hidden" }}
+      style={{ 
+        overflow: "hidden",
+        backgroundColor: "transparent", // Ensure transparent background
+      }}
     >
       {/* SVG for connector tissue between segments */}
       <svg
@@ -1088,15 +1104,17 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
           height: `${HEAD_SIZE}px`,
           left: `${headPosition.x}px`,
           top: `${headPosition.y}px`,
-          backgroundColor: "var(--color-primary)",
-          border: "3px solid black",
+          backgroundColor: "#00ffff", // Cyan - explicit color for visibility
+          border: "3px solid #000000", // Black border
           borderRadius: "4px",
           boxShadow: 
-            "0 0 20px var(--color-primary), " +
+            "0 0 20px #00ffff, " +
             "inset 4px 4px 0 0 rgba(255,255,255,0.5), " +
             "inset -4px -4px 0 0 rgba(255,255,255,0.5), " +
             "0 2px 4px rgba(0,0,0,0.5)",
           transition: "none", // No transition for smooth movement
+          display: "block", // Ensure it's visible
+          opacity: 1, // Ensure full opacity
         }}
         aria-label="Snake head"
       >
