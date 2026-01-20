@@ -173,6 +173,39 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         console.log("🔍 Debug overlay:", !debugVisible);
         return;
       }
+      
+      // Collision debug system shortcuts
+      if (e.key === "d" || e.key === "D") {
+        e.preventDefault();
+        setDebugMode((prev) => {
+          const newValue = !prev;
+          console.log("🎮 Debug mode:", newValue ? "ON" : "OFF");
+          return newValue;
+        });
+        return;
+      }
+      
+      if (e.key === "c" || e.key === "C") {
+        e.preventDefault();
+        setCollisionEnabled((prev) => {
+          const newValue = !prev;
+          console.log("🎮 Collision detection:", newValue ? "ENABLED" : "DISABLED");
+          return newValue;
+        });
+        return;
+      }
+      
+      // Pause/unpause game
+      if (e.key === "Escape" && !gameOver) {
+        e.preventDefault();
+        setIsPaused((prev) => {
+          const newValue = !prev;
+          console.log("🎮 Game:", newValue ? "PAUSED" : "UNPAUSED");
+          return newValue;
+        });
+        // Don't close game when pausing, just toggle pause
+        return;
+      }
 
       if (gameOver) return;
       
@@ -540,9 +573,69 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     }
   }, [segments]);
 
+  // Calculate closest segment for debug display
+  const calculateClosestSegment = useCallback(() => {
+    if (!headRef.current || segments.length < 1) {
+      setClosestSegment(null);
+      setCollisionStatus("SAFE");
+      return;
+    }
+
+    const headRect = headRef.current.getBoundingClientRect();
+    const headPos = { x: headRect.left + headRect.width / 2, y: headRect.top + headRect.height / 2 };
+    
+    let closestIndex = -1;
+    let closestDistance = Infinity;
+    let collisionDetected = false;
+    
+    // Find closest segment
+    for (let i = 1; i < segments.length; i++) {
+      const segment = segments[i];
+      if (!segment.element || !document.contains(segment.element)) continue;
+      
+      const segmentRect = segment.element.getBoundingClientRect();
+      const segmentPos = { 
+        x: segmentRect.left + segmentRect.width / 2, 
+        y: segmentRect.top + segmentRect.height / 2 
+      };
+      
+      const distance = Math.sqrt(
+        Math.pow(headPos.x - segmentPos.x, 2) + 
+        Math.pow(headPos.y - segmentPos.y, 2)
+      );
+      
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = i;
+      }
+      
+      // Check for actual collision
+      if (distance < 20) {
+        collisionDetected = true;
+      }
+    }
+    
+    // Update state
+    if (closestIndex >= 0) {
+      setClosestSegment({ index: closestIndex, distance: closestDistance });
+      
+      // Determine collision status
+      if (collisionDetected) {
+        setCollisionStatus("COLLISION");
+      } else if (closestDistance < 40) {
+        setCollisionStatus("CLOSE");
+      } else {
+        setCollisionStatus("SAFE");
+      }
+    } else {
+      setClosestSegment(null);
+      setCollisionStatus("SAFE");
+    }
+  }, [segments]);
+
   // Main game loop
   useEffect(() => {
-    if (!isPlaying || gameOver) {
+    if (!isPlaying || gameOver || isPaused) {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
         animationFrameRef.current = null;
@@ -553,8 +646,13 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     const gameLoop = () => {
       updateHeadPosition();
       
+      // Calculate closest segment for debug (always, even if collision disabled)
+      if (debugMode) {
+        calculateClosestSegment();
+      }
+      
       // Check for self-collision (head hitting body) - FIXED: Check from first segment
-      if (headRef.current && segments.length >= 1) {
+      if (collisionEnabled && headRef.current && segments.length >= 1) {
         const headRect = headRef.current.getBoundingClientRect();
         const headPos = { x: headRect.left + headRect.width / 2, y: headRect.top + headRect.height / 2 };
         
@@ -637,7 +735,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isPlaying, gameOver, updateHeadPosition, segments, checkCollision, score, onGameOver]);
+  }, [isPlaying, gameOver, isPaused, updateHeadPosition, segments, checkCollision, score, onGameOver, collisionEnabled, debugMode, calculateClosestSegment]);
 
   // Cleanup segments on unmount or game end
   useEffect(() => {
@@ -818,6 +916,72 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         </p>
       </div>
 
+      {/* Debug Canvas for visual collision overlays */}
+      {debugMode && (
+        <canvas
+          ref={debugCanvasRef}
+          className="fixed top-0 left-0 w-full h-full pointer-events-none z-[9997]"
+          style={{ zIndex: 9997 }}
+          width={window.innerWidth}
+          height={window.innerHeight}
+        />
+      )}
+
+      {/* Visual Debug Drawing */}
+      {debugMode && (
+        <CollisionDebugOverlay
+          headRef={headRef}
+          segments={segments}
+          closestSegment={closestSegment}
+          collisionStatus={collisionStatus}
+          canvasRef={debugCanvasRef}
+        />
+      )}
+
+      {/* Collision Monitor HUD */}
+      {debugMode && (
+        <div className="fixed top-4 right-4 bg-black/95 text-white p-4 rounded z-[10001] font-pixel text-[9px] border-2 border-green-500">
+          <div className="space-y-2">
+            <div className="text-green-400 font-bold border-b border-green-500 pb-1 mb-2">
+              COLLISION DEBUG
+            </div>
+            <div>
+              <div className="text-gray-400">Status:</div>
+              <div className={`font-bold ${
+                collisionStatus === "COLLISION" ? "text-red-400" :
+                collisionStatus === "CLOSE" ? "text-yellow-400" :
+                "text-green-400"
+              }`}>
+                {collisionStatus}
+              </div>
+            </div>
+            {closestSegment && (
+              <div>
+                <div className="text-gray-400">Closest Segment:</div>
+                <div className="text-white">#{closestSegment.index}</div>
+                <div className="text-gray-400">Distance:</div>
+                <div className="text-white">{closestSegment.distance.toFixed(1)}px</div>
+              </div>
+            )}
+            <div className="pt-2 border-t border-gray-700">
+              <div className="text-gray-400">Segments:</div>
+              <div className="text-white">{segments.length}</div>
+            </div>
+            <div>
+              <div className="text-gray-400">Collision:</div>
+              <div className={collisionEnabled ? "text-green-400" : "text-red-400"}>
+                {collisionEnabled ? "ENABLED" : "DISABLED"}
+              </div>
+            </div>
+            {isPaused && (
+              <div className="text-yellow-400 font-bold">
+                PAUSED
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Debug: Enhanced debug overlay */}
       {debugVisible && (
         <div className="fixed top-4 left-4 bg-black/90 text-white p-3 rounded z-[10001] font-pixel text-[8px] border-2 border-white">
@@ -841,7 +1005,9 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
               <div>T = Add segment</div>
               <div>R = Reset</div>
               <div>I = Toggle debug</div>
-              <div>ESC = Exit</div>
+              <div>D = Collision debug</div>
+              <div>C = Toggle collision</div>
+              <div>ESC = {isPaused ? "Unpause" : "Pause/Exit"}</div>
             </div>
             {score >= 80 && !gameOver && (
               <div className="mt-2 p-2 bg-yellow-900/50 border border-yellow-500 text-yellow-300 text-[7px]">
@@ -965,16 +1131,20 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
               </button>
               {onClose && (
                 <button
-                  onClick={() => {
-                    soundManager.click();
-                    // Clean up segments
-                    document.querySelectorAll('[data-snake-segment]').forEach((el) => {
-                      if (el.parentNode) {
-                        el.parentNode.removeChild(el);
-                      }
-                    });
-                    onClose();
-                  }}
+        onClick={() => {
+          soundManager.click();
+          // Clean up segments
+          document.querySelectorAll('[data-snake-segment]').forEach((el) => {
+            if (el.parentNode) {
+              el.parentNode.removeChild(el);
+            }
+          });
+          // Reset debug state
+          setIsPaused(false);
+          setDebugMode(false);
+          setCollisionEnabled(true);
+          onClose();
+        }}
                   className="retro-btn retro-btn-secondary px-4 py-2 font-pixel text-[10px] uppercase"
                 >
                   EXIT
