@@ -175,13 +175,11 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     
     // Make it VISIBLE and TRACKABLE with explicit styles
     const currentSegments = segments.length;
-    const lastSegment = currentSegments > 0 ? segments[currentSegments - 1] : null;
-    const targetX = lastSegment 
-      ? lastSegment.currentPosition.x - SEGMENT_SPACING
-      : headPosition.x - SEGMENT_SPACING;
-    const targetY = lastSegment 
-      ? lastSegment.currentPosition.y
-      : headPosition.y;
+    // Calculate target position from trail (attach to nearest trail position)
+    const trailIndex = Math.min(5 + (currentSegments * 5), trail.length - 1);
+    const attachPosition = trail[trailIndex] || trail[trail.length - 1] || headPosition;
+    const targetX = attachPosition.x;
+    const targetY = attachPosition.y;
 
     // Get color hint for gradient
     const elementColor = getColorFromElementType(elementId);
