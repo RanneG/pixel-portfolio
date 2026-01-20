@@ -145,6 +145,50 @@ const CollisionDebugOverlay: React.FC<CollisionDebugOverlayProps> = ({
             (headCenter.y + segmentCenter.y) / 2 - 10
           );
         }
+      });
+      
+      // Draw tunnel path if continuous collision was detected
+      if (tunnelPathRef.current) {
+        const tunnel = tunnelPathRef.current;
+        const tunnelStart = {
+          x: tunnel.start.x + HEAD_SIZE / 2,
+          y: tunnel.start.y + HEAD_SIZE / 2,
+        };
+        const tunnelEnd = {
+          x: tunnel.end.x + HEAD_SIZE / 2,
+          y: tunnel.end.y + HEAD_SIZE / 2,
+        };
+        
+        // Draw movement path that caused collision
+        ctx.strokeStyle = "rgba(255, 0, 255, 0.7)";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        ctx.moveTo(tunnelStart.x, tunnelStart.y);
+        ctx.lineTo(tunnelEnd.x, tunnelEnd.y);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        
+        // Draw hit point estimate (midpoint)
+        const midX = (tunnelStart.x + tunnelEnd.x) / 2;
+        const midY = (tunnelStart.y + tunnelEnd.y) / 2;
+        
+        ctx.fillStyle = "#ff00ff";
+        ctx.beginPath();
+        ctx.arc(midX, midY, 6, 0, Math.PI * 2);
+        ctx.fill();
+        
+        // Label
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "10px 'Press Start 2P', monospace";
+        ctx.textAlign = "left";
+        ctx.fillText("TUNNEL PATH", midX + 10, midY - 10);
+        
+        // Clear tunnel path after drawing (will be set again if collision persists)
+        setTimeout(() => {
+          tunnelPathRef.current = null;
+        }, 100);
+      }
 
         // Draw segment index
         ctx.fillStyle = "#ffffff";
@@ -200,18 +244,24 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   const eatenElementsRef = useRef<Set<string>>(new Set());
   const segmentCounterRef = useRef<number>(0);
   const lastHeadPositionRef = useRef<Position>({ x: 100, y: 100 });
+  const prevHeadPositionRef = useRef<Position>({ x: 100, y: 100 }); // Previous frame position for continuous collision
   const debugCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const tunnelPathRef = useRef<{start: Position, end: Position, segment: number} | null>(null); // For debug visualization
   
   // Trail length based on number of segments eaten
   const getTrailLength = () => Math.max(segments.length + 5, 20); // At least 20 positions in trail
+  
+  // Maximum speed per frame to prevent extreme tunneling
+  const MAX_SPEED_PER_FRAME = 15; // pixels per frame maximum
 
-  // Initialize head position and trail
+      // Initialize head position and trail
   useEffect(() => {
     if (isPlaying && headRef.current) {
       const rect = headRef.current.getBoundingClientRect();
       const initialPos = { x: rect.left, y: rect.top };
       setHeadPosition(initialPos);
       lastHeadPositionRef.current = initialPos;
+      prevHeadPositionRef.current = initialPos; // Initialize previous position
       mousePositionRef.current = initialPos;
       // Initialize trail with current position repeated
       const trailLength = getTrailLength();
@@ -902,7 +952,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isPlaying, gameOver, isPaused, updateHeadPosition, segments, checkCollision, score, onGameOver, collisionEnabled, debugMode, calculateClosestSegment]);
+  }, [isPlaying, gameOver, isPaused, updateHeadPosition, segments, checkCollision, score, onGameOver, collisionEnabled, debugMode, calculateClosestSegment, checkContinuousCollision]);
 
   // Cleanup segments on unmount or game end
   useEffect(() => {
