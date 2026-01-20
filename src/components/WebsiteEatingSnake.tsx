@@ -456,6 +456,110 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     );
   }, []);
 
+  // Line-circle intersection helper for continuous collision detection
+  const lineIntersectsCircle = useCallback((
+    lineStart: Position,
+    lineEnd: Position,
+    circleCenter: Position,
+    radius: number
+  ): boolean => {
+    // Vector from line start to end
+    const lineDx = lineEnd.x - lineStart.x;
+    const lineDy = lineEnd.y - lineStart.y;
+    
+    // Vector from line start to circle center
+    const toCircleX = circleCenter.x - lineStart.x;
+    const toCircleY = circleCenter.y - lineStart.y;
+    
+    // Project circle onto line
+    const lineLengthSquared = lineDx * lineDx + lineDy * lineDy;
+    
+    // Handle zero-length line (head didn't move)
+    if (lineLengthSquared < 0.01) {
+      // Just check point-to-circle distance
+      const distX = circleCenter.x - lineStart.x;
+      const distY = circleCenter.y - lineStart.y;
+      const distanceSquared = distX * distX + distY * distY;
+      return distanceSquared <= (radius * radius);
+    }
+    
+    const projection = (toCircleX * lineDx + toCircleY * lineDy) / lineLengthSquared;
+    
+    // Find closest point on line segment to circle center
+    let closestX: number, closestY: number;
+    if (projection < 0) {
+      closestX = lineStart.x;
+      closestY = lineStart.y;
+    } else if (projection > 1) {
+      closestX = lineEnd.x;
+      closestY = lineEnd.y;
+    } else {
+      closestX = lineStart.x + projection * lineDx;
+      closestY = lineStart.y + projection * lineDy;
+    }
+    
+    // Distance from closest point to circle center
+    const distX = circleCenter.x - closestX;
+    const distY = circleCenter.y - closestY;
+    const distanceSquared = distX * distX + distY * distY;
+    
+    // Check if distance is within combined radii
+    return distanceSquared <= (radius * radius);
+  }, []);
+
+  // Continuous collision detection - checks entire movement path
+  const checkContinuousCollision = useCallback((): {detected: boolean, segmentIndex: number, distance: number} => {
+    if (!collisionEnabled || segments.length < 1 || !headRef.current) {
+      return { detected: false, segmentIndex: -1, distance: Infinity };
+    }
+
+    const headRadius = 20; // Head collision radius
+    const segmentRadius = 12; // Segment collision radius
+    const totalRadius = headRadius + segmentRadius;
+    
+    const prevPos = prevHeadPositionRef.current;
+    const currentPos = headPosition;
+    
+    // Check each body segment (skip first segment to avoid neck collision)
+    for (let i = 1; i < segments.length; i++) {
+      const segment = segments[i];
+      if (!segment.element || !document.contains(segment.element)) continue;
+      
+      const segmentRect = segment.element.getBoundingClientRect();
+      const segmentCenter = {
+        x: segmentRect.left + segmentRect.width / 2,
+        y: segmentRect.top + segmentRect.height / 2,
+      };
+      
+      // Check if movement line intersects segment's collision circle
+      if (lineIntersectsCircle(prevPos, currentPos, segmentCenter, totalRadius)) {
+        // Calculate actual distance for logging
+        const distX = segmentCenter.x - currentPos.x;
+        const distY = segmentCenter.y - currentPos.y;
+        const distance = Math.sqrt(distX * distX + distY * distY);
+        
+        if (debugMode) {
+          console.log("🚨 CONTINUOUS COLLISION DETECTED!");
+          console.log(`Segment ${i} intersected movement path`);
+          console.log(`Movement: (${prevPos.x.toFixed(1)},${prevPos.y.toFixed(1)}) → (${currentPos.x.toFixed(1)},${currentPos.y.toFixed(1)})`);
+          console.log(`Segment at: (${segmentCenter.x.toFixed(1)},${segmentCenter.y.toFixed(1)})`);
+          console.log(`Distance: ${distance.toFixed(2)}px`);
+          
+          // Store for visual debug
+          tunnelPathRef.current = {
+            start: prevPos,
+            end: currentPos,
+            segment: i,
+          };
+        }
+        
+        return { detected: true, segmentIndex: i, distance };
+      }
+    }
+    
+    return { detected: false, segmentIndex: -1, distance: Infinity };
+  }, [collisionEnabled, segments, headPosition, lineIntersectsCircle, debugMode]);
+
   // Eat an element: clone it, hide original, add to snake body
   const eatElement = useCallback((element: HTMLElement, elementId: string) => {
     console.log("🔵 COLLISION DETECTED with element:", elementId);
