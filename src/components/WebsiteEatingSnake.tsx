@@ -22,11 +22,20 @@ interface Position {
   y: number;
 }
 
-const HEAD_SIZE = 40; // Size of snake head in pixels
-const SEGMENT_SPACING = 50; // Distance between segments
-const SEGMENT_SCALE = 0.7; // Scale factor for body segments
+const HEAD_SIZE = 28; // Size of snake head in pixels
+const SEGMENT_SIZE = 24; // Uniform size for body segments
+const SEGMENT_SPACING = 18; // Tighter spacing between segments (pixels)
 const MOVEMENT_SPEED = 5; // Pixels per frame
 const COLLISION_BUFFER = 10; // Buffer for collision detection
+
+// Get color hint based on element type
+const getColorFromElementType = (elementId: string): string => {
+  if (elementId.includes("button")) return "var(--color-primary)";
+  if (elementId.includes("header")) return "var(--color-accent)";
+  if (elementId.includes("bar")) return "var(--color-secondary)";
+  if (elementId.includes("card")) return "var(--color-primary)";
+  return "var(--color-secondary)";
+};
 
 export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   isPlaying,
@@ -152,7 +161,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     const rect = originalElement.getBoundingClientRect();
     console.log("Original element position:", { x: rect.x, y: rect.y, width: rect.width, height: rect.height });
 
-    // 3. Create VISIBLE clone with debugging
+    // 3. Create VISIBLE clone and transform it into uniform snake segment
     const clone = originalElement.cloneNode(true) as HTMLElement;
     
     // Make it VISIBLE and TRACKABLE with explicit styles
@@ -165,27 +174,47 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       ? lastSegment.currentPosition.y
       : headPosition.y;
 
-    // Apply comprehensive styles
+    // Get color hint for gradient
+    const elementColor = getColorFromElementType(elementId);
+
+    // Transform clone to uniform snake segment appearance
     clone.style.cssText = `
       position: fixed !important;
       left: ${rect.left}px !important;
       top: ${rect.top}px !important;
-      width: ${rect.width}px !important;
-      height: ${rect.height}px !important;
-      transform: scale(${SEGMENT_SCALE}) !important;
-      transform-origin: top left !important;
-      opacity: 0.8 !important;
+      width: ${SEGMENT_SIZE}px !important;
+      height: ${SEGMENT_SIZE}px !important;
+      background: linear-gradient(135deg, var(--color-secondary) 70%, ${elementColor} 30%) !important;
+      border: 2px solid black !important;
+      border-radius: 3px !important;
+      opacity: 0.9 !important;
       z-index: 9999 !important;
       pointer-events: none !important;
-      border: 3px dashed var(--color-secondary) !important;
-      background: rgba(0, 255, 255, 0.1) !important;
+      /* Hide original content */
+      color: transparent !important;
+      font-size: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      overflow: hidden !important;
+      /* Snake segment pattern */
+      background-image: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3) 2px, transparent 3px) !important;
       transition: all 0.5s ease !important;
       will-change: transform, left, top !important;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2) !important;
     `;
     
-    // Add debug identifier
+    // Hide all children to remove original content
+    const hideChildren = (el: HTMLElement) => {
+      Array.from(el.children).forEach(child => {
+        (child as HTMLElement).style.display = 'none';
+      });
+    };
+    hideChildren(clone);
+    
+    // Add identifiers
     clone.setAttribute("data-snake-segment", elementId);
     clone.setAttribute("data-segment-index", currentSegments.toString());
+    clone.setAttribute("data-original-type", elementId);
     clone.classList.add("snake-body-segment");
 
     // 4. Add to DOM FIRST (immediately visible) - use document.body
@@ -211,11 +240,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       return newSegments;
     });
 
-    // 7. After a brief delay, update border (remove debug visual)
-    setTimeout(() => {
-      clone.style.border = "2px solid var(--color-secondary)";
-      clone.style.background = "rgba(0, 255, 255, 0.05)";
-    }, 300);
+    // 7. Animate from original position to snake position (no border change needed)
 
     // Hide original element with "bite" animation
     originalElement.classList.add("snake-food-eaten");
@@ -331,27 +356,13 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
           // Update targetPosition
           segment.targetPosition = targetToFollow;
           
-          // Update DOM element position
+          // Update DOM element position (no rotation, keep uniform square appearance)
           if (segment.element && segment.element.parentNode) {
             segment.element.style.left = `${segment.currentPosition.x}px`;
             segment.element.style.top = `${segment.currentPosition.y}px`;
-            
-            // Optional: Add rotation toward direction of movement
-            if (i > 0) {
-              const prevSegment = updatedSegments[i - 1];
-              const dx = segment.currentPosition.x - prevSegment.currentPosition.x;
-              const dy = segment.currentPosition.y - prevSegment.currentPosition.y;
-              const angle = Math.atan2(dy, dx);
-              segment.element.style.transform = `scale(${SEGMENT_SCALE}) rotate(${angle}rad)`;
-              segment.element.style.transformOrigin = "center";
-            } else {
-              // First segment faces toward head
-              const dx = headPosition.x - segment.currentPosition.x;
-              const dy = headPosition.y - segment.currentPosition.y;
-              const angle = Math.atan2(dy, dx);
-              segment.element.style.transform = `scale(${SEGMENT_SCALE}) rotate(${angle}rad)`;
-              segment.element.style.transformOrigin = "center";
-            }
+            // Keep uniform size and appearance (no transform)
+            segment.element.style.width = `${SEGMENT_SIZE}px`;
+            segment.element.style.height = `${SEGMENT_SIZE}px`;
           } else {
             console.warn(`⚠️ Segment ${segment.id} element not in DOM`);
           }
@@ -499,50 +510,49 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       className="fixed inset-0 z-50 pointer-events-none"
       style={{ overflow: "hidden" }}
     >
-      {/* SVG for connector lines */}
+      {/* SVG for connector tissue between segments */}
       <svg
         ref={svgRef}
         className="fixed top-0 left-0 w-full h-full pointer-events-none"
-        style={{ zIndex: 9998 }}
+        style={{ zIndex: 9994 }}
       >
-        {/* Line from head to first segment */}
+        {/* Connector circles between head and first segment */}
         {segments.length > 0 && (() => {
           const firstSegment = segments[0];
           const firstCenter = getSegmentCenter(firstSegment);
+          const midX = (headCenter.x + firstCenter.x) / 2;
+          const midY = (headCenter.y + firstCenter.y) / 2;
+          
           return (
-            <line
+            <circle
               key="connector-head-to-first"
-              x1={headCenter.x}
-              y1={headCenter.y}
-              x2={firstCenter.x}
-              y2={firstCenter.y}
-              stroke="var(--color-primary)"
-              strokeWidth="3"
-              strokeDasharray="5,3"
-              opacity="0.6"
+              cx={midX}
+              cy={midY}
+              r="4"
+              fill="var(--color-accent)"
+              opacity="0.7"
             />
           );
         })()}
         
-        {/* Lines between segments */}
+        {/* Connector circles between segments */}
         {segments.map((segment, index) => {
           const nextSegment = segments[index + 1];
           if (!nextSegment) return null;
           
           const currentCenter = getSegmentCenter(segment);
           const nextCenter = getSegmentCenter(nextSegment);
+          const midX = (currentCenter.x + nextCenter.x) / 2;
+          const midY = (currentCenter.y + nextCenter.y) / 2;
           
           return (
-            <line
+            <circle
               key={`connector-${segment.id}`}
-              x1={currentCenter.x}
-              y1={currentCenter.y}
-              x2={nextCenter.x}
-              y2={nextCenter.y}
-              stroke="var(--color-secondary)"
-              strokeWidth="2"
-              strokeDasharray="3,3"
-              opacity="0.5"
+              cx={midX}
+              cy={midY}
+              r="3"
+              fill="var(--color-accent)"
+              opacity="0.6"
             />
           );
         })}
@@ -558,24 +568,38 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
           left: `${headPosition.x}px`,
           top: `${headPosition.y}px`,
           backgroundColor: "var(--color-primary)",
-          border: "3px solid var(--color-foreground)",
+          border: "3px solid black",
           borderRadius: "4px",
-          boxShadow: "0 0 20px var(--color-primary), inset 0 0 10px rgba(255, 255, 255, 0.3)",
+          boxShadow: 
+            "0 0 20px var(--color-primary), " +
+            "inset 4px 4px 0 0 rgba(255,255,255,0.5), " +
+            "inset -4px -4px 0 0 rgba(255,255,255,0.5), " +
+            "0 2px 4px rgba(0,0,0,0.5)",
           transition: "none", // No transition for smooth movement
         }}
         aria-label="Snake head"
       >
-        {/* Eye indicator */}
+        {/* Eye indicators (left and right) */}
         <div
           style={{
             position: "absolute",
-            width: "8px",
-            height: "8px",
-            backgroundColor: "var(--color-foreground)",
+            width: "4px",
+            height: "4px",
+            backgroundColor: "black",
             borderRadius: "50%",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
+            top: "35%",
+            left: "30%",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            width: "4px",
+            height: "4px",
+            backgroundColor: "black",
+            borderRadius: "50%",
+            top: "35%",
+            right: "30%",
           }}
         />
       </div>
