@@ -553,17 +553,20 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     const gameLoop = () => {
       updateHeadPosition();
       
-      // Check for self-collision (head hitting body) - with debug logging
-      if (headRef.current && segments.length >= 3) {
+      // Check for self-collision (head hitting body) - FIXED: Check from first segment
+      if (headRef.current && segments.length >= 1) {
         const headRect = headRef.current.getBoundingClientRect();
         const headPos = { x: headRect.left + headRect.width / 2, y: headRect.top + headRect.height / 2 };
         
-        // Check self-collision with improved detection (skip first 2 segments - neck area)
+        // Check self-collision with improved detection
+        // Start from index 1 (second segment) to avoid false collisions on tight turns
+        // This allows collision detection to work from the very beginning (1+ segments)
         let collisionDetected = false;
         let collisionSegment = -1;
         let collisionDistance = Infinity;
         
-        for (let i = 2; i < segments.length; i++) {
+        // FIXED: Start from index 1 instead of 2, so collision works with 2+ segments
+        for (let i = 1; i < segments.length; i++) {
           const segment = segments[i];
           if (!segment.element || !document.contains(segment.element)) continue;
           
@@ -580,6 +583,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
           );
           
           // Collision if distance is less than combined radii (20px threshold)
+          // This threshold accounts for head size (28px) and segment size (24px)
           if (distance < 20) {
             collisionDetected = true;
             collisionSegment = i;
