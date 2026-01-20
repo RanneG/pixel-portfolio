@@ -12,7 +12,7 @@ interface SnakeSegment {
   id: string;
   elementId: string;
   element: HTMLElement; // Cloned DOM element
-  position: { x: number; y: number };
+  currentPosition: { x: number; y: number }; // Current actual position
   targetPosition: { x: number; y: number }; // Position to smoothly move to
   offset: number; // Distance behind head
 }
@@ -45,6 +45,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   const [direction, setDirection] = useState<Position>({ x: 0, y: 0 });
   
   const animationFrameRef = useRef<number | null>(null);
+  const segmentUpdateFrameRef = useRef<number | null>(null);
   const mousePositionRef = useRef<Position>({ x: 100, y: 100 });
   const keyDirectionRef = useRef<Position>({ x: 1, y: 0 });
   const eatenElementsRef = useRef<Set<string>>(new Set());
@@ -54,8 +55,10 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   useEffect(() => {
     if (isPlaying && headRef.current) {
       const rect = headRef.current.getBoundingClientRect();
-      setHeadPosition({ x: rect.left, y: rect.top });
-      mousePositionRef.current = { x: rect.left, y: rect.top };
+      const initialPos = { x: rect.left, y: rect.top };
+      setHeadPosition(initialPos);
+      mousePositionRef.current = initialPos;
+      console.log("🟢 INITIALIZED head position:", initialPos);
     }
   }, [isPlaying]);
 
@@ -127,61 +130,98 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
 
   // Eat an element: clone it, hide original, add to snake body
   const eatElement = useCallback((element: HTMLElement, elementId: string) => {
+    console.log("🔵 COLLISION DETECTED with element:", elementId);
+    console.log("Current segments before:", segments.length);
+    
     if (eatenElementsRef.current.has(elementId)) {
+      console.log("⚠️ Element already eaten:", elementId);
       return; // Already eaten
     }
 
     eatenElementsRef.current.add(elementId);
+    console.log("🟢 CREATING BODY SEGMENT for:", elementId);
 
-    // Clone the element
-    const clone = element.cloneNode(true) as HTMLElement;
-    clone.classList.add("snake-body-segment");
-    clone.style.position = "fixed";
-    clone.style.zIndex = "9999";
-    clone.style.pointerEvents = "none";
-    clone.style.transform = `scale(${SEGMENT_SCALE})`;
-    clone.style.opacity = "0.8";
-    clone.style.transition = "all 0.3s ease";
-    clone.style.willChange = "transform";
-
-    // Get original element position
-    const originalRect = element.getBoundingClientRect();
-    clone.style.left = `${originalRect.left}px`;
-    clone.style.top = `${originalRect.top}px`;
-    clone.style.width = `${originalRect.width}px`;
-    clone.style.height = `${originalRect.height}px`;
-
-    // Add to DOM
-    if (containerRef.current) {
-      containerRef.current.appendChild(clone);
+    // 1. Find the ORIGINAL element
+    const originalElement = document.querySelector(`[data-food-id="${elementId}"]`) as HTMLElement;
+    if (!originalElement) {
+      console.error("❌ Original element not found:", elementId);
+      return;
     }
 
-    // Calculate target position (behind last segment or head)
-    const lastSegment = segments[segments.length - 1];
+    // 2. Get position BEFORE cloning
+    const rect = originalElement.getBoundingClientRect();
+    console.log("Original element position:", { x: rect.x, y: rect.y, width: rect.width, height: rect.height });
+
+    // 3. Create VISIBLE clone with debugging
+    const clone = originalElement.cloneNode(true) as HTMLElement;
+    
+    // Make it VISIBLE and TRACKABLE with explicit styles
+    const currentSegments = segments.length;
+    const lastSegment = currentSegments > 0 ? segments[currentSegments - 1] : null;
     const targetX = lastSegment 
-      ? lastSegment.targetPosition.x 
+      ? lastSegment.currentPosition.x - SEGMENT_SPACING
       : headPosition.x - SEGMENT_SPACING;
     const targetY = lastSegment 
-      ? lastSegment.targetPosition.y 
+      ? lastSegment.currentPosition.y
       : headPosition.y;
 
-    // Create segment
+    // Apply comprehensive styles
+    clone.style.cssText = `
+      position: fixed !important;
+      left: ${rect.left}px !important;
+      top: ${rect.top}px !important;
+      width: ${rect.width}px !important;
+      height: ${rect.height}px !important;
+      transform: scale(${SEGMENT_SCALE}) !important;
+      transform-origin: top left !important;
+      opacity: 0.8 !important;
+      z-index: 9999 !important;
+      pointer-events: none !important;
+      border: 3px dashed var(--color-secondary) !important;
+      background: rgba(0, 255, 255, 0.1) !important;
+      transition: all 0.5s ease !important;
+      will-change: transform, left, top !important;
+    `;
+    
+    // Add debug identifier
+    clone.setAttribute("data-snake-segment", elementId);
+    clone.setAttribute("data-segment-index", currentSegments.toString());
+    clone.classList.add("snake-body-segment");
+
+    // 4. Add to DOM FIRST (immediately visible) - use document.body
+    document.body.appendChild(clone);
+    console.log("✅ Clone added to DOM. Document contains?", document.contains(clone));
+    console.log("Clone element:", clone);
+
+    // 5. Create segment object with currentPosition
     const newSegment: SnakeSegment = {
-      id: `segment-${segmentCounterRef.current++}`,
-      elementId,
+      id: `segment-${Date.now()}-${segmentCounterRef.current++}`,
+      elementId: elementId,
       element: clone,
-      position: { x: originalRect.left, y: originalRect.top },
+      currentPosition: { x: rect.left, y: rect.top }, // Start at original position
       targetPosition: { x: targetX, y: targetY },
-      offset: segments.length + 1,
+      offset: currentSegments + 1,
     };
 
-    setSegments((prev) => [...prev, newSegment]);
+    // 6. Update state
+    setSegments((prev) => {
+      const newSegments = [...prev, newSegment];
+      console.log("📈 Segments array updated. Length:", newSegments.length);
+      console.log("New segment:", newSegment);
+      return newSegments;
+    });
+
+    // 7. After a brief delay, update border (remove debug visual)
+    setTimeout(() => {
+      clone.style.border = "2px solid var(--color-secondary)";
+      clone.style.background = "rgba(0, 255, 255, 0.05)";
+    }, 300);
 
     // Hide original element with "bite" animation
-    element.classList.add("snake-food-eaten");
-    element.style.filter = "grayscale(1) brightness(0.5)";
-    element.style.opacity = "0.3";
-    element.style.transition = "all 0.5s ease";
+    originalElement.classList.add("snake-food-eaten");
+    originalElement.style.filter = "grayscale(1) brightness(0.5)";
+    originalElement.style.opacity = "0.3";
+    originalElement.style.transition = "all 0.5s ease";
 
     // Play sound
     soundManager.eatElement();
@@ -189,6 +229,8 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     // Update score
     const points = 20; // Element food always worth 20
     setScore((prev) => prev + points);
+    
+    console.log("Current segments after:", segments.length + 1);
   }, [segments, headPosition]);
 
   // Check for collisions with portfolio elements
@@ -255,74 +297,97 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     });
   }, [headPosition, mode, gameOver, checkElementCollisions]);
 
-  // Update body segments to follow head
-  const updateBodySegments = useCallback(() => {
-    setSegments((prevSegments) => {
-      return prevSegments.map((segment, index) => {
-        // Calculate target position: behind previous segment or head
-        let targetX: number;
-        let targetY: number;
+  // Update body segments to follow head - FIXED VERSION
+  useEffect(() => {
+    if (!isPlaying || segments.length === 0 || gameOver) {
+      if (segmentUpdateFrameRef.current) {
+        cancelAnimationFrame(segmentUpdateFrameRef.current);
+        segmentUpdateFrameRef.current = null;
+      }
+      return;
+    }
 
-        if (index === 0) {
-          // First segment follows head
-          const dx = headPosition.x - segment.position.x;
-          const dy = headPosition.y - segment.position.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+    const updateSegmentPositions = () => {
+      setSegments((prevSegments) => {
+        const updatedSegments = [...prevSegments];
+        
+        // Update each segment to follow the one before it
+        for (let i = 0; i < updatedSegments.length; i++) {
+          const segment = updatedSegments[i];
           
-          if (distance > SEGMENT_SPACING) {
-            const angle = Math.atan2(dy, dx);
-            targetX = headPosition.x - Math.cos(angle) * SEGMENT_SPACING;
-            targetY = headPosition.y - Math.sin(angle) * SEGMENT_SPACING;
-          } else {
-            targetX = segment.targetPosition.x;
-            targetY = segment.targetPosition.y;
-          }
-        } else {
-          // Follow previous segment
-          const prevSegment = prevSegments[index - 1];
-          const dx = prevSegment.position.x - segment.position.x;
-          const dy = prevSegment.position.y - segment.position.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          // Determine target to follow
+          const targetToFollow = i === 0 
+            ? { x: headPosition.x - SEGMENT_SPACING, y: headPosition.y } // First segment follows head
+            : { 
+                x: updatedSegments[i - 1].currentPosition.x - SEGMENT_SPACING, 
+                y: updatedSegments[i - 1].currentPosition.y 
+              }; // Others follow previous segment
           
-          if (distance > SEGMENT_SPACING) {
-            const angle = Math.atan2(dy, dx);
-            targetX = prevSegment.position.x - Math.cos(angle) * SEGMENT_SPACING;
-            targetY = prevSegment.position.y - Math.sin(angle) * SEGMENT_SPACING;
+          // Smooth interpolation (easing) - use lerp
+          const lerpFactor = 0.3;
+          segment.currentPosition.x += (targetToFollow.x - segment.currentPosition.x) * lerpFactor;
+          segment.currentPosition.y += (targetToFollow.y - segment.currentPosition.y) * lerpFactor;
+          
+          // Update targetPosition
+          segment.targetPosition = targetToFollow;
+          
+          // Update DOM element position
+          if (segment.element && segment.element.parentNode) {
+            segment.element.style.left = `${segment.currentPosition.x}px`;
+            segment.element.style.top = `${segment.currentPosition.y}px`;
+            
+            // Optional: Add rotation toward direction of movement
+            if (i > 0) {
+              const prevSegment = updatedSegments[i - 1];
+              const dx = segment.currentPosition.x - prevSegment.currentPosition.x;
+              const dy = segment.currentPosition.y - prevSegment.currentPosition.y;
+              const angle = Math.atan2(dy, dx);
+              segment.element.style.transform = `scale(${SEGMENT_SCALE}) rotate(${angle}rad)`;
+              segment.element.style.transformOrigin = "center";
+            } else {
+              // First segment faces toward head
+              const dx = headPosition.x - segment.currentPosition.x;
+              const dy = headPosition.y - segment.currentPosition.y;
+              const angle = Math.atan2(dy, dx);
+              segment.element.style.transform = `scale(${SEGMENT_SCALE}) rotate(${angle}rad)`;
+              segment.element.style.transformOrigin = "center";
+            }
           } else {
-            targetX = segment.targetPosition.x;
-            targetY = segment.targetPosition.y;
+            console.warn(`⚠️ Segment ${segment.id} element not in DOM`);
           }
         }
-
-        // Smoothly move segment toward target
-        const dx = targetX - segment.position.x;
-        const dy = targetY - segment.position.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
         
-        let newX = segment.position.x;
-        let newY = segment.position.y;
-        
-        if (distance > 1) {
-          newX = segment.position.x + (dx / distance) * MOVEMENT_SPEED * 0.8; // Slightly slower
-          newY = segment.position.y + (dy / distance) * MOVEMENT_SPEED * 0.8;
-        } else {
-          newX = targetX;
-          newY = targetY;
-        }
-
-        // Update DOM element position
-        segment.element.style.left = `${newX}px`;
-        segment.element.style.top = `${newY}px`;
-        segment.element.style.transform = `scale(${SEGMENT_SCALE}) translate(${(-SEGMENT_SCALE + 1) * 50}%, ${(-SEGMENT_SCALE + 1) * 50}%)`;
-
-        return {
-          ...segment,
-          position: { x: newX, y: newY },
-          targetPosition: { x: targetX, y: targetY },
-        };
+        return updatedSegments;
       });
-    });
-  }, [headPosition]);
+      
+      segmentUpdateFrameRef.current = requestAnimationFrame(updateSegmentPositions);
+    };
+    
+    segmentUpdateFrameRef.current = requestAnimationFrame(updateSegmentPositions);
+    
+    return () => {
+      if (segmentUpdateFrameRef.current) {
+        cancelAnimationFrame(segmentUpdateFrameRef.current);
+      }
+    };
+  }, [isPlaying, headPosition, segments.length, gameOver]);
+
+  // Debug: Log segment rendering
+  useEffect(() => {
+    if (import.meta.env.DEV && segments.length > 0) {
+      console.log("🟣 RENDERING - Total segments:", segments.length);
+      segments.forEach((seg, i) => {
+        console.log(`  Segment ${i}:`, {
+          id: seg.id,
+          elementId: seg.elementId,
+          visible: document.contains(seg.element),
+          position: seg.currentPosition,
+          element: seg.element?.tagName,
+          inDOM: seg.element?.parentNode !== null,
+        });
+      });
+    }
+  }, [segments]);
 
   // Main game loop
   useEffect(() => {
@@ -336,12 +401,12 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
 
     const gameLoop = () => {
       updateHeadPosition();
-      updateBodySegments();
       
       // Check for self-collision (head hitting body)
       if (headRef.current && segments.length > 3) {
         const headRect = headRef.current.getBoundingClientRect();
         const collision = segments.some((segment) => {
+          if (!segment.element || !document.contains(segment.element)) return false;
           const segmentRect = segment.element.getBoundingClientRect();
           return checkCollision(headRect, segmentRect);
         });
@@ -366,11 +431,19 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isPlaying, gameOver, updateHeadPosition, updateBodySegments, segments, checkCollision, score, onGameOver]);
+  }, [isPlaying, gameOver, updateHeadPosition, segments, checkCollision, score, onGameOver]);
 
   // Cleanup segments on unmount or game end
   useEffect(() => {
     return () => {
+      // Remove all segment elements from DOM
+      document.querySelectorAll('[data-snake-segment]').forEach((el) => {
+        if (el.parentNode) {
+          el.parentNode.removeChild(el);
+        }
+      });
+      
+      // Also clean up from state
       segments.forEach((segment) => {
         if (segment.element.parentNode) {
           segment.element.parentNode.removeChild(segment.element);
@@ -382,6 +455,13 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   // Reset game
   useEffect(() => {
     if (isPlaying && !gameOver) {
+      // Clean up any existing segments
+      document.querySelectorAll('[data-snake-segment]').forEach((el) => {
+        if (el.parentNode) {
+          el.parentNode.removeChild(el);
+        }
+      });
+      
       setScore(0);
       setGameOver(false);
       setSegments([]);
@@ -399,6 +479,20 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
 
   if (!isPlaying) return null;
 
+  // Calculate connector line positions
+  const getSegmentCenter = (segment: SnakeSegment) => {
+    const rect = segment.element?.getBoundingClientRect();
+    if (rect) {
+      return { x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
+    }
+    return { x: segment.currentPosition.x, y: segment.currentPosition.y };
+  };
+
+  const headCenter = { 
+    x: headPosition.x + HEAD_SIZE / 2, 
+    y: headPosition.y + HEAD_SIZE / 2 
+  };
+
   return (
     <div
       ref={containerRef}
@@ -408,32 +502,47 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       {/* SVG for connector lines */}
       <svg
         ref={svgRef}
-        className="absolute inset-0 w-full h-full pointer-events-none"
+        className="fixed top-0 left-0 w-full h-full pointer-events-none"
         style={{ zIndex: 9998 }}
       >
+        {/* Line from head to first segment */}
+        {segments.length > 0 && (() => {
+          const firstSegment = segments[0];
+          const firstCenter = getSegmentCenter(firstSegment);
+          return (
+            <line
+              key="connector-head-to-first"
+              x1={headCenter.x}
+              y1={headCenter.y}
+              x2={firstCenter.x}
+              y2={firstCenter.y}
+              stroke="var(--color-primary)"
+              strokeWidth="3"
+              strokeDasharray="5,3"
+              opacity="0.6"
+            />
+          );
+        })()}
+        
+        {/* Lines between segments */}
         {segments.map((segment, index) => {
-          const prevPosition = index === 0 
-            ? { x: headPosition.x + HEAD_SIZE / 2, y: headPosition.y + HEAD_SIZE / 2 }
-            : { 
-                x: segments[index - 1].position.x, 
-                y: segments[index - 1].position.y 
-              };
+          const nextSegment = segments[index + 1];
+          if (!nextSegment) return null;
           
-          const segmentRect = segment.element.getBoundingClientRect();
-          const segmentCenterX = segmentRect.left + segmentRect.width / 2;
-          const segmentCenterY = segmentRect.top + segmentRect.height / 2;
+          const currentCenter = getSegmentCenter(segment);
+          const nextCenter = getSegmentCenter(nextSegment);
           
           return (
             <line
               key={`connector-${segment.id}`}
-              x1={prevPosition.x}
-              y1={prevPosition.y}
-              x2={segmentCenterX}
-              y2={segmentCenterY}
-              stroke="var(--color-primary)"
-              strokeWidth="3"
-              strokeDasharray="5,5"
-              opacity="0.6"
+              x1={currentCenter.x}
+              y1={currentCenter.y}
+              x2={nextCenter.x}
+              y2={nextCenter.y}
+              stroke="var(--color-secondary)"
+              strokeWidth="2"
+              strokeDasharray="3,3"
+              opacity="0.5"
             />
           );
         })}
@@ -481,6 +590,15 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         </p>
       </div>
 
+      {/* Debug: Segment count (development only) */}
+      {import.meta.env.DEV && (
+        <div className="fixed top-4 right-4 bg-black/80 text-white p-2 rounded z-[10000] font-pixel text-[8px]">
+          Segments: {segments.length}
+          <br />
+          In DOM: {document.querySelectorAll('[data-snake-segment]').length}
+        </div>
+      )}
+
       {/* Game Over Screen */}
       {gameOver && (
         <div className="fixed inset-0 z-[10002] flex items-center justify-center bg-bg/95 backdrop-blur-sm pixel-fade-in">
@@ -497,6 +615,12 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
               <button
                 onClick={() => {
                   soundManager.click();
+                  // Clean up segments
+                  document.querySelectorAll('[data-snake-segment]').forEach((el) => {
+                    if (el.parentNode) {
+                      el.parentNode.removeChild(el);
+                    }
+                  });
                   setGameOver(false);
                   setScore(0);
                   setSegments([]);
@@ -516,6 +640,12 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
                 <button
                   onClick={() => {
                     soundManager.click();
+                    // Clean up segments
+                    document.querySelectorAll('[data-snake-segment]').forEach((el) => {
+                      if (el.parentNode) {
+                        el.parentNode.removeChild(el);
+                      }
+                    });
                     onClose();
                   }}
                   className="retro-btn retro-btn-secondary px-4 py-2 font-pixel text-[10px] uppercase"
@@ -544,4 +674,3 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
     </div>
   );
 };
-
