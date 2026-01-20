@@ -189,17 +189,6 @@ const CollisionDebugOverlay: React.FC<CollisionDebugOverlayProps> = ({
           tunnelPathRef.current = null;
         }, 100);
       }
-
-        // Draw segment index
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "8px 'Press Start 2P', monospace";
-        ctx.textAlign = "left";
-        ctx.fillText(
-          `#${index}`,
-          segmentCenter.x + 15,
-          segmentCenter.y - 15
-        );
-      });
     };
 
     const animationFrame = requestAnimationFrame(function frame() {
@@ -839,19 +828,16 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
         calculateClosestSegment();
       }
       
-      // Check for self-collision (head hitting body) - FIXED: Check from first segment
+      // Check for self-collision - BOTH discrete and continuous
       if (collisionEnabled && headRef.current && segments.length >= 1) {
         const headRect = headRef.current.getBoundingClientRect();
         const headPos = { x: headRect.left + headRect.width / 2, y: headRect.top + headRect.height / 2 };
         
-        // Check self-collision with improved detection
-        // Start from index 1 (second segment) to avoid false collisions on tight turns
-        // This allows collision detection to work from the very beginning (1+ segments)
-        let collisionDetected = false;
+        // 1. DISCRETE COLLISION CHECK (point-to-point at current position)
+        let discreteCollision = false;
         let collisionSegment = -1;
         let collisionDistance = Infinity;
         
-        // FIXED: Start from index 1 instead of 2, so collision works with 2+ segments
         for (let i = 1; i < segments.length; i++) {
           const segment = segments[i];
           if (!segment.element || !document.contains(segment.element)) continue;
@@ -869,59 +855,48 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
           );
           
           // Collision if distance is less than combined radii (20px threshold)
-          // This threshold accounts for head size (28px) and segment size (24px)
           if (distance < 20) {
-            collisionDetected = true;
+            discreteCollision = true;
             collisionSegment = i;
             collisionDistance = distance;
-            
-            // Detailed collision logging
-            console.log("🚨 === COLLISION DETECTED ===");
-            console.log("Collision Details:", {
-              score,
-              segments: segments.length,
-              collisionSegment: i,
-              collisionDistance: distance.toFixed(2) + "px",
-              headPosition: headPos,
-              segmentPosition: segments[i].currentPosition,
-              threshold: "20px",
-              headRect: {
-                left: headRect.left.toFixed(2),
-                top: headRect.top.toFixed(2),
-                width: headRect.width.toFixed(2),
-                height: headRect.height.toFixed(2),
-              },
-              segmentRect: segmentRect ? {
-                left: segmentRect.left.toFixed(2),
-                top: segmentRect.top.toFixed(2),
-                width: segmentRect.width.toFixed(2),
-                height: segmentRect.height.toFixed(2),
-              } : "null",
-            });
-            console.log("All segment positions:", segments.map((s, idx) => ({
-              index: idx,
-              position: s.currentPosition,
-              elementId: s.elementId,
-            })));
             break;
           }
         }
 
-        if (collisionDetected) {
-          console.log("🚨 === GAME OVER CHECK ===");
-          console.log("Reason: Self-collision detected");
-          console.log("Score:", score);
-          console.log("Segments:", segments.length);
-          console.log("Collision with segment:", collisionSegment);
-          console.log("Collision distance:", collisionDistance.toFixed(2), "px");
-          console.log("Head position:", headPos);
-          console.log("Segment position:", segments[collisionSegment]?.currentPosition);
-          console.log("⚠️ CRITICAL: Is this a false positive?");
-          console.log("  - If score is 80, this might be the bug!");
-          console.log("  - Check if segments are too close due to trail spacing");
+        // 2. CONTINUOUS COLLISION CHECK (line-to-circle along movement path)
+        const continuousCollision = checkContinuousCollision();
+        
+        // Use whichever detected collision first
+        if (discreteCollision || continuousCollision.detected) {
+          const isContinuous = continuousCollision.detected && !discreteCollision;
+          const finalSegment = isContinuous ? continuousCollision.segmentIndex : collisionSegment;
+          const finalDistance = isContinuous ? continuousCollision.distance : collisionDistance;
+          
+          console.log("🚨 === COLLISION DETECTED ===");
+          console.log(`Type: ${isContinuous ? "CONTINUOUS (tunneling prevented)" : "DISCRETE"}`);
+          console.log("Collision Details:", {
+            score,
+            segments: segments.length,
+            collisionSegment: finalSegment,
+            collisionDistance: finalDistance.toFixed(2) + "px",
+            headPosition: headPos,
+            segmentPosition: segments[finalSegment]?.currentPosition,
+            threshold: "20px",
+            movementPath: isContinuous ? {
+              from: prevHeadPositionRef.current,
+              to: headPosition,
+            } : "N/A",
+          });
+          console.log("All segment positions:", segments.map((s, idx) => ({
+            index: idx,
+            position: s.currentPosition,
+            elementId: s.elementId,
+          })));
           
           soundManager.error();
-          setGameOverReason(`Self-collision with segment ${collisionSegment} (distance: ${collisionDistance.toFixed(1)}px)`);
+          setGameOverReason(
+            `${isContinuous ? "Continuous" : "Discrete"} collision with segment ${finalSegment} (distance: ${finalDistance.toFixed(1)}px)`
+          );
           setGameOver(true);
           if (onGameOver) {
             console.log("📞 Calling onGameOver callback with score:", score);
