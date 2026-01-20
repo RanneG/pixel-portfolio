@@ -588,10 +588,15 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
 
   // Update head position based on mode and update trail
   const updateHeadPosition = useCallback(() => {
-    if (!headRef.current || gameOver) return;
+    if (!headRef.current || gameOver || isPaused) return;
+
+    // Store previous position BEFORE movement (for continuous collision detection)
+    prevHeadPositionRef.current = { ...headPosition };
 
     let newX = headPosition.x;
     let newY = headPosition.y;
+    let moveX = 0;
+    let moveY = 0;
 
     if (mode === "mouse") {
       // Smoothly move head toward mouse
@@ -603,13 +608,35 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
       const distance = Math.sqrt(dx * dx + dy * dy);
       
       if (distance > 1) {
-        newX = headPosition.x + (dx / distance) * MOVEMENT_SPEED;
-        newY = headPosition.y + (dy / distance) * MOVEMENT_SPEED;
+        moveX = (dx / distance) * MOVEMENT_SPEED;
+        moveY = (dy / distance) * MOVEMENT_SPEED;
+        
+        // Cap maximum movement per frame to prevent extreme tunneling
+        const moveDistance = Math.sqrt(moveX * moveX + moveY * moveY);
+        if (moveDistance > MAX_SPEED_PER_FRAME) {
+          const scale = MAX_SPEED_PER_FRAME / moveDistance;
+          moveX *= scale;
+          moveY *= scale;
+        }
+        
+        newX = headPosition.x + moveX;
+        newY = headPosition.y + moveY;
       }
     } else if (mode === "arrow") {
       // Move head based on arrow key direction
-      newX = headPosition.x + keyDirectionRef.current.x * MOVEMENT_SPEED;
-      newY = headPosition.y + keyDirectionRef.current.y * MOVEMENT_SPEED;
+      moveX = keyDirectionRef.current.x * MOVEMENT_SPEED;
+      moveY = keyDirectionRef.current.y * MOVEMENT_SPEED;
+      
+      // Cap maximum movement per frame
+      const moveDistance = Math.sqrt(moveX * moveX + moveY * moveY);
+      if (moveDistance > MAX_SPEED_PER_FRAME) {
+        const scale = MAX_SPEED_PER_FRAME / moveDistance;
+        moveX *= scale;
+        moveY *= scale;
+      }
+      
+      newX = headPosition.x + moveX;
+      newY = headPosition.y + moveY;
 
       // Check boundaries (prevent going off screen)
       newX = Math.max(0, Math.min(window.innerWidth - HEAD_SIZE, newX));
