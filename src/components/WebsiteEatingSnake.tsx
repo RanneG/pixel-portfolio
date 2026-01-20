@@ -1332,6 +1332,11 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
             {mode === "mouse" 
               ? "MOVE MOUSE • ESC TO EXIT" 
               : "USE ARROW KEYS • ESC TO EXIT"}
+            {debugMode && (
+              <span className="block mt-1 text-green-400">
+                DEBUG: D=Toggle • C=Collision • ESC=Pause
+              </span>
+            )}
           </p>
         </div>
       )}
