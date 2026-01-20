@@ -37,6 +37,138 @@ const getColorFromElementType = (elementId: string): string => {
   return "var(--color-secondary)";
 };
 
+// Collision Debug Overlay Component
+interface CollisionDebugOverlayProps {
+  headRef: React.RefObject<HTMLDivElement>;
+  segments: SnakeSegment[];
+  closestSegment: {index: number, distance: number} | null;
+  collisionStatus: "SAFE" | "CLOSE" | "COLLISION";
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+}
+
+const CollisionDebugOverlay: React.FC<CollisionDebugOverlayProps> = ({
+  headRef,
+  segments,
+  closestSegment,
+  collisionStatus,
+  canvasRef,
+}) => {
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !headRef.current) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const draw = () => {
+      // Resize canvas to match window
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Get head position
+      const headRect = headRef.current?.getBoundingClientRect();
+      if (!headRect) return;
+
+      const headCenter = {
+        x: headRect.left + headRect.width / 2,
+        y: headRect.top + headRect.height / 2,
+      };
+
+      // Draw collision radius around head (20px threshold)
+      ctx.strokeStyle = collisionStatus === "COLLISION" ? "#ff0000" :
+                       collisionStatus === "CLOSE" ? "#ffff00" :
+                       "#00ff00";
+      ctx.lineWidth = 2;
+      ctx.setLineDash([5, 5]);
+      ctx.beginPath();
+      ctx.arc(headCenter.x, headCenter.y, 20, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw head center point
+      ctx.fillStyle = "#00ffff";
+      ctx.beginPath();
+      ctx.arc(headCenter.x, headCenter.y, 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Draw segments and collision radii
+      segments.forEach((segment, index) => {
+        if (!segment.element || !document.contains(segment.element)) return;
+
+        const segmentRect = segment.element.getBoundingClientRect();
+        const segmentCenter = {
+          x: segmentRect.left + segmentRect.width / 2,
+          y: segmentRect.top + segmentRect.height / 2,
+        };
+
+        // Highlight closest segment
+        const isClosest = closestSegment?.index === index;
+        
+        // Draw collision radius (12px for segments)
+        ctx.strokeStyle = isClosest 
+          ? (collisionStatus === "COLLISION" ? "#ff0000" : "#ffff00")
+          : "#666666";
+        ctx.lineWidth = isClosest ? 3 : 1;
+        ctx.setLineDash([3, 3]);
+        ctx.beginPath();
+        ctx.arc(segmentCenter.x, segmentCenter.y, 12, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Draw segment center point
+        ctx.fillStyle = isClosest ? "#ffff00" : "#ff00ff";
+        ctx.beginPath();
+        ctx.arc(segmentCenter.x, segmentCenter.y, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw distance line to head if closest segment
+        if (isClosest && closestSegment) {
+          ctx.strokeStyle = collisionStatus === "COLLISION" ? "#ff0000" :
+                           collisionStatus === "CLOSE" ? "#ffff00" :
+                           "#00ff00";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(headCenter.x, headCenter.y);
+          ctx.lineTo(segmentCenter.x, segmentCenter.y);
+          ctx.stroke();
+
+          // Draw distance label
+          ctx.fillStyle = "#ffffff";
+          ctx.font = "10px 'Press Start 2P', monospace";
+          ctx.textAlign = "center";
+          ctx.fillText(
+            `${closestSegment.distance.toFixed(1)}px`,
+            (headCenter.x + segmentCenter.x) / 2,
+            (headCenter.y + segmentCenter.y) / 2 - 10
+          );
+        }
+
+        // Draw segment index
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "8px 'Press Start 2P', monospace";
+        ctx.textAlign = "left";
+        ctx.fillText(
+          `#${index}`,
+          segmentCenter.x + 15,
+          segmentCenter.y - 15
+        );
+      });
+    };
+
+    const animationFrame = requestAnimationFrame(function frame() {
+      draw();
+      requestAnimationFrame(frame);
+    });
+    
+    return () => cancelAnimationFrame(animationFrame);
+  }, [headRef, segments, closestSegment, collisionStatus, canvasRef]);
+
+  return null;
+};
+
 export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   isPlaying,
   onGameOver,
@@ -55,6 +187,11 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   const [direction, setDirection] = useState<Position>({ x: 0, y: 0 });
   const [trail, setTrail] = useState<Array<{x: number, y: number}>>([]); // Head position trail
   const [debugVisible, setDebugVisible] = useState<boolean>(import.meta.env.DEV);
+  const [debugMode, setDebugMode] = useState<boolean>(false); // Visual collision debug overlay
+  const [collisionEnabled, setCollisionEnabled] = useState<boolean>(true); // Toggle collision detection
+  const [isPaused, setIsPaused] = useState<boolean>(false); // Pause game
+  const [closestSegment, setClosestSegment] = useState<{index: number, distance: number} | null>(null); // Closest segment for debug
+  const [collisionStatus, setCollisionStatus] = useState<"SAFE" | "CLOSE" | "COLLISION">("SAFE");
   
   const animationFrameRef = useRef<number | null>(null);
   const segmentUpdateFrameRef = useRef<number | null>(null);
@@ -63,6 +200,7 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
   const eatenElementsRef = useRef<Set<string>>(new Set());
   const segmentCounterRef = useRef<number>(0);
   const lastHeadPositionRef = useRef<Position>({ x: 100, y: 100 });
+  const debugCanvasRef = useRef<HTMLCanvasElement | null>(null);
   
   // Trail length based on number of segments eaten
   const getTrailLength = () => Math.max(segments.length + 5, 20); // At least 20 positions in trail
@@ -686,6 +824,35 @@ export const WebsiteEatingSnake: React.FC<WebsiteEatingSnakeProps> = ({
             collisionDetected = true;
             collisionSegment = i;
             collisionDistance = distance;
+            
+            // Detailed collision logging
+            console.log("🚨 === COLLISION DETECTED ===");
+            console.log("Collision Details:", {
+              score,
+              segments: segments.length,
+              collisionSegment: i,
+              collisionDistance: distance.toFixed(2) + "px",
+              headPosition: headPos,
+              segmentPosition: segments[i].currentPosition,
+              threshold: "20px",
+              headRect: {
+                left: headRect.left.toFixed(2),
+                top: headRect.top.toFixed(2),
+                width: headRect.width.toFixed(2),
+                height: headRect.height.toFixed(2),
+              },
+              segmentRect: segmentRect ? {
+                left: segmentRect.left.toFixed(2),
+                top: segmentRect.top.toFixed(2),
+                width: segmentRect.width.toFixed(2),
+                height: segmentRect.height.toFixed(2),
+              } : "null",
+            });
+            console.log("All segment positions:", segments.map((s, idx) => ({
+              index: idx,
+              position: s.currentPosition,
+              elementId: s.elementId,
+            })));
             break;
           }
         }
