@@ -110,7 +110,7 @@ const ChatBot: React.FC = () => {
       {/* Chat Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 retro-btn retro-btn-secondary flex items-center justify-center text-2xl"
+        className="fixed bottom-6 left-6 z-50 w-14 h-14 retro-btn retro-btn-secondary flex items-center justify-center text-2xl"
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
         {isOpen ? "✕" : "💬"}
@@ -118,7 +118,7 @@ const ChatBot: React.FC = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-50 w-80 sm:w-96 h-[28rem] flex flex-col bg-card pixel-border overflow-hidden">
+        <div className="fixed bottom-24 left-6 z-50 w-80 sm:w-96 h-[28rem] flex flex-col bg-card pixel-border overflow-hidden">
           {/* Header */}
           <div className="bg-secondary px-4 py-3 flex items-center gap-2">
             <span className="text-xl">🤖</span>
