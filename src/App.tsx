@@ -4,6 +4,7 @@ import Hero from "./components/Hero";
 import CharacterStats from "./components/CharacterStats";
 import SavePoint from "./components/SavePoint";
 import Footer from "./components/Footer";
+import ChatBot from "./components/ChatBot";
 import { SettingsProvider, useSettings } from "./contexts/SettingsContext";
 import { PortfolioDataProvider, usePortfolioData } from "./contexts/PortfolioDataContext";
 import { AchievementsProvider } from "./contexts/AchievementsContext";
@@ -137,6 +138,7 @@ const AppContent: React.FC = () => {
         </main>
         <Footer name={data.name} />
       </div>
+      <ChatBot />
     </>
   );
 };
