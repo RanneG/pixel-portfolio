@@ -3,8 +3,6 @@
  * 8-bit Portfolio AI Assistant
  */
 
-import type { VercelRequest, VercelResponse } from "@vercel/node";
-
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 const SYSTEM_PROMPT = `You are RANNE-BOT, an 8-bit AI assistant on Ranne Gerodias's portfolio website. 
@@ -45,7 +43,7 @@ You speak in a friendly, slightly playful retro-gaming style. Keep responses con
 
 Respond helpfully about Ranne's work, skills, and projects. Use occasional gaming references (XP, quests, level up, etc.) but don't overdo it. If asked something you don't know, suggest contacting Ranne directly.`;
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+module.exports = async function handler(req, res) {
   // CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
@@ -149,5 +147,4 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     console.error("Chat error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-}
-
+};
