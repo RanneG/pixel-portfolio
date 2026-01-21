@@ -107,18 +107,18 @@ const ChatBot: React.FC = () => {
 
   return (
     <>
-      {/* Chat Toggle Button */}
+      {/* Chat Toggle Button - positioned next to settings icon */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed bottom-6 left-6 z-50 w-14 h-14 retro-btn retro-btn-secondary flex items-center justify-center text-2xl"
+        className="fixed bottom-4 right-16 z-50 pixel-border bg-card p-3 text-secondary hover:bg-card/80 transition-transform hover:scale-110"
         aria-label={isOpen ? "Close chat" : "Open chat"}
       >
-        {isOpen ? "✕" : "💬"}
+        <span className="font-pixel text-xs">{isOpen ? "✕" : "💬"}</span>
       </button>
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-24 left-6 z-50 w-80 sm:w-96 h-[28rem] flex flex-col bg-card pixel-border overflow-hidden">
+        <div className="fixed bottom-16 right-4 z-50 w-80 sm:w-96 h-[28rem] flex flex-col bg-card pixel-border overflow-hidden">
           {/* Header */}
           <div className="bg-secondary px-4 py-3 flex items-center gap-2">
             <span className="text-xl">🤖</span>
