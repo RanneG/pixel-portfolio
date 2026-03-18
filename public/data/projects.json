@@ -33,6 +33,29 @@
       "stars": 5,
       "tech": ["REACT", "TYPESCRIPT", "TAILWIND CSS", "FORMSPREE", "VERCEL"],
       "questId": "PP-001"
+    },
+    {
+      "title": "AUTONOMI",
+      "difficulty": "LEGENDARY",
+      "status": "COMPLETED",
+      "description": "Autonomous lending protection on Arc. 24/7 lending bodyguard that auto-rebalances your USYC/USDC position when LTV crosses the safety threshold — no liquidation surprises.",
+      "xp": 2600,
+      "stars": 5,
+      "tech": ["DEFI", "ARC", "USYC", "USDC", "AUTO REBALANCING", "ENCODE HACKATHON"],
+      "githubUrl": "https://github.com/RanneG/autonomi",
+      "liveUrl": "https://autonomi-lake.vercel.app/",
+      "questId": "AU-001"
+    },
+    {
+      "title": "CHATBOT RAG CORE",
+      "difficulty": "EPIC",
+      "status": "COMPLETED",
+      "description": "Reusable Python RAG chatbot library using Ollama for local AI. Document Q&A, embeddings, and production-ready API server.",
+      "xp": 2200,
+      "stars": 5,
+      "tech": ["PYTHON", "LLAMAINDEX", "OLLAMA", "RAG", "DOCKER"],
+      "githubUrl": "https://github.com/RanneG/chatbot-rag-core",
+      "questId": "CB-001"
     }
   ]
 }
