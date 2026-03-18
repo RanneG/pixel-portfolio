@@ -14,7 +14,7 @@ const defaultData: PortfolioData = {
   ],
   statusBadges: ["CAFFEINATED", "MOTIVATED", "CREATIVE"],
   stats: {
-    projects: 3,
+    projects: 5,
     level: "DEV 28",
     creativity: "MAX"
   },
@@ -104,6 +104,29 @@ const defaultData: PortfolioData = {
       stars: 5,
       tech: ["REACT", "TYPESCRIPT", "TAILWIND CSS", "FORMSPREE", "VERCEL"],
       questId: "PP-001"
+    },
+    {
+      title: "AUTONOMI",
+      difficulty: "LEGENDARY",
+      status: "COMPLETED",
+      description: "Decentralized internet infrastructure - a distributed storage network built from everyday devices. No middlemen, private by design, open-source.",
+      xp: 2600,
+      stars: 5,
+      tech: ["DISTRIBUTED SYSTEMS", "P2P", "ENCRYPTION", "OPEN SOURCE"],
+      githubUrl: "https://github.com/maidsafe/autonomi",
+      liveUrl: "https://autonomi.com",
+      questId: "AU-001"
+    },
+    {
+      title: "CHATBOT RAG CORE",
+      difficulty: "EPIC",
+      status: "COMPLETED",
+      description: "Reusable Python RAG chatbot library using Ollama for local AI. Document Q&A, embeddings, and production-ready API server.",
+      xp: 2200,
+      stars: 5,
+      tech: ["PYTHON", "LLAMAINDEX", "OLLAMA", "RAG", "DOCKER"],
+      githubUrl: "https://github.com/RanneG/chatbot-rag-core",
+      questId: "CB-001"
     }
   ],
   contact: {
