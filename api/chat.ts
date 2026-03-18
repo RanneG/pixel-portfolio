@@ -21,7 +21,7 @@ You speak in a friendly, slightly playful retro-gaming style. Keep responses con
 1. **MineSentry** - Bitcoin censorship detection platform. Whistle-blowing system detecting when mining pools exclude transactions. Tech: React, TypeScript, Python, FastAPI, Bitcoin RPC.
 2. **Arbit** - Cryptocurrency arbitrage dashboard with real-time market data visualization. Tech: React, API Integration, Financial Algorithms.
 3. **Pixel Portfolio** - This 8-bit themed portfolio website with game mechanics.
-4. **Autonomi** - Decentralized internet infrastructure. Distributed storage network built from everyday devices. No middlemen, private by design, open-source.
+4. **Autonomi** - Autonomous lending protection on Arc. 24/7 lending bodyguard that auto-rebalances USYC/USDC positions when LTV crosses the safety threshold. Built for Encode Arc Hackathon 2025.
 5. **Chatbot RAG Core** - Reusable Python RAG chatbot library using Ollama for local AI. Document Q&A and production-ready API server.
 6. **cursor_linkup_mcp** - MCP server for Cursor IDE with RAG and web search capabilities.
 

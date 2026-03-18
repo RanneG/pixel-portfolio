@@ -38,12 +38,12 @@
       "title": "AUTONOMI",
       "difficulty": "LEGENDARY",
       "status": "COMPLETED",
-      "description": "Decentralized internet infrastructure - a distributed storage network built from everyday devices. No middlemen, private by design, open-source.",
+      "description": "Autonomous lending protection on Arc. 24/7 lending bodyguard that auto-rebalances your USYC/USDC position when LTV crosses the safety threshold — no liquidation surprises.",
       "xp": 2600,
       "stars": 5,
-      "tech": ["DISTRIBUTED SYSTEMS", "P2P", "ENCRYPTION", "OPEN SOURCE"],
-      "githubUrl": "https://github.com/maidsafe/autonomi",
-      "liveUrl": "https://autonomi.com",
+      "tech": ["DEFI", "ARC", "USYC", "USDC", "AUTO REBALANCING", "ENCODE HACKATHON"],
+      "githubUrl": "https://github.com/RanneG/autonomi",
+      "liveUrl": "https://autonomi-lake.vercel.app/",
       "questId": "AU-001"
     },
     {
