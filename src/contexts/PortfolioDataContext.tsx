@@ -14,7 +14,7 @@ const defaultData: PortfolioData = {
   ],
   statusBadges: ["CAFFEINATED", "MOTIVATED", "CREATIVE"],
   stats: {
-    projects: 5,
+    projects: 6,
     level: "DEV 28",
     creativity: "MAX"
   },
@@ -127,6 +127,19 @@ const defaultData: PortfolioData = {
       tech: ["PYTHON", "LLAMAINDEX", "OLLAMA", "RAG", "DOCKER"],
       githubUrl: "https://github.com/RanneG/chatbot-rag-core",
       questId: "CB-001"
+    },
+    {
+      title: "LUCKY CHARM",
+      difficulty: "LEGENDARY",
+      status: "COMPLETED",
+      description:
+        "Privacy-preserving standup and meeting transcript tool: wallet-first auth, TEE-oriented processing, Props-filtered dashboard — structured themes and actions without verbatim quotes leaving the trust boundary.",
+      xp: 2500,
+      stars: 5,
+      tech: ["REACT", "VITE", "WALLET AUTH", "TEE", "FLASK", "PROPS FILTER"],
+      githubUrl: "https://github.com/RanneG/standup-bot",
+      liveUrl: "https://lucky-charm-taupe.vercel.app/",
+      questId: "LC-001"
     }
   ],
   contact: {
