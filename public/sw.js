@@ -1,7 +1,7 @@
 // Service Worker for 8-Bit Portfolio
-const CACHE_NAME = "pixel-portfolio-v1";
-const STATIC_CACHE = "static-v1";
-const DYNAMIC_CACHE = "dynamic-v1";
+const CACHE_NAME = "pixel-portfolio-v2";
+const STATIC_CACHE = "static-v2";
+const DYNAMIC_CACHE = "dynamic-v2";
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -60,6 +60,22 @@ self.addEventListener("fetch", (event) => {
             return cachedResponse || caches.match("/index.html");
           });
         })
+    );
+    return;
+  }
+
+  // Hashed Vite bundles: network-first so we never cache a 200 HTML fallback as "JavaScript"
+  if (url.pathname.startsWith("/assets/") && request.method === "GET") {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.ok) {
+            const clone = response.clone();
+            caches.open(DYNAMIC_CACHE).then((cache) => cache.put(request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
     );
     return;
   }
