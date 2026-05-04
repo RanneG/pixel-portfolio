@@ -14,7 +14,7 @@ const defaultData: PortfolioData = {
   ],
   statusBadges: ["CAFFEINATED", "MOTIVATED", "CREATIVE"],
   stats: {
-    projects: 6,
+    projects: 7,
     level: "DEV 28",
     creativity: "MAX"
   },
@@ -71,6 +71,18 @@ const defaultData: PortfolioData = {
     }
   ],
   projects: [
+    {
+      title: "STITCH",
+      difficulty: "LEGENDARY",
+      status: "IN PROGRESS",
+      description:
+        "Local-first subscription companion: Tauri + React desktop (stitch-app), Python Flask bridge for RAG over your PDFs, Google sign-in + Gmail discovery, and optional face MFA — pairs with the Linkup MCP stack for Cursor.",
+      xp: 2900,
+      stars: 5,
+      tech: ["TAURI", "VITE", "REACT", "TYPESCRIPT", "PYTHON", "FLASK", "RAG", "OLLAMA", "GOOGLE OAUTH"],
+      githubUrl: "https://github.com/RanneG/stitch-app",
+      questId: "ST-001"
+    },
     {
       title: "MINESENTRY",
       difficulty: "EPIC",

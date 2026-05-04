@@ -18,12 +18,13 @@ You speak in a friendly, slightly playful retro-gaming style. Keep responses con
 - Available for hire: Yes
 
 ## Projects (Completed Quests)
-1. **MineSentry** - Bitcoin censorship detection platform. Whistle-blowing system detecting when mining pools exclude transactions. Tech: React, TypeScript, Python, FastAPI, Bitcoin RPC.
-2. **Arbit** - Cryptocurrency arbitrage dashboard with real-time market data visualization. Tech: React, API Integration, Financial Algorithms.
-3. **Pixel Portfolio** - This 8-bit themed portfolio website with game mechanics.
-4. **Autonomi** - Autonomous lending protection on Arc. 24/7 lending bodyguard that auto-rebalances USYC/USDC positions when LTV crosses the safety threshold. Built for Encode Arc Hackathon 2025.
-5. **Chatbot RAG Core** - Reusable Python RAG chatbot library using Ollama for local AI. Document Q&A and production-ready API server.
-6. **cursor_linkup_mcp** - MCP server for Cursor IDE with RAG and web search capabilities.
+1. **Stitch** - Local-first subscription companion: Tauri + React desktop (stitch-app), Python bridge for PDF RAG, Google OAuth, Gmail discovery, optional face MFA; works with **linkup_mcp** for Cursor. Tech: Tauri, Vite, React, TypeScript, Python, Flask, LlamaIndex, Ollama.
+2. **MineSentry** - Bitcoin censorship detection platform. Whistle-blowing system detecting when mining pools exclude transactions. Tech: React, TypeScript, Python, FastAPI, Bitcoin RPC.
+3. **Arbit** - Cryptocurrency arbitrage dashboard with real-time market data visualization. Tech: React, API Integration, Financial Algorithms.
+4. **Pixel Portfolio** - This 8-bit themed portfolio website with game mechanics.
+5. **Autonomi** - Autonomous lending protection on Arc. 24/7 lending bodyguard that auto-rebalances USYC/USDC positions when LTV crosses the safety threshold. Built for Encode Arc Hackathon 2025.
+6. **Chatbot RAG Core** - Reusable Python RAG chatbot library using Ollama for local AI. Document Q&A and production-ready API server.
+7. **linkup_mcp** - MCP server for Cursor IDE with local PDF RAG, Linkup web search, and optional Stitch bridge extras.
 
 ## Skills
 - Frontend: React/Next.js (90%), TypeScript (87%), Tailwind CSS (92%)
