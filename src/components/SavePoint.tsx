@@ -2,6 +2,12 @@ import React, { useState, FormEvent } from "react";
 import { soundManager } from "../utils/soundManager";
 import { useAchievementTracker } from "../hooks/useAchievementTracker";
 import { analytics } from "../utils/analytics";
+import { useLanguage } from "../contexts/LanguageContext";
+import {
+  resolveFormspreeId,
+  submitPortfolioContact,
+  validateContactFields
+} from "../utils/formspreeSubmit";
 
 interface SavePointProps {
   contactInfo?: {
@@ -11,7 +17,9 @@ interface SavePointProps {
   };
   socialLinks?: Array<{ name: string; url: string }>;
   availableForHire?: boolean;
-  formspreeId?: string; // Formspree form ID
+  formspreeId?: string;
+  /** Browse brutalist layout (vibe template); default keeps retro terminal styling */
+  variant?: "retro" | "brutalist";
 }
 
 const SavePoint: React.FC<SavePointProps> = ({
@@ -23,12 +31,14 @@ const SavePoint: React.FC<SavePointProps> = ({
   socialLinks = [
     { name: "GITHUB", url: "https://github.com" },
     { name: "LINKEDIN", url: "https://linkedin.com" },
-    { name: "TWITTER", url: "https://twitter.com" },
-    { name: "DRIBBBLE", url: "https://dribbble.com" }
+    { name: "TWITTER", url: "https://twitter.com" }
   ],
   availableForHire = true,
-  formspreeId = "xeeegyek" // Default to your Formspree ID
+  formspreeId,
+  variant = "retro"
 }) => {
+  const formId = resolveFormspreeId(formspreeId);
+  const { t } = useLanguage();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -39,31 +49,14 @@ const SavePoint: React.FC<SavePointProps> = ({
   const { trackFormSubmission } = useAchievementTracker();
 
   const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = "Name is required";
-    }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Invalid email format";
-    }
-    
-    if (!formData.message.trim()) {
-      newErrors.message = "Message is required";
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters";
-    }
-    
+    const newErrors = validateContactFields(formData);
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -72,41 +65,18 @@ const SavePoint: React.FC<SavePointProps> = ({
     setErrors({});
 
     try {
-      // Use Formspree if ID is provided
-      if (formspreeId) {
-        const response = await fetch(`https://formspree.io/f/${formspreeId}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json"
-          },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            message: formData.message,
-            _subject: `New message from ${formData.name}`
-          })
-        });
+      await submitPortfolioContact(formId, formData);
 
-        if (response.ok) {
-          setStatus("success");
-        soundManager.submit();
-        trackFormSubmission();
-        analytics.trackEvent("contact_form_submitted", { formId: formspreeId });
-          setFormData({ name: "", email: "", message: "" });
-          // Reset success message after 5 seconds
-          setTimeout(() => setStatus("idle"), 5000);
-        } else {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || "Form submission failed");
-        }
-      } else {
-        throw new Error("Formspree ID is required");
-      }
+      setStatus("success");
+      soundManager.submit();
+      trackFormSubmission();
+      analytics.trackEvent("contact_form_submitted", { formId });
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setStatus("idle"), 5000);
     } catch (error) {
       console.error("Form submission error:", error);
-        setStatus("error");
-        soundManager.error();
+      setStatus("error");
+      soundManager.error();
       setTimeout(() => setStatus("idle"), 5000);
     }
   };
@@ -114,7 +84,6 @@ const SavePoint: React.FC<SavePointProps> = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -124,15 +93,123 @@ const SavePoint: React.FC<SavePointProps> = ({
     }
   };
 
+  if (variant === "brutalist") {
+    return (
+      <section aria-labelledby="vibe-contact-heading">
+        <div className="contact">
+          <div className="contact-info">
+            <h2 id="vibe-contact-heading">{t("browse.vibe.contactTitle")}</h2>
+            <p className="vibe-lead-big">{t("browse.vibe.contactLead")}</p>
+            <p>
+              <strong>{t("browse.vibe.contactEmailLabel")}:</strong>{" "}
+              <a href={`mailto:${contactInfo.email}`}>{contactInfo.email}</a>
+            </p>
+            <p>
+              <strong>{t("browse.vibe.contactLocationLabel")}:</strong> {contactInfo.location}
+            </p>
+            <p style={{ marginTop: "12px", fontSize: "0.9rem" }}>
+              <strong>TIMEZONE:</strong> {contactInfo.timezone}
+            </p>
+            <div style={{ marginTop: "32px", display: "flex", flexWrap: "wrap", gap: "16px" }}>
+              {socialLinks.map((social) => (
+                <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer">
+                  {social.name}
+                </a>
+              ))}
+            </div>
+            {availableForHire ? (
+              <div style={{ marginTop: "28px" }}>
+                <p style={{ fontWeight: 700, color: "var(--secondary)" }}>
+                  {t("browse.vibe.availabilityTitle")}
+                </p>
+                <p style={{ marginTop: "8px", fontSize: "0.85rem", color: "var(--muted)", maxWidth: "36rem" }}>
+                  {t("browse.vibe.availabilitySub")}
+                </p>
+              </div>
+            ) : null}
+          </div>
+          <div className="contact-form">
+            <form onSubmit={handleSubmit} noValidate>
+              <div className="input-group">
+                <label htmlFor="vibe-sp-name">{t("browse.vibe.contactFormName")}</label>
+                <input
+                  id="vibe-sp-name"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
+                  aria-invalid={errors.name ? "true" : "false"}
+                  aria-required="true"
+                />
+                {errors.name ? (
+                  <p style={{ color: "#ff6b6b", marginTop: "8px", fontSize: "0.85rem" }} role="alert">
+                    {errors.name}
+                  </p>
+                ) : null}
+              </div>
+              <div className="input-group">
+                <label htmlFor="vibe-sp-email">{t("browse.vibe.contactFormEmail")}</label>
+                <input
+                  id="vibe-sp-email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  aria-invalid={errors.email ? "true" : "false"}
+                  aria-required="true"
+                />
+                {errors.email ? (
+                  <p style={{ color: "#ff6b6b", marginTop: "8px", fontSize: "0.85rem" }} role="alert">
+                    {errors.email}
+                  </p>
+                ) : null}
+              </div>
+              <div className="input-group">
+                <label htmlFor="vibe-sp-message">{t("browse.vibe.contactFormMessage")}</label>
+                <textarea
+                  id="vibe-sp-message"
+                  name="message"
+                  rows={5}
+                  value={formData.message}
+                  onChange={handleChange}
+                  aria-invalid={errors.message ? "true" : "false"}
+                  aria-required="true"
+                />
+                {errors.message ? (
+                  <p style={{ color: "#ff6b6b", marginTop: "8px", fontSize: "0.85rem" }} role="alert">
+                    {errors.message}
+                  </p>
+                ) : null}
+              </div>
+              <button type="submit" disabled={status === "loading"} aria-busy={status === "loading"}>
+                {status === "loading" ? "…" : t("browse.vibe.contactFormSubmit")}
+              </button>
+              {status === "success" ? (
+                <p style={{ marginTop: "16px", color: "var(--secondary)" }} role="status">
+                  Message sent.
+                </p>
+              ) : null}
+              {status === "error" ? (
+                <p style={{ marginTop: "16px", color: "#ff6b6b" }} role="alert">
+                  Could not send. Try again.
+                </p>
+              ) : null}
+            </form>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
-      id="save-point"
+      id="contact"
       className="bg-[radial-gradient(circle_at_bottom,_hsl(320_100%_12%)_0,_hsl(240_10%_4%)_55%)] py-12 md:py-16 lg:py-24 border-t border-muted"
-      aria-labelledby="save-point-heading"
+      aria-labelledby="contact-heading"
     >
       <div className="mx-auto max-w-5xl px-4 md:px-6">
-        <h2 id="save-point-heading" className="mb-6 font-pixel text-xs md:text-sm text-secondary neon-glow-secondary">
-          &gt; SAVE POINT
+        <h2 id="contact-heading" className="mb-6 font-pixel text-xs md:text-sm text-secondary neon-glow-secondary">
+          &gt; CONTACT
         </h2>
         <p className="sr-only">Contact form and social media links</p>
 
@@ -142,9 +219,11 @@ const SavePoint: React.FC<SavePointProps> = ({
             <form onSubmit={handleSubmit} className="space-y-3 text-xs" noValidate>
               <div className="space-y-1">
                 <label className="font-pixel text-[9px] md:text-[10px]" htmlFor="name">
-                  PLAYER NAME <span className="text-secondary" aria-label="required">*</span>
+                  NAME <span className="text-secondary" aria-label="required">*</span>
                 </label>
-                <span id="name-desc" className="sr-only">Required field</span>
+                <span id="name-desc" className="sr-only">
+                  Required field
+                </span>
                 <input
                   id="name"
                   name="name"
@@ -154,7 +233,7 @@ const SavePoint: React.FC<SavePointProps> = ({
                   className={`w-full border ${
                     errors.name ? "border-secondary" : "border-muted"
                   } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 min-h-[48px] md:min-h-[44px]`}
-                  placeholder="ENTER NAME..."
+                  placeholder="Your name…"
                   aria-invalid={errors.name ? "true" : "false"}
                   aria-describedby={errors.name ? "name-error name-desc" : "name-desc"}
                   aria-required="true"
@@ -167,9 +246,11 @@ const SavePoint: React.FC<SavePointProps> = ({
               </div>
               <div className="space-y-1">
                 <label className="font-pixel text-[9px] md:text-[10px]" htmlFor="email">
-                  SAVE SLOT (EMAIL) <span className="text-secondary" aria-label="required">*</span>
+                  EMAIL <span className="text-secondary" aria-label="required">*</span>
                 </label>
-                <span id="email-desc" className="sr-only">Required field</span>
+                <span id="email-desc" className="sr-only">
+                  Required field
+                </span>
                 <input
                   id="email"
                   name="email"
@@ -179,7 +260,7 @@ const SavePoint: React.FC<SavePointProps> = ({
                   className={`w-full border ${
                     errors.email ? "border-secondary" : "border-muted"
                   } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 min-h-[48px] md:min-h-[44px]`}
-                  placeholder="ENTER EMAIL..."
+                  placeholder="you@example.com"
                   aria-invalid={errors.email ? "true" : "false"}
                   aria-describedby={errors.email ? "email-error email-desc" : "email-desc"}
                   aria-required="true"
@@ -192,9 +273,11 @@ const SavePoint: React.FC<SavePointProps> = ({
               </div>
               <div className="space-y-1">
                 <label className="font-pixel text-[9px] md:text-[10px]" htmlFor="message">
-                  MESSAGE DATA <span className="text-secondary" aria-label="required">*</span>
+                  MESSAGE <span className="text-secondary" aria-label="required">*</span>
                 </label>
-                <span id="message-desc" className="sr-only">Required field</span>
+                <span id="message-desc" className="sr-only">
+                  Required field
+                </span>
                 <textarea
                   id="message"
                   name="message"
@@ -204,7 +287,7 @@ const SavePoint: React.FC<SavePointProps> = ({
                   className={`w-full border ${
                     errors.message ? "border-secondary" : "border-muted"
                   } bg-bg px-3 py-3 md:px-2 md:py-1 text-sm md:text-xs outline-none focus:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary focus-visible:outline-offset-2 resize-y min-h-[120px]`}
-                  placeholder="DESCRIBE YOUR QUEST..."
+                  placeholder="Your message (min 10 characters)…"
                   aria-invalid={errors.message ? "true" : "false"}
                   aria-describedby={errors.message ? "message-error message-desc" : "message-desc"}
                   aria-required="true"
@@ -222,12 +305,12 @@ const SavePoint: React.FC<SavePointProps> = ({
                 aria-label={status === "loading" ? "Submitting form, please wait" : "Submit contact form"}
                 aria-busy={status === "loading"}
               >
-                {status === "loading" ? "SAVING..." : "SAVE GAME"}
+                {status === "loading" ? "SENDING…" : "SEND MESSAGE"}
               </button>
-              
+
               {status === "success" && (
                 <p className="mt-2 text-[9px] md:text-[10px] text-accent font-pixel" role="status">
-                  ★ SAVED! ★ Message sent successfully!
+                  ★ Message sent successfully!
                 </p>
               )}
               {status === "error" && (
@@ -272,15 +355,18 @@ const SavePoint: React.FC<SavePointProps> = ({
               </div>
             </div>
             {availableForHire && (
-              <div className="pixel-border bg-card p-4 md:p-6 box-glow flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+              <div className="pixel-border bg-card p-4 md:p-6 box-glow flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-[10px] md:text-[11px]">
                   <span className="h-2 w-2 animate-pulse bg-accent" aria-hidden="true" />
                   <span className="font-pixel text-accent">
-                    AVAILABLE FOR HIRE
+                    {t("browse.vibe.availabilityTitle")}
                   </span>
                 </div>
+                <p className="text-[9px] md:text-[10px] text-muted font-retro leading-relaxed">
+                  {t("browse.vibe.availabilitySub")}
+                </p>
                 <span className="text-[9px] md:text-[10px] text-muted font-pixel">
-                  STATUS: LOOKING FOR NEXT QUEST
+                  {t("browse.vibe.availabilityStatus")}
                 </span>
               </div>
             )}
@@ -292,4 +378,3 @@ const SavePoint: React.FC<SavePointProps> = ({
 };
 
 export default SavePoint;
-

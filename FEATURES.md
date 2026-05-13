@@ -8,23 +8,22 @@ This document describes all the enhanced features added to the 8-bit portfolio.
 Interactive achievement system that tracks user interactions and unlocks achievements as users explore the portfolio.
 
 ### Features
-- **8 Achievements** covering exploration, interaction, completion, and secret categories
+- **7 Achievements** covering exploration, interaction, completion, and secret categories
 - **localStorage persistence** - Achievements persist across sessions
 - **Notification system** - Visual notifications when achievements unlock
-- **Settings integration** - View all achievements in settings panel
+- **Notification system** - Visual notifications when achievements unlock
 
 ### Achievement List
 1. **WELCOME, PLAYER ONE** - First visit
 2. **EXPLORER** - Visited all sections
 3. **MESSAGE SENT** - Submitted contact form
 4. **CHEAT CODE ACTIVATED** - Entered Konami code
-5. **TINKERER** - Opened settings panel
+5. **TINKERER** - Opened the settings panel
 6. **QUEST LOG EXPLORED** - Viewed all projects
 7. **SKILL MASTER** - Scrolled through all skills
-8. **RETRO ENTHUSIAST** - Enabled scanlines effect
 
 ### Usage
-Achievements are automatically tracked. View them in the Settings panel under "ACHIEVEMENTS".
+Achievements are tracked automatically. Unlocks surface as on-screen notifications.
 
 ## 🔊 Sound System
 

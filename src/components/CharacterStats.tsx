@@ -12,19 +12,15 @@ interface CharacterStatsProps {
     INT: number;
     CHA: number;
   };
-  experience?: {
-    current: number;
-    max: number;
-  };
 }
 
 const CharacterStats: React.FC<CharacterStatsProps> = ({
   name = "PLAYER ONE / DEV",
-  title = "Frontend-focused developer crafting retro-futuristic interfaces and playful experiences.",
+  title = "Engineer focused on TypeScript, React, and reliable automation.",
   bio = [
-    "> Loves combining design, code, and nostalgia.",
-    "> Specializes in TypeScript, React, and delightful details.",
-    "> Currently grinding XP in UI engineering and motion design."
+    "> Loves combining design, code, and clear product surfaces.",
+    "> Specializes in TypeScript, React, and local-first tooling.",
+    "> Ships typed frontends, Python bridges, and docs people actually use."
   ],
   statusBadges = ["CAFFEINATED", "MOTIVATED", "CREATIVE"],
   attributes = {
@@ -32,14 +28,8 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({
     DEX: 84,
     INT: 92,
     CHA: 78
-  },
-  experience = {
-    current: 13420,
-    max: 20000
   }
 }) => {
-  const xpPercentage = Math.round((experience.current / experience.max) * 100);
-
   return (
     <section
       id="character"
@@ -50,7 +40,7 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({
         <h2 id="character-heading" className="mb-6 font-pixel text-xs md:text-sm text-secondary neon-glow-secondary">
           &gt; CHARACTER STATS
         </h2>
-        <p className="sr-only">View character information, bio, attributes, and experience level</p>
+        <p className="sr-only">View character information, bio, and attributes</p>
 
         <div className="grid gap-6 md:gap-8 md:grid-cols-[minmax(0,_2fr)_minmax(0,_3fr)]">
           <div className="pixel-border bg-card p-4 md:p-6 box-glow">
@@ -93,33 +83,15 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="pixel-border bg-card p-4 md:p-6 box-glow">
-              <p className="mb-3 font-pixel text-[10px] md:text-xs text-muted">
-                CORE ATTRIBUTES
-              </p>
-              <div className="space-y-3">
-                <StatBar label="STR" value={attributes.STR} color="accent" />
-                <StatBar label="DEX" value={attributes.DEX} color="secondary" />
-                <StatBar label="INT" value={attributes.INT} color="primary" />
-                <StatBar label="CHA" value={attributes.CHA} color="secondary" />
-              </div>
-            </div>
-
-            <div className="pixel-border bg-card p-4 md:p-6 box-glow-secondary">
-              <p className="mb-3 font-pixel text-[10px] md:text-xs text-muted">
-                EXPERIENCE
-              </p>
-              <div className="pixel-progress-track h-4 md:h-5 w-full" role="progressbar" aria-valuenow={xpPercentage} aria-valuemin={0} aria-valuemax={100}>
-                <div
-                  className="pixel-progress-fill-accent"
-                  style={{ width: `${xpPercentage}%` }}
-                />
-              </div>
-              <div className="mt-2 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[10px] md:text-[11px]">
-                <span>XP: {experience.current.toLocaleString()} / {experience.max.toLocaleString()}</span>
-                <span className="text-accent font-pixel">LEVEL UP SOON</span>
-              </div>
+          <div className="pixel-border bg-card p-4 md:p-6 box-glow">
+            <p className="mb-3 font-pixel text-[10px] md:text-xs text-muted">
+              CORE ATTRIBUTES
+            </p>
+            <div className="space-y-3">
+              <StatBar label="STR" value={attributes.STR} color="accent" />
+              <StatBar label="DEX" value={attributes.DEX} color="secondary" />
+              <StatBar label="INT" value={attributes.INT} color="primary" />
+              <StatBar label="CHA" value={attributes.CHA} color="secondary" />
             </div>
           </div>
         </div>
@@ -129,4 +101,3 @@ const CharacterStats: React.FC<CharacterStatsProps> = ({
 };
 
 export default CharacterStats;
-

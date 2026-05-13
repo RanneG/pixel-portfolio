@@ -1,7 +1,7 @@
 // Service Worker for 8-Bit Portfolio
-const CACHE_NAME = "pixel-portfolio-v2";
-const STATIC_CACHE = "static-v2";
-const DYNAMIC_CACHE = "dynamic-v2";
+const CACHE_NAME = "pixel-portfolio-v3";
+const STATIC_CACHE = "static-v3";
+const DYNAMIC_CACHE = "dynamic-v3";
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -76,6 +76,14 @@ self.addEventListener("fetch", (event) => {
           return response;
         })
         .catch(() => caches.match(request))
+    );
+    return;
+  }
+
+  // Portfolio JSON: never serve stale cached copies (cache-first below would freeze old personal.json, etc.)
+  if (url.pathname.startsWith("/data/") && request.method === "GET") {
+    event.respondWith(
+      fetch(request).catch(() => new Response(null, { status: 503, statusText: "Unavailable" }))
     );
     return;
   }

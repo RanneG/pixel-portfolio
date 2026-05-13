@@ -90,11 +90,11 @@ const Hero: React.FC<HeroProps> = ({
             VIEW QUESTS
           </a>
           <a
-            href="#save-point"
+            href="#contact"
             className="retro-btn retro-btn-secondary px-4 py-2.5 md:py-2 font-pixel text-[10px] uppercase tracking-widest min-h-[44px] flex items-center justify-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-secondary focus-visible:outline-offset-2"
             aria-label="Go to contact form"
           >
-            SAVE PROGRESS
+            CONTACT
           </a>
         </div>
       </div>

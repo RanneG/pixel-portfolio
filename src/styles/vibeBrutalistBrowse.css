@@ -1,0 +1,1117 @@
+/**
+ * Brutalist browse UI — adapted from vibe-coder-template (app/globals.css).
+ * All rules scoped under .vibe-coder-browse so terminal mode and global Tailwind stay intact.
+ */
+
+.vibe-coder-browse {
+  --baltic-blue: #05668dff;
+  --teal: #028090ff;
+  --verdigris: #00a896ff;
+  --mint-leaf: #02c39aff;
+  --cream: #f0f3bdff;
+
+  --bg: var(--cream);
+  --black: var(--baltic-blue);
+  --primary: var(--teal);
+  --secondary: var(--verdigris);
+  --accent: var(--mint-leaf);
+
+  --panel-alt: color-mix(in srgb, var(--cream) 82%, white);
+  --panel-muted: color-mix(in srgb, var(--cream) 72%, white);
+  --service-4: color-mix(in srgb, var(--mint-leaf) 55%, var(--cream));
+
+  --border-width: 4px;
+  --shadow-offset: 8px;
+  --radius: 0.625rem;
+
+  box-sizing: border-box;
+  background-color: var(--bg);
+  font-family: "Space Mono", monospace;
+  color: var(--black);
+  line-height: 1.4;
+  overflow-x: hidden;
+  border: var(--border-width) solid var(--black);
+  isolation: isolate;
+}
+
+.vibe-coder-browse *,
+.vibe-coder-browse *::before,
+.vibe-coder-browse *::after {
+  box-sizing: border-box;
+}
+
+.vibe-coder-browse h1,
+.vibe-coder-browse h2,
+.vibe-coder-browse h3,
+.vibe-coder-browse h4 {
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
+}
+
+.vibe-coder-browse .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.vibe-coder-browse .vibe-site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: var(--border-width) solid var(--black);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 1000;
+}
+
+.vibe-coder-browse .logo {
+  font-size: clamp(1.1rem, 3vw, 2rem);
+  font-weight: 900;
+  background: var(--primary);
+  padding: 5px 15px;
+  border: var(--border-width) solid var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  text-decoration: none;
+  color: var(--cream);
+}
+
+.vibe-coder-browse .nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.vibe-coder-browse .nav-links a {
+  text-decoration: none;
+  color: var(--black);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: clamp(0.75rem, 1.5vw, 1.1rem);
+}
+
+.vibe-coder-browse .nav-links a:hover {
+  background: var(--accent);
+  outline: var(--border-width) solid var(--black);
+}
+
+.vibe-coder-browse .nav-links a[aria-current="page"] {
+  background: var(--accent);
+  outline: var(--border-width) solid var(--black);
+}
+
+.vibe-coder-browse .vibe-nav-toggle {
+  background: var(--bg);
+  color: var(--black);
+  border: var(--border-width) solid var(--black);
+  box-shadow: 4px 4px 0 var(--black);
+  padding: 8px 12px;
+  font-family: "Archivo Black", sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.vibe-coder-browse .vibe-nav-toggle:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--black);
+}
+
+.vibe-coder-browse .vibe-mobile-nav {
+  border-bottom: var(--border-width) solid var(--black);
+  background: var(--bg);
+}
+
+.vibe-coder-browse .vibe-mobile-nav a {
+  display: block;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: var(--black);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  border-top: 2px solid var(--black);
+}
+
+.vibe-coder-browse .vibe-mobile-nav a:hover,
+.vibe-coder-browse .vibe-mobile-nav a[aria-current="page"] {
+  background: var(--accent);
+}
+
+@media (min-width: 768px) {
+  .vibe-coder-browse .vibe-mobile-nav {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .vibe-coder-browse .nav-links.vibe-nav-desktop {
+    display: none !important;
+  }
+}
+
+.vibe-coder-browse .hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 80vh;
+  border-bottom: var(--border-width) solid var(--black);
+}
+
+.vibe-coder-browse .hero-text {
+  padding: clamp(24px, 5vw, 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-right: var(--border-width) solid var(--black);
+  background: var(--accent);
+}
+
+.vibe-coder-browse .hero-text h1 {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  line-height: 0.9;
+  margin-bottom: 20px;
+  letter-spacing: -2px;
+}
+
+.vibe-coder-browse .hero-tagline {
+  font-size: clamp(0.95rem, 2.5vw, 1.5rem);
+  background: var(--black);
+  color: var(--cream);
+  padding: 10px;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 30px;
+  transform: rotate(-2deg);
+}
+
+.vibe-coder-browse .hero-image {
+  background: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 4vw, 40px);
+  position: relative;
+}
+
+.vibe-coder-browse .hero-image img {
+  width: 100%;
+  height: 100%;
+  min-height: 240px;
+  max-height: min(70vh, 640px);
+  object-fit: cover;
+  object-position: center top;
+  border: var(--border-width) solid var(--black);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--black);
+  /* Tint cool neutrals toward Baltic / verdigris / cream palette */
+  filter: brightness(1.03) contrast(1.08) saturate(0.92) sepia(0.14) hue-rotate(158deg);
+  transition: 0.3s;
+}
+
+.vibe-coder-browse .hero-image img:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 12px 12px 0 var(--black);
+  filter: brightness(1.05) contrast(1.1) saturate(1) sepia(0.12) hue-rotate(162deg);
+}
+
+.vibe-coder-browse .blob {
+  position: absolute;
+  z-index: 0;
+  width: 200px;
+  height: 200px;
+  background: var(--primary);
+  border: var(--border-width) solid var(--black);
+  top: -20px;
+  right: -20px;
+  pointer-events: none;
+}
+
+.vibe-coder-browse .hero-image .vibe-hero-img-wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .vibe-coder-browse .hero {
+    grid-template-columns: 1fr;
+  }
+
+  .vibe-coder-browse .hero-text {
+    border-right: none;
+    border-bottom: var(--border-width) solid var(--black);
+  }
+
+  .vibe-coder-browse .hero-image img {
+    max-height: 55vh;
+  }
+}
+
+.vibe-coder-browse .marquee {
+  background: var(--black);
+  color: var(--cream);
+  padding: 20px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: var(--border-width) solid var(--black);
+}
+
+.vibe-coder-browse .marquee-content {
+  display: inline-block;
+  font-family: "Archivo Black", sans-serif;
+  font-size: clamp(1.1rem, 4vw, 2rem);
+  animation: vibeMarquee 20s linear infinite;
+}
+
+@keyframes vibeMarquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vibe-coder-browse .marquee-content {
+    animation: none;
+    white-space: normal;
+    text-align: center;
+    padding: 0 16px;
+  }
+
+  .vibe-coder-browse .hero-image img,
+  .vibe-coder-browse .hero-image img:hover {
+    filter: brightness(1.02) contrast(1.05);
+  }
+}
+
+.vibe-coder-browse .section-title {
+  padding: clamp(32px, 6vw, 60px) 20px;
+  font-size: clamp(2rem, 6vw, 4rem);
+  text-align: center;
+  border-bottom: var(--border-width) solid var(--black);
+  background: var(--bg);
+  margin: 0;
+}
+
+.vibe-coder-browse .projects {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.vibe-coder-browse .project-card {
+  border-right: var(--border-width) solid var(--black);
+  border-bottom: var(--border-width) solid var(--black);
+  padding: clamp(24px, 4vw, 40px);
+  transition: 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.vibe-coder-browse .project-card:nth-child(2n) {
+  border-right: none;
+  background: var(--panel-alt);
+}
+
+.vibe-coder-browse .project-card:hover {
+  background: var(--primary);
+  color: var(--cream);
+}
+
+.vibe-coder-browse .project-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border: var(--border-width) solid var(--black);
+  margin-bottom: 20px;
+  background: color-mix(in srgb, var(--verdigris) 18%, var(--cream));
+}
+
+.vibe-coder-browse .project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.vibe-coder-browse .tag {
+  padding: 4px 12px;
+  border: 2px solid var(--black);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background: color-mix(in srgb, var(--cream) 94%, white);
+  color: var(--black);
+}
+
+.vibe-coder-browse .project-card:hover .tag {
+  background: rgba(240, 243, 189, 0.25);
+  color: var(--cream);
+  border-color: var(--cream);
+}
+
+.vibe-coder-browse .project-card h3 {
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  margin-bottom: 8px;
+}
+
+.vibe-coder-browse .vibe-project-award {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 6px 12px;
+  width: fit-content;
+  max-width: 100%;
+  border: 2px solid var(--black);
+  font-family: "Archivo Black", sans-serif;
+  font-size: clamp(0.62rem, 1.8vw, 0.72rem);
+  font-weight: 800;
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: color-mix(in srgb, var(--mint-leaf) 38%, var(--cream));
+  color: var(--black);
+}
+
+.vibe-coder-browse .project-card:hover .vibe-project-award {
+  background: rgba(240, 243, 189, 0.28);
+  color: var(--cream);
+  border-color: var(--cream);
+}
+
+.vibe-coder-browse .project-card p {
+  margin: 12px 0;
+  font-size: 0.9rem;
+}
+
+.vibe-coder-browse .project-card a.project-link {
+  color: inherit;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.vibe-coder-browse .project-card a.project-link:hover {
+  text-decoration: underline;
+}
+
+/* CHATBOT RAG CORE — embedded Groq persona demo (Browse projects) */
+.vibe-coder-browse .project-rag-demo {
+  margin-top: clamp(16px, 3vw, 24px);
+  border: var(--border-width) solid var(--black);
+  background: var(--panel-alt);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--black) 35%, transparent);
+}
+
+.vibe-coder-browse .project-rag-demo__intro {
+  padding: clamp(12px, 2.5vw, 16px) clamp(14px, 3vw, 18px);
+  border-bottom: var(--border-width) solid var(--black);
+  background: var(--bg);
+}
+
+.vibe-coder-browse .project-rag-demo__kicker {
+  font-family: "Archivo Black", sans-serif;
+  font-size: clamp(0.65rem, 1.6vw, 0.78rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 6px;
+  color: var(--primary);
+}
+
+.vibe-coder-browse .project-rag-demo__title {
+  font-family: "Archivo Black", sans-serif;
+  font-size: clamp(0.85rem, 2.2vw, 1rem);
+  text-transform: uppercase;
+  margin: 0 0 8px;
+  line-height: 1.2;
+  color: var(--black);
+}
+
+.vibe-coder-browse .project-rag-demo__blurb {
+  margin: 0;
+  font-size: clamp(0.72rem, 1.6vw, 0.82rem);
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--black) 82%, var(--cream));
+  max-width: 52ch;
+}
+
+.vibe-coder-browse .project-rag-demo__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.vibe-coder-browse .project-rag-demo__tags .tag {
+  font-size: 0.68rem;
+}
+
+.vibe-coder-browse .project-rag-demo__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  padding: 10px 12px;
+  background: var(--primary);
+  color: var(--cream);
+  border-bottom: var(--border-width) solid var(--black);
+}
+
+.vibe-coder-browse .project-rag-demo__toolbar-title {
+  font-family: "Archivo Black", sans-serif;
+  font-size: clamp(0.62rem, 1.5vw, 0.75rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.vibe-coder-browse .project-rag-demo__toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.vibe-coder-browse .project-rag-demo__select {
+  font-family: "Space Mono", monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 6px 8px;
+  max-width: 12rem;
+  border: 2px solid var(--black);
+  background: var(--cream);
+  color: var(--black);
+  cursor: pointer;
+}
+
+.vibe-coder-browse .project-rag-demo__select:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.vibe-coder-browse .project-rag-demo__stream {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.vibe-coder-browse .project-rag-demo__stream--desktop-only {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .vibe-coder-browse .project-rag-demo__stream--desktop-only {
+    display: inline-flex;
+  }
+}
+
+.vibe-coder-browse .project-rag-demo__stream-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--black);
+  animation: vibe-rag-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes vibe-rag-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.vibe-coder-browse .project-rag-demo__toolbar-row2 {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: color-mix(in srgb, var(--primary) 92%, var(--black));
+  color: var(--cream);
+  border-bottom: 2px solid color-mix(in srgb, var(--black) 40%, var(--primary));
+}
+
+@media (min-width: 640px) {
+  .vibe-coder-browse .project-rag-demo__toolbar-row2 {
+    display: none;
+  }
+}
+
+.vibe-coder-browse .project-rag-demo__messages {
+  flex: 1 1 auto;
+  min-height: 200px;
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 14px;
+  background: var(--panel-muted);
+  border-bottom: var(--border-width) solid var(--black);
+}
+
+@media (min-width: 768px) {
+  .vibe-coder-browse .project-rag-demo__messages {
+    min-height: 220px;
+    max-height: 280px;
+  }
+}
+
+.vibe-coder-browse .project-rag-demo__row {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.vibe-coder-browse .project-rag-demo__row--user {
+  justify-content: flex-end;
+}
+
+.vibe-coder-browse .project-rag-demo__bubble {
+  max-width: 88%;
+  padding: 10px 12px;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  border: 2px solid var(--black);
+}
+
+.vibe-coder-browse .project-rag-demo__bubble--assistant {
+  background: var(--bg);
+  color: var(--black);
+  border-left-width: 6px;
+  border-left-color: var(--secondary);
+}
+
+.vibe-coder-browse .project-rag-demo__bubble-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+  margin-bottom: 4px;
+}
+
+.vibe-coder-browse .project-rag-demo__bubble--user {
+  background: var(--secondary);
+  color: var(--cream);
+}
+
+.vibe-coder-browse .project-rag-demo__caret {
+  display: inline-block;
+  width: 6px;
+  height: 14px;
+  margin-left: 4px;
+  background: var(--accent);
+  vertical-align: middle;
+  animation: vibe-rag-pulse 1s ease-in-out infinite;
+}
+
+.vibe-coder-browse .project-rag-demo__footer {
+  padding: 12px 14px;
+  background: var(--bg);
+}
+
+.vibe-coder-browse .project-rag-demo__input-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.vibe-coder-browse .project-rag-demo__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 12px 14px;
+  font-family: "Space Mono", monospace;
+  font-size: 0.82rem;
+  border: var(--border-width) solid var(--black);
+  background: var(--cream);
+  color: var(--black);
+}
+
+.vibe-coder-browse .project-rag-demo__input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.vibe-coder-browse .project-rag-demo__input:disabled {
+  opacity: 0.65;
+}
+
+.vibe-coder-browse .project-rag-demo__send {
+  flex-shrink: 0;
+  padding: 10px 18px;
+  font-family: "Archivo Black", sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: var(--border-width) solid var(--black);
+  background: var(--black);
+  color: var(--cream);
+  box-shadow: 4px 4px 0 var(--secondary);
+}
+
+.vibe-coder-browse .project-rag-demo__send:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: 5px 5px 0 var(--primary);
+}
+
+.vibe-coder-browse .project-rag-demo__send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.vibe-coder-browse .project-rag-demo__legal {
+  margin: 10px 0 0;
+  font-size: 0.62rem;
+  line-height: 1.35;
+  text-align: center;
+  color: color-mix(in srgb, var(--black) 65%, var(--cream));
+}
+
+/* Demo inside hovered project card (teal/cream invert) */
+.vibe-coder-browse .project-card:hover .project-rag-demo {
+  border-color: var(--cream);
+  background: color-mix(in srgb, var(--primary) 22%, var(--black));
+  box-shadow: 4px 4px 0 color-mix(in srgb, var(--cream) 35%, transparent);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__intro {
+  background: color-mix(in srgb, var(--primary) 15%, var(--black));
+  border-bottom-color: var(--cream);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__kicker {
+  color: var(--accent);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__title,
+.vibe-coder-browse .project-card:hover .project-rag-demo__blurb {
+  color: var(--cream);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__tags .tag {
+  background: rgba(240, 243, 189, 0.2);
+  color: var(--cream);
+  border-color: var(--cream);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__toolbar {
+  background: color-mix(in srgb, var(--black) 55%, var(--primary));
+  border-bottom-color: var(--cream);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__select {
+  border-color: var(--cream);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__toolbar-row2 {
+  background: color-mix(in srgb, var(--black) 40%, var(--primary));
+  border-bottom-color: color-mix(in srgb, var(--cream) 45%, var(--primary));
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__messages {
+  background: color-mix(in srgb, var(--black) 35%, var(--primary));
+  border-bottom-color: var(--cream);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__bubble--assistant {
+  background: color-mix(in srgb, var(--cream) 12%, var(--primary));
+  color: var(--cream);
+  border-color: var(--cream);
+  border-left-color: var(--accent);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__bubble-label {
+  color: var(--accent);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__bubble--user {
+  background: var(--cream);
+  color: var(--black);
+  border-color: var(--cream);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__footer {
+  background: color-mix(in srgb, var(--primary) 12%, var(--black));
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__input {
+  border-color: var(--cream);
+  background: var(--cream);
+  color: var(--black);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__send {
+  border-color: var(--cream);
+  background: var(--cream);
+  color: var(--black);
+  box-shadow: 4px 4px 0 var(--accent);
+}
+
+.vibe-coder-browse .project-card:hover .project-rag-demo__legal {
+  color: color-mix(in srgb, var(--cream) 78%, var(--black));
+}
+
+@media (max-width: 768px) {
+  .vibe-coder-browse .projects {
+    grid-template-columns: 1fr;
+  }
+
+  .vibe-coder-browse .project-card {
+    border-right: none;
+  }
+
+  .vibe-coder-browse .project-card:nth-child(2n) {
+    border-right: none;
+  }
+}
+
+.vibe-coder-browse .services {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  border-bottom: var(--border-width) solid var(--black);
+}
+
+@media (min-width: 900px) {
+  .vibe-coder-browse .services {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.vibe-coder-browse .service-box {
+  padding: clamp(24px, 4vw, 40px);
+  border-right: var(--border-width) solid var(--black);
+  text-align: center;
+}
+
+.vibe-coder-browse .service-box:last-child {
+  border-right: none;
+}
+
+.vibe-coder-browse .service-box h3 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+
+.vibe-coder-browse .service-box:nth-child(1) {
+  background: var(--secondary);
+}
+
+.vibe-coder-browse .service-box:nth-child(2) {
+  background: var(--accent);
+}
+
+.vibe-coder-browse .service-box:nth-child(3) {
+  background: var(--primary);
+  color: var(--cream);
+}
+
+.vibe-coder-browse .service-box:nth-child(4) {
+  background: var(--service-4);
+  color: var(--baltic-blue);
+}
+
+.vibe-coder-browse .service-box p {
+  font-size: 0.85rem;
+}
+
+.vibe-coder-browse .vibe-panel {
+  border: var(--border-width) solid var(--black);
+  box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--black);
+  padding: clamp(20px, 3vw, 32px);
+  margin-bottom: 24px;
+  background: var(--bg);
+}
+
+.vibe-coder-browse .vibe-panel-muted {
+  background: var(--panel-muted);
+}
+
+.vibe-coder-browse .vibe-lead {
+  font-size: 1rem;
+  max-width: 52ch;
+}
+
+.vibe-coder-browse .vibe-meta {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.vibe-coder-browse .brutal-btn {
+  display: inline-block;
+  padding: 15px 30px;
+  background: var(--black);
+  color: var(--cream);
+  text-decoration: none;
+  font-family: "Archivo Black", sans-serif;
+  border: var(--border-width) solid var(--black);
+  box-shadow: 6px 6px 0 var(--secondary);
+  margin-top: 20px;
+}
+
+.vibe-coder-browse .brutal-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 var(--primary);
+}
+
+.vibe-coder-browse .brutal-btn-secondary {
+  background: var(--bg);
+  color: var(--black);
+  margin-left: 12px;
+  margin-top: 20px;
+}
+
+.vibe-coder-browse .contact {
+  display: grid;
+  grid-template-columns: 1fr;
+  background: var(--black);
+  color: var(--cream);
+  border-top: var(--border-width) solid var(--black);
+}
+
+@media (min-width: 900px) {
+  .vibe-coder-browse .contact {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.vibe-coder-browse .contact-info {
+  padding: clamp(40px, 6vw, 80px);
+  border-bottom: var(--border-width) solid var(--cream);
+}
+
+@media (min-width: 900px) {
+  .vibe-coder-browse .contact-info {
+    border-bottom: none;
+    border-right: var(--border-width) solid var(--cream);
+  }
+}
+
+.vibe-coder-browse .contact-info h2 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  margin-bottom: 20px;
+}
+
+.vibe-coder-browse .contact-info .vibe-lead-big {
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  margin-bottom: 32px;
+}
+
+.vibe-coder-browse .contact-info a {
+  color: var(--secondary);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.vibe-coder-browse .contact-info a:hover {
+  text-decoration: underline;
+}
+
+.vibe-coder-browse .contact-form {
+  padding: clamp(40px, 6vw, 80px);
+}
+
+.vibe-coder-browse .contact-form .input-group {
+  margin-bottom: 24px;
+}
+
+.vibe-coder-browse .contact-form label {
+  display: block;
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.vibe-coder-browse .contact-form input,
+.vibe-coder-browse .contact-form textarea {
+  width: 100%;
+  padding: 15px;
+  background: white;
+  border: var(--border-width) solid var(--primary);
+  font-family: "Space Mono", monospace;
+  font-size: 1rem;
+  box-shadow: 6px 6px 0 var(--primary);
+}
+
+.vibe-coder-browse .contact-form input:focus,
+.vibe-coder-browse .contact-form textarea:focus {
+  outline: none;
+  background: var(--accent);
+}
+
+.vibe-coder-browse .contact-form button[type="submit"] {
+  background: var(--secondary);
+  color: var(--black);
+  padding: 16px 32px;
+  border: var(--border-width) solid var(--black);
+  font-family: "Archivo Black", sans-serif;
+  font-size: 1.25rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 8px 8px 0 var(--primary);
+  transition: 0.1s;
+}
+
+.vibe-coder-browse .contact-form button[type="submit"]:active {
+  transform: translate(4px, 4px);
+  box-shadow: 4px 4px 0 var(--primary);
+}
+
+.vibe-coder-browse .vibe-page-footer {
+  padding: 32px 20px;
+  text-align: center;
+  background: var(--bg);
+  font-weight: 700;
+  border-top: var(--border-width) solid var(--black);
+}
+
+.vibe-coder-browse .vibe-outlet {
+  padding-bottom: 40px;
+}
+
+/* Browse skills — simple lists (no terminal / StatBar styling) */
+.vibe-coder-browse .vibe-skills-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .vibe-coder-browse .vibe-skills-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.vibe-coder-browse .vibe-skills-category-title {
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  margin: 0 0 8px;
+  color: var(--black);
+}
+
+.vibe-coder-browse .vibe-skills-count {
+  margin: 0 0 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--black) 72%, var(--bg));
+}
+
+.vibe-coder-browse .vibe-skill-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  font-family: "Space Mono", monospace;
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: var(--black);
+}
+
+.vibe-coder-browse .vibe-skill-list--tight {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+
+.vibe-coder-browse .vibe-skill-list li + li {
+  margin-top: 6px;
+}
+
+/* Settings popover — same palette as browse; not nested under .vibe-coder-browse */
+.vibe-settings-sheet {
+  --baltic-blue: #05668dff;
+  --teal: #028090ff;
+  --verdigris: #00a896ff;
+  --mint-leaf: #02c39aff;
+  --cream: #f0f3bdff;
+  --bg: var(--cream);
+  --ink: var(--baltic-blue);
+  --primary: var(--teal);
+  --accent: var(--mint-leaf);
+
+  font-family: "Space Mono", monospace;
+  color: var(--ink);
+  background: var(--bg);
+  border: 4px solid var(--ink);
+  box-shadow: 8px 8px 0 color-mix(in srgb, var(--ink) 35%, transparent);
+}
+
+.vibe-settings-sheet h2 {
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.vibe-settings-sheet .vibe-settings-divider {
+  border-bottom: 3px solid color-mix(in srgb, var(--ink) 32%, var(--bg));
+}
+
+.vibe-settings-sheet .vibe-settings-section-title {
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.vibe-settings-sheet .vibe-settings-muted {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  font-weight: 600;
+  color: color-mix(in srgb, var(--ink) 94%, var(--bg));
+}
+
+.vibe-settings-sheet .vibe-settings-btn {
+  font-family: "Archivo Black", sans-serif;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  padding: 8px 12px;
+  min-height: 36px;
+  border: 3px solid var(--ink);
+  cursor: pointer;
+  background: color-mix(in srgb, var(--bg) 88%, white);
+  color: var(--ink);
+}
+
+.vibe-settings-sheet .vibe-settings-btn[aria-pressed="true"] {
+  background: var(--primary);
+  color: var(--cream);
+  border-color: var(--ink);
+}
+
+.vibe-settings-sheet .vibe-settings-btn:hover {
+  filter: brightness(1.03);
+}
+
+.vibe-settings-sheet button.vibe-settings-close {
+  font-family: "Archivo Black", sans-serif;
+  border: none;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 4px 8px;
+}

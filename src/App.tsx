@@ -1,47 +1,43 @@
-import React, { Suspense, lazy } from "react";
-import Navigation from "./components/Navigation";
-import Hero from "./components/Hero";
-import CharacterStats from "./components/CharacterStats";
-import SavePoint from "./components/SavePoint";
-import Footer from "./components/Footer";
-import ChatBot from "./components/ChatBot";
+import React, { Suspense, lazy, useEffect, useRef } from "react";
+import { BrowserRouter, useNavigate, useLocation } from "react-router-dom";
 import { SettingsProvider, useSettings } from "./contexts/SettingsContext";
 import { PortfolioDataProvider, usePortfolioData } from "./contexts/PortfolioDataContext";
-import { AchievementsProvider } from "./contexts/AchievementsContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import { KonamiCode } from "./components/KonamiCode";
+import { AchievementsProvider } from "./contexts/AchievementsContext";
+import { AchievementManager } from "./components/AchievementManager";
 import { SkipToContent } from "./components/SkipToContent";
 import { InstallPrompt } from "./components/InstallPrompt";
-import { AchievementManager } from "./components/AchievementManager";
-import { QuestLogSkeleton, SkillInventorySkeleton } from "./components/LoadingSkeleton";
 import AdminPanel from "./components/AdminPanel";
+import { MatrixBackground } from "./components/terminal/MatrixBackground";
+import { TerminalHome } from "./components/terminal/TerminalHome";
+import { BrowseRoutes } from "./components/browse/BrowseRoutes";
+import { PortfolioLoader, PORTFOLIO_LOADER_HOLD_MS } from "./components/PortfolioLoader";
 import { initWebVitals } from "./utils/webVitals";
 import { updateMetaTags, generateStructuredData, injectStructuredData } from "./utils/seo";
 import { analytics } from "./utils/analytics";
 
-// Lazy load heavy components for code splitting with prefetching
 const SettingsPanel = lazy(() => import("./components/SettingsPanel"));
-const SkillInventory = lazy(() => import("./components/SkillInventory"));
-const QuestLog = lazy(() => import("./components/QuestLog"));
 
 const AppContent: React.FC = () => {
   const { settings } = useSettings();
-  const { data, config } = usePortfolioData();
+  const { data, config, isLoading } = usePortfolioData();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const prevSiteView = useRef(settings.siteView);
+  const loaderPrevSiteView = useRef(settings.siteView);
+  const [browseShellPending, setBrowseShellPending] = React.useState(false);
 
-  // Initialize SEO and Web Vitals
-  React.useEffect(() => {
-    // Update meta tags
+  useEffect(() => {
     const siteUrl = window.location.origin;
     updateMetaTags({
       title: config?.site?.title || `${data.name} | 8-Bit Portfolio`,
       description: config?.site?.description || data.title,
       url: siteUrl,
-      image: `${siteUrl}/og-image.png`, // Update with actual image path
+      image: `${siteUrl}/og-image.png`,
       siteName: config?.site?.title || "8-Bit Portfolio",
-      type: "website"
+      type: "website",
     });
 
-    // Inject structured data
     const structuredData = generateStructuredData({
       name: data.name,
       title: data.title,
@@ -52,60 +48,83 @@ const AppContent: React.FC = () => {
       projects: data.projects.map((p) => ({
         title: p.title,
         description: p.description,
-        url: p.liveUrl || p.githubUrl
-      }))
+        url: p.liveUrl || p.githubUrl,
+      })),
     });
     injectStructuredData(structuredData);
 
-    // Initialize Web Vitals tracking
     initWebVitals();
   }, [data, config]);
 
-  // Track theme changes
-  React.useEffect(() => {
-    if (settings.theme) {
-      analytics.trackEvent("theme_change", { theme: settings.theme });
+  useEffect(() => {
+    if (prevSiteView.current !== settings.siteView) {
+      analytics.trackEvent("site_view_change", { siteView: settings.siteView });
+      prevSiteView.current = settings.siteView;
     }
-  }, [settings.theme]);
-  
+  }, [settings.siteView]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    const prev = loaderPrevSiteView.current;
+    loaderPrevSiteView.current = settings.siteView;
+    if (prev === "terminal" && settings.siteView === "browse") {
+      setBrowseShellPending(true);
+      const id = window.setTimeout(() => setBrowseShellPending(false), PORTFOLIO_LOADER_HOLD_MS);
+      return () => window.clearTimeout(id);
+    }
+    if (prev === "browse" && settings.siteView === "terminal") {
+      setBrowseShellPending(true);
+      const id = window.setTimeout(() => setBrowseShellPending(false), PORTFOLIO_LOADER_HOLD_MS);
+      return () => window.clearTimeout(id);
+    }
+  }, [isLoading, settings.siteView]);
+
+  useEffect(() => {
+    if (isLoading) return;
+    if (settings.siteView === "terminal" && location.pathname !== "/") {
+      navigate("/", { replace: true });
+    }
+  }, [isLoading, settings.siteView, location.pathname, navigate]);
+
   return (
     <>
       <SkipToContent />
-      <KonamiCode />
       <InstallPrompt />
-      <AchievementManager />
       {import.meta.env.DEV && <AdminPanel />}
       <Suspense fallback={null}>
         <SettingsPanel />
       </Suspense>
-      <div className={`min-h-screen bg-bg text-foreground crt-flicker ${settings.scanlinesEnabled ? "scanlines" : ""}`}>
-        <Navigation name={data.name} />
-        <main id="main-content">
-          <Hero name={data.name} subtitle={data.subtitle} stats={data.stats} />
-          <CharacterStats
-            name={`${data.name} / DEV`}
-            title={data.title}
-            bio={data.bio}
-            statusBadges={data.statusBadges}
-            attributes={data.attributes}
-            experience={data.experience}
-          />
-          <Suspense fallback={<SkillInventorySkeleton />}>
-            <SkillInventory skills={data.skills} />
-          </Suspense>
-          <Suspense fallback={<QuestLogSkeleton />}>
-            <QuestLog projects={data.projects} />
-          </Suspense>
-          <SavePoint
-            contactInfo={data.contact}
-            socialLinks={data.socialLinks}
-            availableForHire={data.availableForHire}
-            formspreeId={import.meta.env.VITE_FORMSPREE_ID || config?.site?.formspreeId || "xeeegyek"}
-          />
-        </main>
-        <Footer name={data.name} />
-      </div>
-      <ChatBot />
+      {isLoading ? (
+        <div
+          id="main-content"
+          className="min-h-screen bg-black flex items-center justify-center font-pixel text-xs text-muted"
+          aria-busy="true"
+        >
+          LOADING…
+        </div>
+      ) : settings.siteView === "browse" ? (
+        <>
+          {browseShellPending && (
+            <PortfolioLoader variant={settings.siteView === "browse" ? "browse" : "dark"} />
+          )}
+          <BrowseRoutes />
+        </>
+      ) : (
+        <>
+          {browseShellPending && (
+            <PortfolioLoader variant={settings.siteView === "browse" ? "browse" : "dark"} />
+          )}
+          <div className="relative min-h-screen h-full bg-black text-foreground">
+            <MatrixBackground />
+            <main
+              id="main-content"
+              className="relative z-10 flex min-h-screen items-center justify-center p-4"
+            >
+              <TerminalHome />
+            </main>
+          </div>
+        </>
+      )}
     </>
   );
 };
@@ -113,13 +132,21 @@ const AppContent: React.FC = () => {
 const App: React.FC = () => {
   return (
     <LanguageProvider>
-      <SettingsProvider>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true
+        }}
+      >
         <AchievementsProvider>
-          <PortfolioDataProvider>
-            <AppContent />
-          </PortfolioDataProvider>
+          <SettingsProvider>
+            <PortfolioDataProvider>
+              <AchievementManager />
+              <AppContent />
+            </PortfolioDataProvider>
+          </SettingsProvider>
         </AchievementsProvider>
-      </SettingsProvider>
+      </BrowserRouter>
     </LanguageProvider>
   );
 };

@@ -19,7 +19,7 @@ export function useAchievementTracker() {
     visitedSections.current.add(sectionId);
 
     // Check if all sections visited
-    const allSections = ["hero", "character", "skills", "quests", "save-point"];
+    const allSections = ["hero", "character", "skills", "quests", "contact"];
     if (allSections.every((s) => visitedSections.current.has(s))) {
       if (!checkAchievement("all-sections")) {
         unlockAchievement("all-sections");
@@ -62,21 +62,12 @@ export function useAchievementTracker() {
     }
   };
 
-  // Track scanlines enabled
-  const trackScanlinesEnabled = () => {
-    if (!checkAchievement("dark-mode")) {
-      unlockAchievement("dark-mode");
-    }
-  };
-
   return {
     trackSectionVisit,
     trackFormSubmission,
     trackSettingsOpened,
     trackKonamiCode,
     trackProjectsViewed,
-    trackSkillsScrolled,
-    trackScanlinesEnabled
+    trackSkillsScrolled
   };
 }
-

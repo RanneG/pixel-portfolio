@@ -7,6 +7,10 @@
 
 A responsive, retro gaming-themed personal portfolio website built with React, TypeScript, and Tailwind CSS. Features a classic NES/arcade game interface with modern functionality.
 
+## Third-party UI
+
+The Matrix rain background and glass terminal shell are adapted from components on [Uiverse.io](https://uiverse.io) (authors **whoisyourdeadie** and **louloudev59**). The bottom-right tri-action fan dock (settings / social) is adapted from Uiverse (**GreyD097**). Verify each component’s license on Uiverse before commercial use; attribution is kept in source comments.
+
 ## 🚀 Live Demo
 
 **🌐 Live:** [rannegerodias.com](https://rannegerodias.com)
@@ -31,9 +35,9 @@ A responsive, retro gaming-themed personal portfolio website built with React, T
 
 - 🎮 **Retro Design**: Classic 8-bit gaming aesthetic with neon glows and pixel-perfect styling
 - 📱 **Fully Responsive**: Mobile-first design with optimized layouts for all screen sizes
-- ⚙️ **Settings Panel**: Toggle CRT scanlines, sound effects, high contrast mode, and themes
+- ⚙️ **Settings Panel**: Choose terminal vs browse site view and language
 - 🎯 **Working Contact Form**: Integrated with Formspree for email submissions
-- 🎨 **Accessibility**: ARIA labels, keyboard navigation, skip links, and high contrast mode
+- 🎨 **Accessibility**: ARIA labels, keyboard navigation, skip links, and reduced-motion support
 - ⚡ **Performance Optimized**: Code splitting, lazy loading, and reduced motion support
 - 🎪 **Easter Eggs**: Konami code activation with celebration animation
 - 🔧 **Customizable**: Easy-to-modify content via context providers
@@ -63,6 +67,18 @@ npm run dev
 ```
 
 4. Open your browser to `http://localhost:5173`
+
+### Browse Projects: Groq persona demo (`/api/chat`)
+
+The **CHATBOT RAG CORE** card on **Browse → Projects** embeds a streaming chat that calls **`POST /api/chat`**.
+
+**Local dev (one terminal):** Add **`GROQ_API_KEY`** to **`.env.local`** at the repo root (same key as in [Groq console](https://console.groq.com/keys)), then run **`npm run dev`**. Vite serves **`/api/chat`** itself during development — no `vercel dev` required for this route.
+
+**Optional:** Run **`vercel dev`** if you need other Vercel routes locally (e.g. `/api/health`) the same way as production.
+
+**Production:** Deploy to Vercel and set **`GROQ_API_KEY`** in the project environment variables.
+
+The **chatbot-rag-core** GitHub project uses **Ollama + LlamaIndex** for document RAG locally; this portfolio widget is a small **hosted** demo of **persona / system-prompt routing**, not the same binary stack.
 
 ## Configuration
 
@@ -215,10 +231,8 @@ src/
 
 Access via the gear icon (⚙) in the bottom-right corner:
 
-- **CRT Scanlines**: Toggle the retro scanline overlay
-- **Sound Effects**: Toggle sound (ready for future implementation)
-- **High Contrast**: Enhanced accessibility mode
-- **Theme Switcher**: Choose between NES, Game Boy, and Arcade color palettes
+- **Site view**: Switch between the terminal home and the browse experience
+- **Language**: UI language preference where applicable
 
 ### Konami Code Easter Egg
 
@@ -231,7 +245,6 @@ Triggers a celebration animation and secret message!
 - Skip to content link (visible on focus)
 - ARIA labels on all interactive elements
 - Keyboard navigation support
-- High contrast mode
 - Reduced motion support (respects `prefers-reduced-motion`)
 
 ### Mobile Optimizations

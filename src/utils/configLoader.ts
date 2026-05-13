@@ -86,14 +86,17 @@ export function mergePortfolioData(
     subtitle: personal.subtitle,
     bio: personal.bio,
     statusBadges: personal.statusBadges,
+    motto: personal.motto,
+    workExperience: personal.workExperience,
+    education: personal.education,
     stats: {
       projects: stats.projects,
       level: stats.level,
       creativity: stats.creativity
     },
     attributes: stats.attributes,
-    experience: stats.experience,
     skills: skills.categories,
+    specialAbilities: skills.specialAbilities ?? [],
     projects: projects.projects,
     contact: personal.contact,
     socialLinks: personal.socialLinks,
@@ -115,7 +118,9 @@ function getDefaultPersonal(): PersonalData {
       timezone: "UTC+08"
     },
     socialLinks: [],
-    availableForHire: true
+    availableForHire: true,
+    workExperience: [],
+    education: []
   };
 }
 
@@ -124,8 +129,7 @@ function getDefaultStats(): StatsData {
     projects: 0,
     level: "DEV 01",
     creativity: "MAX",
-    attributes: { STR: 50, DEX: 50, INT: 50, CHA: 50 },
-    experience: { current: 0, max: 10000 }
+    attributes: { STR: 50, DEX: 50, INT: 50, CHA: 50 }
   };
 }
 
@@ -149,10 +153,6 @@ function getDefaultConfig(): SiteConfig {
       description: "Retro-themed portfolio website",
       logo: "<DEV/>",
       formspreeId: ""
-    },
-    theme: {
-      default: "nes",
-      available: ["nes", "gameboy", "arcade"]
     },
     features: {
       konamiCode: true,

@@ -61,11 +61,9 @@ This document outlines the accessibility improvements made to the 8-bit portfoli
 - ✅ Error messages use high contrast secondary color
 - ✅ Form labels meet contrast requirements
 
-#### High Contrast Mode
-- ✅ Added `@media (prefers-contrast: high)` support
-- ✅ Increased color saturation in high contrast mode
-- ✅ Enhanced border visibility
-- ✅ Reduced glow effects for better readability
+#### System contrast and zoom
+- Default palette targets WCAG AA for core text and UI accents
+- Re-check contrast after visual changes; use OS **Increase contrast** / **forced colors** where you ship to audiences that rely on them
 
 #### Color Blindness
 - ✅ Status indicators use both color and text
@@ -85,8 +83,6 @@ This document outlines the accessibility improvements made to the 8-bit portfoli
 - ✅ Typewriter effect disabled
 
 #### Animation Controls
-- ✅ CRT flicker can be disabled via settings
-- ✅ Scanlines can be toggled off
 - ✅ No auto-playing animations
 - ✅ No flashing content (complies with WCAG 2.3.1)
 
@@ -188,7 +184,7 @@ This document outlines the accessibility improvements made to the 8-bit portfoli
 ### Color Contrast Testing
 - ✅ Use WebAIM Contrast Checker
 - ✅ Test with color blindness simulators
-- ✅ Verify high contrast mode
+- ✅ Test default palette contrast after major visual changes
 - ✅ Test with browser zoom (200%)
 
 ### Motion Testing
