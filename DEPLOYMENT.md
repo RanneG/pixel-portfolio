@@ -56,7 +56,7 @@ Before deploying, update:
 
 ## 🔧 Deployment Script
 
-The deployment script (`scripts/deploy.js`) performs:
+The deployment script (`scripts/deploy.cjs`) performs:
 
 1. **Environment Validation** - Checks required env vars
 2. **Tests** - Runs test suite (if configured)
@@ -350,7 +350,7 @@ vercel rollback [deployment-url]
 
 - [Vercel Documentation](https://vercel.com/docs)
 - [GitHub Actions Docs](https://docs.github.com/en/actions)
-- [Deployment Script](./scripts/deploy.js)
+- [Deployment Script](./scripts/deploy.cjs)
 - [CI/CD Workflows](./.github/workflows/)
 
 ---

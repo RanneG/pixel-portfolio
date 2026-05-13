@@ -37,7 +37,33 @@ function streamErrorMessage(status: number): string {
   if (import.meta.env.DEV && (status === 404 || status === 405)) {
     return "Can't reach the chat API. Add GROQ_API_KEY to .env.local and restart npm run dev.";
   }
+  if (status === 404 || status === 405) {
+    return "Chat API not found on this host. Deploy on Vercel (or another host that runs /api/chat) so POST /api/chat exists.";
+  }
   return "Something went wrong. Try again in a moment.";
+}
+
+/** Parse JSON error from /api/chat when !ok (Vercel returns JSON, not SSE). */
+async function chatApiFailureText(response: Response): Promise<string> {
+  const fallback = streamErrorMessage(response.status);
+  const ct = response.headers.get("content-type") ?? "";
+  if (!ct.includes("application/json")) return fallback;
+  try {
+    const err = (await response.json()) as { error?: string };
+    const e = err.error?.trim();
+    if (!e) return fallback;
+    if (e === "GROQ_API_KEY not configured") {
+      return "Chat demo is off: set GROQ_API_KEY for this deployment (e.g. Vercel → Project → Settings → Environment Variables → Production), then redeploy.";
+    }
+    if (e === "Message is required") return "Missing message — try sending again.";
+    if (e === "Failed to get response from AI") {
+      return "Groq rejected the request (invalid key, rate limit, or model error). Check Vercel function logs and Groq console.";
+    }
+    if (e.length <= 160) return e;
+    return fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 export const ProjectsPersonaChat: React.FC = () => {
@@ -91,7 +117,7 @@ export const ProjectsPersonaChat: React.FC = () => {
       });
 
       if (!response.ok) {
-        failureText = streamErrorMessage(response.status);
+        failureText = await chatApiFailureText(response);
         throw new Error(`HTTP ${response.status}`);
       }
 
