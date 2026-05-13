@@ -7,7 +7,7 @@ import { handleGroqPersonaChatBody } from "./chatStream";
 
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
-module.exports = async function handler(req: any, res: any) {
+export default async function handler(req: any, res: any) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
@@ -23,4 +23,4 @@ module.exports = async function handler(req: any, res: any) {
   }
 
   await handleGroqPersonaChatBody(req.body ?? {}, GROQ_API_KEY, res);
-};
+}

@@ -2,6 +2,7 @@
   "name": "portfolio-8bit",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "engines": {
     "node": ">=18"
   },
@@ -13,10 +14,10 @@
     "lint": "echo \"no linter configured\"",
     "test": "echo \"no tests configured\"",
     "vercel-build": "npm run build",
-    "analyze": "npm run build && node scripts/analyze-bundle.js",
+    "analyze": "npm run build && node scripts/analyze-bundle.cjs",
     "bundle-size": "npm run analyze",
-    "deploy": "node scripts/deploy.js",
-    "deploy:prod": "node scripts/deploy.js --production",
+    "deploy": "node scripts/deploy.cjs",
+    "deploy:prod": "node scripts/deploy.cjs --production",
     "health-check": "curl -f https://yourdomain.com/api/health || exit 1"
   },
   "dependencies": {

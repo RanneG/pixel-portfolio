@@ -1,6 +1,6 @@
 import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
-import { handleGroqPersonaChatBody, type ChatRequestBody } from "./api/chatStream";
+import { handleGroqPersonaChatBody, type ChatRequestBody } from "./api/chatStream.js";
 
 /** Serves POST /api/chat during `npm run dev` when GROQ_API_KEY is in .env / .env.local */
 function chatApiDevPlugin(): Plugin {
