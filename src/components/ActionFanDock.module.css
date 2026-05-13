@@ -1,0 +1,197 @@
+/**
+ * Tri-action fan dock — adapted from Uiverse.io (GreyD097).
+ * Child order: touchLeft, touchMiddle, touchRight, tileGithub, tileLinkedin, tileSettings.
+ */
+
+.dock {
+  position: relative;
+  width: 12rem;
+  height: 5rem;
+  display: flex;
+}
+
+.tile {
+  width: 3.2rem;
+  height: 3.2rem;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  cursor: default;
+  pointer-events: none;
+  border: 3px solid #311703;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s, opacity 0.3s;
+  opacity: 0.85;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.4);
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  opacity: 0.7;
+  transition: transform 0.25s, opacity 0.25s, width 0.25s;
+  flex-shrink: 0;
+}
+
+.tileGithub {
+  transform: translate(-50%, -50%) rotate(90deg);
+  z-index: 30;
+  background: #ff7f50;
+}
+
+.tileLinkedin {
+  transform: translate(-50%, -50%) rotate(-115deg);
+  z-index: 40;
+  background: #ffd700;
+}
+
+.tileSettings {
+  transform: translate(-50%, -50%) rotate(-45deg);
+  z-index: 50;
+  background: #019b98;
+}
+
+.tileSettings .icon {
+  animation: iconSpin 2.2s linear infinite;
+}
+
+.touch {
+  position: relative;
+  z-index: 60;
+  height: 100%;
+  flex: 1;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  display: block;
+  box-sizing: border-box;
+}
+
+.touch:focus {
+  outline: none;
+}
+
+.touch:focus-visible {
+  outline: 2px solid #00ffae;
+  outline-offset: 2px;
+}
+
+/* left -> github tile, right -> linkedin tile, middle -> settings tile */
+.touchLeft:hover ~ .tileGithub {
+  opacity: 1;
+  transform: translate(-170%, -50%) rotate(-90deg) scale(1.05);
+}
+
+.touchLeft:hover ~ .tileGithub .icon {
+  width: 25px;
+  opacity: 0.9;
+}
+
+.touchLeft:active ~ .tileGithub {
+  transform: translate(-170%, -50%) rotate(-90deg) scale(0.9);
+}
+
+.touchRight:hover ~ .tileLinkedin {
+  opacity: 1;
+  transform: translate(70%, -50%) rotate(90deg) scale(1.05);
+}
+
+.touchRight:hover ~ .tileLinkedin .icon {
+  width: 25px;
+  opacity: 0.9;
+}
+
+.touchRight:active ~ .tileLinkedin {
+  transform: translate(70%, -50%) rotate(90deg) scale(0.9);
+}
+
+.touchMiddle:hover ~ .tileSettings {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg) scale(1.05);
+}
+
+.touchMiddle:hover ~ .tileSettings .icon {
+  width: 25px;
+  opacity: 0.9;
+}
+
+.touchMiddle:active ~ .tileSettings {
+  transform: translate(-50%, -50%) rotate(0deg) scale(0.9);
+}
+
+.dock:hover .tileGithub,
+.dock:focus-within .tileGithub {
+  transform: translate(-170%, -50%) rotate(-90deg);
+}
+
+.dock:hover .tileLinkedin,
+.dock:focus-within .tileLinkedin {
+  transform: translate(70%, -50%) rotate(90deg);
+}
+
+.dock:hover .tileSettings,
+.dock:focus-within .tileSettings {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.dock:hover .tileSettings .icon,
+.dock:focus-within .tileSettings .icon {
+  animation: iconSpin 4s linear infinite;
+}
+
+.touchMiddle:hover ~ .tileSettings .icon {
+  animation: iconSpin 2.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tileSettings .icon,
+  .dock:hover .tileSettings .icon,
+  .dock:focus-within .tileSettings .icon,
+  .touchMiddle:hover ~ .tileSettings .icon {
+    animation: none;
+  }
+
+  .tile,
+  .icon {
+    transition: none;
+  }
+}
+
+@keyframes iconSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Touch devices: keep fan expanded so tiles are visible */
+@media (hover: none) {
+  .tileGithub {
+    transform: translate(-170%, -50%) rotate(-90deg);
+  }
+
+  .tileLinkedin {
+    transform: translate(70%, -50%) rotate(90deg);
+  }
+
+  .tileSettings {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  .tileSettings .icon {
+    animation: iconSpin 4s linear infinite;
+  }
+}
+
+@media (hover: none) and (prefers-reduced-motion: reduce) {
+  .tileSettings .icon {
+    animation: none;
+  }
+}

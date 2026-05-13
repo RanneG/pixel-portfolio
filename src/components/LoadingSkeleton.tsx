@@ -52,24 +52,3 @@ export const QuestLogSkeleton: React.FC = () => {
   );
 };
 
-export const SkillInventorySkeleton: React.FC = () => {
-  return (
-    <div className="grid gap-4 md:gap-5 md:grid-cols-2">
-      {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="pixel-border bg-card p-4 md:p-6 animate-pulse">
-          <div className="flex justify-between mb-3">
-            <div className="h-4 bg-muted/30 rounded-none w-24" />
-            <div className="h-3 bg-muted/20 rounded-none w-20" />
-          </div>
-          <LoadingSkeleton type="bar" className="mb-3" />
-          <div className="space-y-2">
-            <LoadingSkeleton type="bar" />
-            <LoadingSkeleton type="bar" />
-            <LoadingSkeleton type="bar" />
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-};
-

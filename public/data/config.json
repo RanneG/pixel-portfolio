@@ -5,10 +5,6 @@
     "logo": "<DEV/>",
     "formspreeId": "xeeegyek"
   },
-  "theme": {
-    "default": "nes",
-    "available": ["nes", "gameboy", "arcade"]
-  },
   "features": {
     "konamiCode": true,
     "settingsPanel": true,

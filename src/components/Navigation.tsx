@@ -34,7 +34,7 @@ const Navigation: React.FC<NavigationProps> = ({ name = "PLAYER ONE" }) => {
     { href: "#character", label: "CHARACTER STATS" },
     { href: "#skills", label: "SKILL INVENTORY" },
     { href: "#quests", label: "QUEST LOG" },
-    { href: "#save-point", label: "SAVE POINT" }
+    { href: "#contact", label: "CONTACT" }
   ];
 
   useEffect(() => {

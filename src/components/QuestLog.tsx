@@ -22,12 +22,11 @@ const ProjectCard: React.FC<Project> = ({
   difficulty,
   status,
   description,
-  xp,
-  stars,
   tech,
   githubUrl,
   liveUrl,
-  questId
+  questId,
+  award
 }) => {
   const diff = difficultyStyles[difficulty];
   // Status badge colors: COMPLETED=blue (primary), IN PROGRESS=green (accent)
@@ -40,7 +39,19 @@ const ProjectCard: React.FC<Project> = ({
     <article className="pixel-border bg-card p-4 md:p-6 box-glow flex flex-col justify-between gap-3">
       <header className="flex flex-col sm:flex-row items-start justify-between gap-3">
         <div className="flex-1">
-          <h3 className="font-pixel text-[10px] md:text-xs text-foreground">{title}</h3>
+          <div className="flex flex-wrap items-center gap-2">
+            <h3 className="font-pixel text-[10px] md:text-xs text-foreground">{title}</h3>
+            {award ? (
+              <span
+                className="inline-flex items-center gap-1 border border-pixelYellow bg-pixelYellow/15 px-2 py-0.5 font-pixel text-[7px] md:text-[8px] uppercase tracking-wide text-pixelYellow"
+                title={award}
+              >
+                <span aria-hidden>🏆</span>
+                <span className="sr-only">Award: </span>
+                {award}
+              </span>
+            ) : null}
+          </div>
           <p className="mt-1 text-[10px] md:text-[11px] text-foreground/80">{description}</p>
         </div>
         <div className="text-left sm:text-right text-[9px] md:text-[10px] font-pixel space-y-1">
@@ -53,15 +64,6 @@ const ProjectCard: React.FC<Project> = ({
         </div>
       </header>
       <div className="flex flex-col sm:flex-row flex-wrap items-start sm:items-center justify-between gap-2 text-[9px] md:text-[10px]">
-        <div className="flex items-center gap-2">
-          <span>XP +{xp}</span>
-          <span className="text-pixelYellow" aria-label={`${stars} out of 5 stars`}>
-            {"★".repeat(stars)}
-            <span className="text-muted">
-              {"★".repeat(5 - stars)}
-            </span>
-          </span>
-        </div>
         <div className="flex flex-wrap gap-1">
           {tech.map((t) => (
             <span
@@ -111,7 +113,9 @@ const ProjectCard: React.FC<Project> = ({
             projectTitle={title}
           />
         </div>
-        <span className="text-muted font-pixel">QUEST ID {questId || `#${xp}`}</span>
+          {questId ? (
+            <span className="text-muted font-pixel">REF {questId}</span>
+          ) : null}
       </footer>
     </article>
   );
@@ -124,8 +128,6 @@ const QuestLog: React.FC<QuestLogProps> = ({
       difficulty: "LEGENDARY",
       status: "COMPLETED",
       description: "Analytics dashboard styled as a retro RPG battle screen.",
-      xp: 2400,
-      stars: 5,
       tech: ["REACT", "TYPESCRIPT", "TAILWIND"]
     },
     {
@@ -133,8 +135,6 @@ const QuestLog: React.FC<QuestLogProps> = ({
       difficulty: "EPIC",
       status: "COMPLETED",
       description: "Developer blog rendered inside a CRT-style terminal UI.",
-      xp: 1800,
-      stars: 4,
       tech: ["NEXT.JS", "MDX", "MOTION"]
     },
     {
@@ -142,8 +142,6 @@ const QuestLog: React.FC<QuestLogProps> = ({
       difficulty: "RARE",
       status: "IN PROGRESS",
       description: "Playable portfolio with level-based navigation and secrets.",
-      xp: 1200,
-      stars: 4,
       tech: ["REACT", "STATE MACHINES", "PIXEL ART"]
     }
   ]
@@ -161,7 +159,7 @@ const QuestLog: React.FC<QuestLogProps> = ({
         <p className="sr-only">Browse through completed and in-progress projects</p>
         <div className="grid gap-4 md:gap-5 md:grid-cols-2">
           {projects.map((project) => (
-            <ProjectCard key={project.title} {...project} />
+            <ProjectCard key={project.questId ?? project.title} {...project} />
           ))}
         </div>
       </div>

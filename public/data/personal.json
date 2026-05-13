@@ -1,11 +1,11 @@
 {
   "name": "RANNE GERODIAS",
-  "title": "Tech Professional crafting retro-futuristic interfaces and playful experiences.",
+  "title": "I'm a full-stack engineer with a DevOps and data background: I've automated cloud delivery at scale, supported enterprise IT and analytics, and I now focus on local-first and privacy-aware products—TypeScript/React and Tauri on the front, Python and RAG/Ollama on the back, with MCP and agent-style tooling where it fits.",
   "subtitle": "DEVELOPER // DESIGNER // CREATOR",
+  "motto": "Build tools, not just features — day job plus selective side builds when they fit.",
   "bio": [
-    "> Loves combining design, code, and nostalgia.",
-    "> Specializes in TypeScript, React, and delightful details.",
-    "> Currently grinding XP in UI engineering and motion design."
+    "> Clear docs, reliable automation, and interfaces that respect the user.",
+    "> Full-time IT support (UK); also open to scoped freelance or consulting around Stitch, linkup_mcp (LlamaIndex + Ollama RAG), MCP for Cursor, and OpenClaw on a dedicated Mac — by arrangement, not as a replacement role."
   ],
   "statusBadges": ["CAFFEINATED", "MOTIVATED", "CREATIVE"],
   "contact": {
@@ -21,12 +21,90 @@
     {
       "name": "LINKEDIN",
       "url": "https://www.linkedin.com/in/ranne-gerodias-809460108/"
-    },
-    {
-      "name": "DRIBBBLE",
-      "url": "https://dribbble.com/ranne-gerodias"
     }
   ],
-  "availableForHire": true
+  "availableForHire": true,
+  "workExperience": [
+    {
+      "company": "Cantium Business Solutions (Kings Hill, UK)",
+      "role": "Help Desk Engineer",
+      "start": "Feb 2026",
+      "end": "Ongoing",
+      "url": "https://www.cantium.group/",
+      "paragraphs": [
+        "First-line support for desktops, laptops, printers, and mobile devices on Windows, macOS, and Linux, including Microsoft 365, VPN, and common business security tools.",
+        "Hands-on repairs (RAM, drives, displays), basic network triage (Wi‑Fi, LAN, DHCP, DNS), and setup for VoIP phones, conference rooms, and video collaboration.",
+        "Work is logged in ITSM tooling (Microsoft Intune, ServiceNow, Active Directory). I prepare and deploy new-hire kits: laptops, monitors, and accessories."
+      ]
+    },
+    {
+      "company": "Dome (London, UK)",
+      "role": "Manager",
+      "start": "Jun 2025",
+      "end": "Feb 2026",
+      "paragraphs": [
+        "Recruited, trained, and led a team with clear communication and scheduling so day-to-day operations stayed smooth.",
+        "Maintained supplier relationships and inventory to keep sales and stock levels predictable through busy periods."
+      ]
+    },
+    {
+      "company": "Deloitte (London, UK)",
+      "role": "Junior DevOps Engineer",
+      "start": "Dec 2021",
+      "end": "Jul 2023",
+      "url": "https://www.deloitte.com/uk/en.html",
+      "paragraphs": [
+        "Delivered client deployments using Agile practice — QA cycles, Scrum, and sprint-based releases with a focus on repeatable quality.",
+        "Created technical documentation, guidelines, and SOPs so teams could share knowledge across AWS, Terraform, Docker, Kubernetes, and Jira.",
+        "Automated multi-region AWS provisioning (including ACM-related patterns) as infrastructure-as-code, integrated into Jenkins with Python and Java. That cut a previously long manual process down to roughly a single day."
+      ]
+    },
+    {
+      "company": "Greenstone Data Solutions Ltd (Kings Hill, UK)",
+      "role": "Junior Production Programmer",
+      "start": "Oct 2019",
+      "end": "Mar 2020",
+      "paragraphs": [
+        "Built scripts to automate database workflows using Bash, Python, SAS, and SQL.",
+        "Helped migrate source control from local and virtualised file storage into GitHub for safer collaboration."
+      ]
+    },
+    {
+      "company": "Katalyze Data (Witney, UK)",
+      "role": "Data Analyst",
+      "start": "Jul 2019",
+      "end": "Oct 2019",
+      "paragraphs": [
+        "Wrote Python for deployment automation, configuration, and monitoring so environments stayed consistent.",
+        "Designed and tuned SQL for faster retrieval and cleaner downstream reporting."
+      ]
+    },
+    {
+      "company": "Department for Work and Pensions (Dartford, UK)",
+      "role": "Support Analyst",
+      "start": "Dec 2018",
+      "end": "May 2019",
+      "url": "https://www.gov.uk/government/organisations/department-for-work-pensions",
+      "paragraphs": [
+        "Produced reports and visualisations so stakeholders could see trends and act on evidence.",
+        "Improved data collection practices so insight stayed reliable and easier to reproduce."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Kent",
+      "location": "Canterbury, Kent",
+      "start": "2020",
+      "end": "2021",
+      "qualification": "Computer Science MSc"
+    },
+    {
+      "institution": "University of Kent",
+      "location": "Canterbury, Kent",
+      "start": "2015",
+      "end": "2019",
+      "qualification": "Mathematics BSc"
+    }
+  ]
 }
-

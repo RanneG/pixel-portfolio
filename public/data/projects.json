@@ -1,12 +1,47 @@
 {
   "projects": [
     {
+      "title": "LUCKY CHARM",
+      "difficulty": "LEGENDARY",
+      "status": "COMPLETED",
+      "description": "Privacy-preserving standup and meeting transcript tool: wallet-first auth, TEE-oriented processing, Props-filtered dashboard — structured themes and actions without verbatim quotes leaving the trust boundary.",
+      "motivation": "Teams need standup signal without leaking raw transcripts: wallet-first auth, filtered views, and TEE-oriented framing so structured themes ship without verbatim quotes crossing the trust line.",
+      "highlight": "Wallet-first auth and props-filtered views so themes ship without raw transcripts crossing the trust boundary.",
+      "award": "Encode Club hackathon winner",
+      "tech": ["REACT", "VITE", "WALLET AUTH", "TEE", "FLASK", "PROPS FILTER"],
+      "githubUrl": "https://github.com/RanneG/standup-bot",
+      "liveUrl": "https://lucky-charm-taupe.vercel.app/",
+      "questId": "LC-001"
+    },
+    {
+      "title": "AUTONOMI",
+      "difficulty": "LEGENDARY",
+      "status": "COMPLETED",
+      "description": "Autonomous lending protection on Arc. 24/7 lending bodyguard that auto-rebalances your USYC/USDC position when LTV crosses the safety threshold — no liquidation surprises.",
+      "motivation": "Hackathon build to keep Arc lending positions inside a safe band automatically so users sleep through volatility instead of babysitting LTV.",
+      "tech": ["DEFI", "ARC", "USYC", "USDC", "AUTO REBALANCING", "ENCODE HACKATHON"],
+      "githubUrl": "https://github.com/RanneG/autonomi",
+      "liveUrl": "https://autonomi-lake.vercel.app/",
+      "questId": "AU-001"
+    },
+    {
+      "title": "ARBIT",
+      "difficulty": "LEGENDARY",
+      "status": "COMPLETED",
+      "description": "Cryptocurrency arbitrage opportunity dashboard with real-time market data visualization.",
+      "motivation": "Turn noisy exchange spreads into a readable surface so you can see where edges exist before fees and latency eat them.",
+      "tech": ["REACT", "API INTEGRATION", "DATA VISUALIZATION", "FINANCIAL ALGORITHMS"],
+      "githubUrl": "https://github.com/RanneG/Arbit",
+      "liveUrl": "https://arbit-psi.vercel.app",
+      "questId": "AR-001"
+    },
+    {
       "title": "STITCH",
       "difficulty": "LEGENDARY",
       "status": "IN PROGRESS",
       "description": "Local-first subscription companion: Tauri + React desktop (stitch-app), Python Flask bridge for RAG over your PDFs, Google sign-in + Gmail discovery, and optional face MFA — pairs with the Linkup MCP stack for Cursor.",
-      "xp": 2900,
-      "stars": 5,
+      "motivation": "Own your subscription data and search it locally: a desktop shell plus a Python bridge so PDFs and Gmail context stay on your machine, with optional stronger auth — not another siloed SaaS dashboard.",
+      "highlight": "Companion to RanneG/linkup_mcp (LlamaIndex + Ollama) for editor-side RAG.",
       "tech": ["TAURI", "VITE", "REACT", "TYPESCRIPT", "PYTHON", "FLASK", "RAG", "OLLAMA", "GOOGLE OAUTH"],
       "githubUrl": "https://github.com/RanneG/stitch-app",
       "questId": "ST-001"
@@ -16,70 +51,22 @@
       "difficulty": "EPIC",
       "status": "COMPLETED",
       "description": "Bitcoin censorship detection platform - whistle-blowing system for detecting when mining pools exclude transactions from blocks.",
-      "xp": 2400,
-      "stars": 5,
+      "motivation": "Make pool transaction selection observable so the community can spot censorship or policy shifts instead of guessing from mempool gossip alone.",
       "tech": ["REACT", "TYPESCRIPT", "TAILWIND CSS", "PYTHON", "FASTAPI", "BITCOIN RPC"],
       "githubUrl": "https://github.com/RanneG/MineSentry",
       "liveUrl": "https://minesentry.vercel.app/",
       "questId": "MS-001"
     },
     {
-      "title": "ARBIT",
-      "difficulty": "LEGENDARY",
-      "status": "COMPLETED",
-      "description": "Cryptocurrency arbitrage opportunity dashboard with real-time market data visualization.",
-      "xp": 2800,
-      "stars": 5,
-      "tech": ["REACT", "API INTEGRATION", "DATA VISUALIZATION", "FINANCIAL ALGORITHMS"],
-      "githubUrl": "https://github.com/RanneG/Arbit",
-      "liveUrl": "https://arbit-psi.vercel.app",
-      "questId": "AR-001"
-    },
-    {
-      "title": "PIXEL PORTFOLIO",
-      "difficulty": "LEGENDARY",
-      "status": "IN PROGRESS",
-      "description": "8-bit themed interactive portfolio website with game mechanics and retro aesthetics.",
-      "xp": 3200,
-      "stars": 5,
-      "tech": ["REACT", "TYPESCRIPT", "TAILWIND CSS", "FORMSPREE", "VERCEL"],
-      "questId": "PP-001"
-    },
-    {
-      "title": "AUTONOMI",
-      "difficulty": "LEGENDARY",
-      "status": "COMPLETED",
-      "description": "Autonomous lending protection on Arc. 24/7 lending bodyguard that auto-rebalances your USYC/USDC position when LTV crosses the safety threshold — no liquidation surprises.",
-      "xp": 2600,
-      "stars": 5,
-      "tech": ["DEFI", "ARC", "USYC", "USDC", "AUTO REBALANCING", "ENCODE HACKATHON"],
-      "githubUrl": "https://github.com/RanneG/autonomi",
-      "liveUrl": "https://autonomi-lake.vercel.app/",
-      "questId": "AU-001"
-    },
-    {
       "title": "CHATBOT RAG CORE",
       "difficulty": "EPIC",
       "status": "COMPLETED",
-      "description": "Reusable Python RAG chatbot library using Ollama for local AI. Document Q&A, embeddings, and production-ready API server.",
-      "xp": 2200,
-      "stars": 5,
+      "description": "Reusable Python RAG chatbot library using Ollama for local AI. Document Q&A, embeddings, and production-ready API server. On Browse → Projects, a live Groq block demonstrates persona routing (swap system prompts per character) — separate from doc RAG, same integration story.",
+      "motivation": "A small library you can drop behind an API: ingest docs, embed with Ollama, and answer questions without shipping prompts to a remote model by default.",
+      "highlight": "Ollama + LlamaIndex — local-first RAG building block.",
       "tech": ["PYTHON", "LLAMAINDEX", "OLLAMA", "RAG", "DOCKER"],
       "githubUrl": "https://github.com/RanneG/chatbot-rag-core",
       "questId": "CB-001"
-    },
-    {
-      "title": "LUCKY CHARM",
-      "difficulty": "LEGENDARY",
-      "status": "COMPLETED",
-      "description": "Privacy-preserving standup and meeting transcript tool: wallet-first auth, TEE-oriented processing, Props-filtered dashboard — structured themes and actions without verbatim quotes leaving the trust boundary.",
-      "xp": 2500,
-      "stars": 5,
-      "tech": ["REACT", "VITE", "WALLET AUTH", "TEE", "FLASK", "PROPS FILTER"],
-      "githubUrl": "https://github.com/RanneG/standup-bot",
-      "liveUrl": "https://lucky-charm-taupe.vercel.app/",
-      "questId": "LC-001"
     }
   ]
 }
-

@@ -1,38 +1,33 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-export type Theme = "nes" | "gameboy" | "arcade";
+export type SiteView = "terminal" | "browse";
 
-interface Settings {
-  scanlinesEnabled: boolean;
-  soundEnabled: boolean;
-  soundVolume: number;
-  highContrast: boolean;
-  theme: Theme;
+export interface Settings {
+  siteView: SiteView;
 }
 
 interface SettingsContextType {
   settings: Settings;
   updateSetting: <K extends keyof Settings>(key: K, value: Settings[K]) => void;
-  toggleSetting: (key: keyof Pick<Settings, "scanlinesEnabled" | "soundEnabled" | "highContrast">) => void;
 }
 
 const defaultSettings: Settings = {
-  scanlinesEnabled: true,
-  soundEnabled: false,
-  soundVolume: 0.3,
-  highContrast: false,
-  theme: "nes"
+  siteView: "terminal"
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<Settings>(() => {
-    // Load from localStorage
     const saved = localStorage.getItem("portfolio-settings");
     if (saved) {
       try {
-        return { ...defaultSettings, ...JSON.parse(saved) };
+        const parsed = JSON.parse(saved) as Record<string, unknown>;
+        const siteView: SiteView =
+          parsed.siteView === "browse" || parsed.siteView === "terminal"
+            ? parsed.siteView
+            : "terminal";
+        return { siteView };
       } catch {
         return defaultSettings;
       }
@@ -41,38 +36,15 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }
   });
 
   useEffect(() => {
-    // Save to localStorage
     localStorage.setItem("portfolio-settings", JSON.stringify(settings));
-    
-    // Apply theme class
-    document.documentElement.setAttribute("data-theme", settings.theme);
-    
-    // Update sound manager
-    if (typeof window !== "undefined") {
-      import("../utils/soundManager").then(({ soundManager }) => {
-        soundManager.setEnabled(settings.soundEnabled);
-        soundManager.setVolume(settings.soundVolume);
-      });
-    }
-    
-    // Apply high contrast
-    if (settings.highContrast) {
-      document.documentElement.classList.add("high-contrast");
-    } else {
-      document.documentElement.classList.remove("high-contrast");
-    }
   }, [settings]);
 
   const updateSetting = <K extends keyof Settings>(key: K, value: Settings[K]) => {
     setSettings((prev) => ({ ...prev, [key]: value }));
   };
 
-  const toggleSetting = (key: keyof Pick<Settings, "scanlinesEnabled" | "soundEnabled" | "highContrast">) => {
-    setSettings((prev) => ({ ...prev, [key]: !prev[key] }));
-  };
-
   return (
-    <SettingsContext.Provider value={{ settings, updateSetting, toggleSetting }}>
+    <SettingsContext.Provider value={{ settings, updateSetting }}>
       {children}
     </SettingsContext.Provider>
   );
@@ -85,4 +57,3 @@ export const useSettings = () => {
   }
   return context;
 };
-

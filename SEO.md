@@ -93,7 +93,7 @@ These events are tracked automatically:
 | `section_viewed` | User navigates to a section | `section` |
 | `contact_form_submitted` | Form submission | `formId` |
 | `konami_code_activated` | Konami code entered | - |
-| `theme_change` | Theme switched | `theme` |
+| `site_view_change` | Switched between terminal and browse | `siteView` |
 | `project_click` | Project link clicked | `project`, `type` (github/live) |
 | `share` | Content shared | `method`, `title` |
 | `Web Vital` | Performance metric | `metric`, `value`, `rating` |

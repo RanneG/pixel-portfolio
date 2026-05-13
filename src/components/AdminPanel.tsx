@@ -52,14 +52,16 @@ const AdminPanel: React.FC = () => {
         statusBadges: localData.statusBadges ?? data.statusBadges,
         contact: localData.contact ?? data.contact,
         socialLinks: localData.socialLinks ?? data.socialLinks,
-        availableForHire: localData.availableForHire ?? data.availableForHire
+        availableForHire: localData.availableForHire ?? data.availableForHire,
+        motto: localData.motto ?? data.motto,
+        workExperience: localData.workExperience ?? data.workExperience,
+        education: localData.education ?? data.education
       },
       stats: {
         projects: localData.stats?.projects ?? data.stats.projects,
         level: localData.stats?.level ?? data.stats.level,
         creativity: localData.stats?.creativity ?? data.stats.creativity,
-        attributes: localData.attributes ?? data.attributes,
-        experience: localData.experience ?? data.experience
+        attributes: localData.attributes ?? data.attributes
       },
       skills: {
         categories: localData.skills ?? data.skills,

@@ -13,30 +13,34 @@ const AchievementsContext = createContext<AchievementsContextType | undefined>(u
 
 const STORAGE_KEY = "portfolio-achievements";
 
-export const AchievementsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [achievements, setAchievements] = useState<Achievement[]>(ACHIEVEMENTS);
+function readAchievementsFromStorage(): Achievement[] {
+  if (typeof window === "undefined") {
+    return ACHIEVEMENTS;
+  }
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return ACHIEVEMENTS;
+    const parsed = JSON.parse(raw) as Achievement[];
+    if (!Array.isArray(parsed)) return ACHIEVEMENTS;
+    return ACHIEVEMENTS.map((ach) => {
+      const stored = parsed.find((s: Achievement) => s.id === ach.id);
+      return stored ? { ...ach, ...stored } : ach;
+    });
+  } catch {
+    return ACHIEVEMENTS;
+  }
+}
 
-  // Load achievements from localStorage
+export const AchievementsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Hydrate from localStorage synchronously so the first save effect never overwrites with defaults.
+  const [achievements, setAchievements] = useState<Achievement[]>(readAchievementsFromStorage);
+
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const storedAchievements = JSON.parse(stored);
-        setAchievements((prev) =>
-          prev.map((ach) => {
-            const stored = storedAchievements.find((s: Achievement) => s.id === ach.id);
-            return stored ? { ...ach, ...stored } : ach;
-          })
-        );
-      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(achievements));
     } catch {
-      // Invalid storage, use defaults
+      // Quota or private mode
     }
-  }, []);
-
-  // Save achievements to localStorage
-  useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(achievements));
   }, [achievements]);
 
   const unlockAchievement = useCallback((id: string) => {
@@ -58,7 +62,11 @@ export const AchievementsProvider: React.FC<{ children: React.ReactNode }> = ({ 
 
   const resetAchievements = useCallback(() => {
     setAchievements(ACHIEVEMENTS.map((a) => ({ ...a, unlocked: false, unlockedAt: undefined })));
-    localStorage.removeItem(STORAGE_KEY);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   const unlockedCount = achievements.filter((a) => a.unlocked).length;
@@ -85,4 +93,3 @@ export const useAchievements = () => {
   }
   return context;
 };
-

@@ -70,14 +70,6 @@ export const ACHIEVEMENTS: Achievement[] = [
     icon: "🎯",
     unlocked: false,
     category: "exploration"
-  },
-  {
-    id: "dark-mode",
-    title: "RETRO ENTHUSIAST",
-    description: "Enabled scanlines effect",
-    icon: "📺",
-    unlocked: false,
-    category: "interaction"
   }
 ];
 

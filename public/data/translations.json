@@ -5,7 +5,7 @@
       "character": "CHARACTER STATS",
       "skills": "SKILL INVENTORY",
       "quests": "QUEST LOG",
-      "save": "SAVE POINT"
+      "save": "CONTACT"
     },
     "hero": {
       "pressStart": "PRESS START",
@@ -22,7 +22,79 @@
       "title": "SETTINGS",
       "sound": "SOUND EFFECTS",
       "volume": "VOLUME",
-      "language": "LANGUAGE"
+      "language": "LANGUAGE",
+      "browseTitle": "SITE VIEW",
+      "browseHint": "Prefer a straightforward site? Use browse mode for a classic layout with a top menu and separate pages. The terminal stays available anytime.",
+      "viewTerminal": "TERMINAL",
+      "viewBrowse": "BROWSE SITE"
+    },
+    "browse": {
+      "brand": "PORTFOLIO",
+      "nav": {
+        "home": "HOME",
+        "about": "ABOUT",
+        "experience": "EXPERIENCE",
+        "education": "EDUCATION",
+        "skills": "SKILLS",
+        "projects": "PROJECTS",
+        "contact": "CONTACT"
+      },
+      "headings": {
+        "about": "ABOUT",
+        "experience": "EXPERIENCE",
+        "education": "EDUCATION",
+        "skills": "SKILLS",
+        "projects": "PROJECTS",
+        "contact": "CONTACT"
+      },
+      "home": {
+        "lead": "This is the browse-friendly view: same content as the terminal, organized as standard pages.",
+        "summaryLabel": "FOCUS",
+        "moreAbout": "MORE ABOUT →"
+      },
+      "about": {
+        "motto": "MOTTO",
+        "role": "ROLE & FOCUS",
+        "more": "MORE"
+      },
+      "experience": {
+        "empty": "No work history on file."
+      },
+      "education": {
+        "empty": "No education entries on file."
+      },
+      "skills": {
+        "highlights": "HIGHLIGHTS",
+        "itemsSuffix": "skills"
+      },
+      "vibe": {
+        "heroTagline": "FULL-STACK // UK // LOCAL-FIRST",
+        "heroHeadline": "CODE THAT RESPECTS USERS.",
+        "heroLead": "TypeScript, React, and Tauri on the surface. Python, RAG, and MCP underneath. I ship privacy-aware tools—not cookie-cutter dashboards.",
+        "marquee": "TYPESCRIPT // REACT // PYTHON // RAG + OLLAMA // MCP // TAURI // DEVOPS // UK // ",
+        "ctaProjects": "VIEW PROJECTS",
+        "ctaAbout": "ABOUT ME",
+        "heroAlt": "Stylized geometric portrait — portfolio hero",
+        "contactLead": "Got something bold to build?",
+        "contactTitle": "LET'S TALK.",
+        "contactFormName": "YOUR NAME",
+        "contactFormEmail": "EMAIL ADDRESS",
+        "contactFormMessage": "THE MISSION",
+        "contactFormSubmit": "SEND MESSAGE",
+        "contactEmailLabel": "EMAIL",
+        "contactLocationLabel": "LOCATION",
+        "availabilityTitle": "OPEN FOR SCOPED SIDE WORK",
+        "availabilitySub": "Full-time employed; selective freelance or consulting only, by arrangement — not soliciting a replacement for my day job.",
+        "availabilityStatus": "STATUS: SELECTIVE SIDE / CONSULTING",
+        "servicesTitle1": "FULL-STACK",
+        "servicesBody1": "React, TypeScript, Python, APIs—shipping end to end.",
+        "servicesTitle2": "LOCAL + RAG",
+        "servicesBody2": "Ollama, LlamaIndex, MCP: agents without leaking your docs.",
+        "servicesTitle3": "DESKTOP",
+        "servicesBody3": "Tauri and bridges when the browser is not enough.",
+        "servicesTitle4": "DEVOPS",
+        "servicesBody4": "AWS, Terraform, Docker, CI—repeatable delivery."
+      }
     }
   },
   "es": {
@@ -48,7 +120,79 @@
       "title": "CONFIGURACIÓN",
       "sound": "EFECTOS DE SONIDO",
       "volume": "VOLUMEN",
-      "language": "IDIOMA"
+      "language": "IDIOMA",
+      "browseTitle": "VISTA DEL SITIO",
+      "browseHint": "¿Prefieres un sitio más clásico? Usa el modo exploración: menú superior y páginas separadas. La terminal sigue disponible.",
+      "viewTerminal": "TERMINAL",
+      "viewBrowse": "SITIO WEB"
+    },
+    "browse": {
+      "brand": "PORTAFOLIO",
+      "nav": {
+        "home": "INICIO",
+        "about": "SOBRE MÍ",
+        "experience": "EXPERIENCIA",
+        "education": "FORMACIÓN",
+        "skills": "HABILIDADES",
+        "projects": "PROYECTOS",
+        "contact": "CONTACTO"
+      },
+      "headings": {
+        "about": "SOBRE MÍ",
+        "experience": "EXPERIENCIA",
+        "education": "FORMACIÓN",
+        "skills": "HABILIDADES",
+        "projects": "PROYECTOS",
+        "contact": "CONTACTO"
+      },
+      "home": {
+        "lead": "Vista de exploración: el mismo contenido que la terminal, en páginas clásicas.",
+        "summaryLabel": "ENFOQUE",
+        "moreAbout": "MÁS →"
+      },
+      "about": {
+        "motto": "LEMA",
+        "role": "ROL Y ENFOQUE",
+        "more": "MÁS"
+      },
+      "experience": {
+        "empty": "Sin historial laboral."
+      },
+      "education": {
+        "empty": "Sin estudios registrados."
+      },
+      "skills": {
+        "highlights": "DESTACADOS",
+        "itemsSuffix": "habilidades"
+      },
+      "vibe": {
+        "heroTagline": "FULL-STACK // UK // LOCAL-FIRST",
+        "heroHeadline": "CÓDIGO QUE RESPETA.",
+        "heroLead": "TypeScript, React y Tauri arriba; Python, RAG y MCP abajo. Herramientas conscientes de la privacidad.",
+        "marquee": "TYPESCRIPT // REACT // PYTHON // RAG + OLLAMA // MCP // TAURI // DEVOPS // UK // ",
+        "ctaProjects": "VER PROYECTOS",
+        "ctaAbout": "SOBRE MÍ",
+        "heroAlt": "Retrato geométrico estilizado — héroe del sitio",
+        "contactLead": "¿Algo ambicioso que construir?",
+        "contactTitle": "HABLEMOS.",
+        "contactFormName": "TU NOMBRE",
+        "contactFormEmail": "EMAIL",
+        "contactFormMessage": "EL ENCARGO",
+        "contactFormSubmit": "ENVIAR",
+        "contactEmailLabel": "EMAIL",
+        "contactLocationLabel": "UBICACIÓN",
+        "availabilityTitle": "ENCARGOS PUNTUALES / CONSULTORÍA",
+        "availabilitySub": "Empleo a tiempo completo; freelance o consultoría acotada solo de mutuo acuerdo — no busco sustituir mi rol principal.",
+        "availabilityStatus": "ESTADO: PROYECTOS PUNTUALES / CONSULTORÍA",
+        "servicesTitle1": "FULL-STACK",
+        "servicesBody1": "React, TypeScript, Python, APIs de punta a punta.",
+        "servicesTitle2": "LOCAL + RAG",
+        "servicesBody2": "Ollama, LlamaIndex, MCP sin filtrar tus documentos.",
+        "servicesTitle3": "ESCRITORIO",
+        "servicesBody3": "Tauri y bridges cuando el navegador no basta.",
+        "servicesTitle4": "DEVOPS",
+        "servicesBody4": "AWS, Terraform, Docker, CI repetible."
+      }
     }
   },
   "ja": {
@@ -74,8 +218,79 @@
       "title": "設定",
       "sound": "効果音",
       "volume": "音量",
-      "language": "言語"
+      "language": "言語",
+      "browseTitle": "表示モード",
+      "browseHint": "ターミナルではなく通常のサイトで見たい場合はブラウズモードへ。上メニューとページ分割。ターミナルにもいつでも戻れます。",
+      "viewTerminal": "ターミナル",
+      "viewBrowse": "ブラウズ"
+    },
+    "browse": {
+      "brand": "ポートフォリオ",
+      "nav": {
+        "home": "ホーム",
+        "about": "概要",
+        "experience": "職歴",
+        "education": "学歴",
+        "skills": "スキル",
+        "projects": "作品",
+        "contact": "連絡"
+      },
+      "headings": {
+        "about": "概要",
+        "experience": "職歴",
+        "education": "学歴",
+        "skills": "スキル",
+        "projects": "作品",
+        "contact": "連絡"
+      },
+      "home": {
+        "lead": "ブラウズ向け表示です。ターミナルと同じ内容をページに分けています。",
+        "summaryLabel": "フォーカス",
+        "moreAbout": "概要へ →"
+      },
+      "about": {
+        "motto": "モットー",
+        "role": "役割とフォーカス",
+        "more": "その他"
+      },
+      "experience": {
+        "empty": "職歴がありません。"
+      },
+      "education": {
+        "empty": "学歴がありません。"
+      },
+      "skills": {
+        "highlights": "ハイライト",
+        "itemsSuffix": "スキル"
+      },
+      "vibe": {
+        "heroTagline": "フルスタック // UK // ローカルファースト",
+        "heroHeadline": "ユーザーを尊重するコード。",
+        "heroLead": "TypeScript / React / Tauri と Python / RAG / MCP。プライバシーを守るツールを届けます。",
+        "marquee": "TYPESCRIPT // REACT // PYTHON // RAG + OLLAMA // MCP // TAURI // DEVOPS // UK // ",
+        "ctaProjects": "プロジェクトを見る",
+        "ctaAbout": "概要",
+        "heroAlt": "幾何学風のポートレート — ヒーロー画像",
+        "contactLead": "大胆なものを作りますか？",
+        "contactTitle": "話そう。",
+        "contactFormName": "お名前",
+        "contactFormEmail": "メール",
+        "contactFormMessage": "内容",
+        "contactFormSubmit": "送信",
+        "contactEmailLabel": "EMAIL",
+        "contactLocationLabel": "所在地",
+        "availabilityTitle": "スポット案件・コンサル可（要相談）",
+        "availabilitySub": "正社員として勤務中。本業と抵触しない範囲で、スポットの開発支援やコンサルのみ相談可能です。",
+        "availabilityStatus": "ステータス: 選別した副業・コンサル",
+        "servicesTitle1": "フルスタック",
+        "servicesBody1": "React、TypeScript、Python、API。",
+        "servicesTitle2": "ローカル+RAG",
+        "servicesBody2": "Ollama、LlamaIndex、MCP。",
+        "servicesTitle3": "デスクトップ",
+        "servicesBody3": "Tauri とブリッジ。",
+        "servicesTitle4": "DevOps",
+        "servicesBody4": "AWS、Terraform、Docker、CI。"
+      }
     }
   }
 }
-

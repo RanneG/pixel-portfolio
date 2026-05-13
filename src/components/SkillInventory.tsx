@@ -28,7 +28,7 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
         <p className="font-pixel text-[10px] md:text-xs text-foreground">{title}</p>
         <p className="text-[9px] md:text-[10px] font-pixel text-muted">
-          MASTERY {mastery}% XP
+          MASTERY {mastery}%
         </p>
       </div>
       <div className="pixel-progress-track h-3 w-full" role="progressbar" aria-valuenow={mastery} aria-valuemin={0} aria-valuemax={100}>
@@ -60,51 +60,77 @@ const SkillCategory: React.FC<SkillCategoryProps> = ({
 const SkillInventory: React.FC<SkillInventoryProps> = ({
   skills = [
     {
-      title: "FRONTEND",
+      title: "CLOUD & DEVOPS",
+      color: "secondary",
+      mastery: 86,
+      skills: [
+        { name: "AWS (MULTI-REGION, ACM-STYLE PATTERNS)", level: 86 },
+        { name: "TERRAFORM / IaC", level: 88 },
+        { name: "DOCKER / KUBERNETES / JENKINS", level: 82 },
+        { name: "CI/CD PIPELINES (PYTHON / JAVA)", level: 84 }
+      ]
+    },
+    {
+      title: "AI & MCP",
       color: "primary",
       mastery: 88,
       skills: [
-        { name: "REACT / NEXT", level: 90 },
-        { name: "TYPESCRIPT", level: 87 },
-        { name: "TAILWIND CSS", level: 92 }
+        { name: "OLLAMA / LOCAL LLMS", level: 86 },
+        { name: "LLAMAINDEX / RAG", level: 88 },
+        { name: "MCP SERVERS / CURSOR TOOLING", level: 85 },
+        { name: "OPENCLAW / AGENT ORCHESTRATION", level: 72 }
       ]
     },
     {
-      title: "BACKEND",
+      title: "NETWORK & ENDPOINTS",
       color: "secondary",
-      mastery: 72,
+      mastery: 80,
       skills: [
-        { name: "NODE / EXPRESS", level: 70 },
-        { name: "REST / GRAPHQL", level: 68 },
-        { name: "DATABASES", level: 65 }
+        { name: "WI-FI / LAN / DHCP / DNS", level: 82 },
+        { name: "VoIP / CONFERENCING SETUP", level: 76 },
+        { name: "WINDOWS / MACOS / LINUX DESKTOPS", level: 84 },
+        { name: "INTUNE / SERVICENOW / AD / M365", level: 80 }
       ]
     },
     {
-      title: "DESIGN",
-      color: "accent",
-      mastery: 83,
-      skills: [
-        { name: "UI / UX", level: 85 },
-        { name: "PROTOTYPING", level: 80 },
-        { name: "MOTION", level: 78 }
-      ]
-    },
-    {
-      title: "OTHER",
+      title: "DATA & SCRIPTING",
       color: "primary",
-      mastery: 76,
+      mastery: 82,
       skills: [
-        { name: "GIT / DEVOPS", level: 72 },
-        { name: "WRITING / DOCS", level: 82 },
-        { name: "GAME JAMS", level: 74 }
+        { name: "PYTHON", level: 88 },
+        { name: "SQL", level: 85 },
+        { name: "BASH", level: 80 },
+        { name: "SAS", level: 68 }
+      ]
+    },
+    {
+      title: "PRODUCT / STACK",
+      color: "accent",
+      mastery: 87,
+      skills: [
+        { name: "TYPESCRIPT / REACT", level: 88 },
+        { name: "TAURI / VITE (STITCH)", level: 86 },
+        { name: "FLASK / PYTHON APIs", level: 84 },
+        { name: "TAILWIND / LOCAL-FIRST UX", level: 82 }
+      ]
+    },
+    {
+      title: "PROCESS & CLIENT",
+      color: "accent",
+      mastery: 84,
+      skills: [
+        { name: "AGILE / SCRUM / SOPs / RUNBOOKS", level: 86 },
+        { name: "STAKEHOLDER REPORTING / VIZ", level: 82 },
+        { name: "TEAM SCHEDULING & OPS (DOME)", level: 80 },
+        { name: "TECH WRITING / ITSM / ONBOARDING KITS", level: 86 }
       ]
     }
   ],
   specialAbilities = [
-    "> Summons satisfying micro-interactions on user action.",
-    "> Casts \"Refactor\" to reduce bug spawn rates.",
-    "> Detects UX bottlenecks and applies speed buffs.",
-    "> Generates pixel-perfect layouts at 60 FPS."
+    "> Ships local-first surfaces where privacy and ownership are part of the product story.",
+    "> Automates the boring path: infra, kits, and pipelines so teams stop firefighting the same week.",
+    "> Grounds AI in tools you control: RAG on your files, MCP in the editor, agents on your own metal.",
+    "> Keeps L2–L4 and endpoint reality in mind when something breaks in prod or on a user laptop."
   ]
 }) => {
   return (

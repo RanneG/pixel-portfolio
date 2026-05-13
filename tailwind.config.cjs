@@ -25,7 +25,6 @@ module.exports = {
           "0 0 0 4px hsl(240 10% 4%), 0 0 0 8px hsl(320 100% 60%)"
       },
       animation: {
-        "crt-flicker": "crt-flicker 2.5s infinite",
         float: "float 6s ease-in-out infinite",
         "pixel-fade-in": "pixel-fade-in 0.9s ease-out both",
         "typewriter": "typewriter 4s steps(24, end) 1s 1 normal both",

@@ -206,49 +206,6 @@ body {
   filter: brightness(1.05);
 }
 
-.scanlines {
-  position: relative;
-  overflow: hidden;
-}
-
-.scanlines::after {
-  content: "";
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgba(0, 0, 0, 0.4),
-    rgba(0, 0, 0, 0.4) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-  mix-blend-mode: multiply;
-  opacity: 0.35;
-}
-
-.crt-flicker {
-  animation: crt-flicker 2.5s infinite;
-}
-
-@keyframes crt-flicker {
-  0%,
-  19%,
-  21%,
-  23%,
-  25%,
-  54%,
-  56%,
-  100% {
-    opacity: 1;
-  }
-  20%,
-  24%,
-  55% {
-    opacity: 0.92;
-  }
-}
-
 .float {
   animation: float 6s ease-in-out infinite;
   will-change: transform;
@@ -420,38 +377,6 @@ body {
   }
 }
 
-/* High Contrast Mode */
-.high-contrast {
-  --color-bg: hsl(0 0% 0%);
-  --color-foreground: hsl(0 0% 100%);
-  --color-primary: hsl(180 100% 60%);
-  --color-secondary: hsl(320 100% 70%);
-  --color-accent: hsl(120 100% 60%);
-}
-
-.high-contrast .pixel-border {
-  box-shadow:
-    0 0 0 3px var(--color-bg),
-    0 0 0 6px var(--color-primary);
-}
-
-/* Theme Variations */
-[data-theme="gameboy"] {
-  --color-bg: hsl(120 20% 15%);
-  --color-foreground: hsl(120 20% 85%);
-  --color-primary: hsl(120 50% 50%);
-  --color-secondary: hsl(60 50% 50%);
-  --color-accent: hsl(120 70% 60%);
-}
-
-[data-theme="arcade"] {
-  --color-bg: hsl(240 30% 5%);
-  --color-foreground: hsl(0 0% 95%);
-  --color-primary: hsl(0 100% 60%);
-  --color-secondary: hsl(240 100% 60%);
-  --color-accent: hsl(60 100% 60%);
-}
-
 /* Screen reader only */
 .sr-only {
   position: absolute;
@@ -486,10 +411,6 @@ body {
     transition-duration: 0.01ms !important;
   }
   
-  .crt-flicker {
-    animation: none;
-  }
-  
   .float {
     animation: none;
   }
@@ -506,10 +427,6 @@ body {
   /* Reduce animation complexity on mobile */
   .float {
     animation-duration: 8s;
-  }
-
-  .crt-flicker {
-    animation-duration: 4s;
   }
 
   /* Optimize images for mobile */

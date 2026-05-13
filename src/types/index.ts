@@ -28,12 +28,16 @@ export interface Project {
   difficulty: ProjectDifficulty;
   status: ProjectStatus;
   description: string;
-  xp: number;
-  stars: number;
+  /** Purpose / motivation for `experience --project "…"` (falls back to `description`). */
+  motivation?: string;
+  /** Optional one-liner (e.g. hackathon win). */
+  highlight?: string;
+  /** Short prize / recognition line shown as a badge in browse + quest log. */
+  award?: string;
   tech: string[];
   githubUrl?: string;
   liveUrl?: string;
-  questId?: string; // Format: MS-001, AR-001, PP-001
+  questId?: string; // Format: MS-001, AR-001, LC-001
 }
 
 export interface ContactInfo {
@@ -47,12 +51,36 @@ export interface SocialLink {
   url: string;
 }
 
+export interface WorkExperienceEntry {
+  company: string;
+  role: string;
+  start: string;
+  end: string;
+  /** Company / careers site for `open --company "…"`. */
+  url?: string;
+  /** Short paragraphs for `experience --detailed` (preferred over `bullets`). */
+  paragraphs?: string[];
+  bullets?: string[];
+}
+
+export interface EducationEntry {
+  institution: string;
+  /** e.g. city, county */
+  location?: string;
+  start: string;
+  end: string;
+  qualification: string;
+}
+
 export interface PortfolioData {
   name: string;
   title: string;
   subtitle: string;
   bio: string[];
   statusBadges: string[];
+  motto?: string;
+  workExperience?: WorkExperienceEntry[];
+  education?: EducationEntry[];
   stats: {
     projects: number;
     level: string;
@@ -64,11 +92,9 @@ export interface PortfolioData {
     INT: number;
     CHA: number;
   };
-  experience: {
-    current: number;
-    max: number;
-  };
   skills: SkillCategoryProps[];
+  /** From skills.json `specialAbilities`; browse mode / SkillInventory. */
+  specialAbilities: string[];
   projects: Project[];
   contact: ContactInfo;
   socialLinks: SocialLink[];
@@ -82,10 +108,6 @@ export interface SiteConfig {
     description: string;
     logo: string;
     formspreeId: string;
-  };
-  theme: {
-    default: string;
-    available: string[];
   };
   features: {
     konamiCode: boolean;
@@ -104,6 +126,9 @@ export interface PersonalData {
   contact: ContactInfo;
   socialLinks: SocialLink[];
   availableForHire: boolean;
+  motto?: string;
+  workExperience?: WorkExperienceEntry[];
+  education?: EducationEntry[];
 }
 
 export interface StatsData {
@@ -115,10 +140,6 @@ export interface StatsData {
     DEX: number;
     INT: number;
     CHA: number;
-  };
-  experience: {
-    current: number;
-    max: number;
   };
 }
 
