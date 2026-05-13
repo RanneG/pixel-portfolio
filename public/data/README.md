@@ -12,6 +12,8 @@ This directory contains all customizable portfolio data in JSON format.
 - **`development.json`** - Development environment overrides
 - **`production.json`** - Production environment overrides
 
+**Translations** (`en` / `es` / `ja`) live in **`src/data/translations.json`** so they ship with the bundle and load synchronously (not from `/data/`).
+
 ## How It Works
 
 1. The app loads JSON files from `/data/` at runtime

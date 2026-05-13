@@ -1,10 +1,15 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
+import translationCatalog from "../data/translations.json";
 
 export type Language = "en" | "es" | "ja";
 
 interface Translations {
-  [key: string]: any;
+  [key: string]: unknown;
 }
+
+type TranslationCatalog = Record<Language, Translations>;
+
+const CATALOG = translationCatalog as TranslationCatalog;
 
 interface LanguageContextType {
   language: Language;
@@ -17,57 +22,56 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const STORAGE_KEY = "portfolio-language";
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>("en");
-  const [translations, setTranslations] = useState<Translations>({});
-
-  // Load language preference
-  useEffect(() => {
+function readInitialLanguage(): Language {
+  if (typeof window === "undefined") return "en";
+  try {
     const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && (stored === "en" || stored === "es" || stored === "ja")) {
-      setLanguageState(stored);
-    } else {
-      // Detect browser language
-      const browserLang = navigator.language.split("-")[0];
-      if (browserLang === "es" || browserLang === "ja") {
-        setLanguageState(browserLang);
-      }
+    if (stored === "en" || stored === "es" || stored === "ja") return stored;
+    const browserLang = navigator.language.split("-")[0];
+    if (browserLang === "es" || browserLang === "ja") return browserLang as Language;
+  } catch {
+    /* private mode or no localStorage */
+  }
+  return "en";
+}
+
+function pickTranslations(lang: Language): Translations {
+  const nested = CATALOG[lang];
+  if (nested && typeof nested === "object") return nested;
+  return CATALOG.en;
+}
+
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguageState] = useState<Language>(() => readInitialLanguage());
+  const [translations, setTranslations] = useState<Translations>(() => pickTranslations(language));
+
+  const setLanguage = useCallback((lang: Language) => {
+    setLanguageState(lang);
+    setTranslations(pickTranslations(lang));
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      /* ignore */
     }
   }, []);
 
-  // Load translations
-  useEffect(() => {
-    fetch(`/data/translations.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setTranslations(data[language] || data.en);
-      })
-      .catch(() => {
-        // Fallback to empty translations
-        setTranslations({});
-      });
-  }, [language]);
-
-  const setLanguage = (lang: Language) => {
-    setLanguageState(lang);
-    localStorage.setItem(STORAGE_KEY, lang);
-  };
-
-  const t = (key: string): string => {
+  const t = useCallback((key: string): string => {
     const keys = key.split(".");
-    let value: any = translations;
+    let value: unknown = translations;
     for (const k of keys) {
-      value = value?.[k];
+      if (value === null || value === undefined || typeof value !== "object") return key;
+      value = (value as Record<string, unknown>)[k];
       if (value === undefined) return key;
     }
     return typeof value === "string" ? value : key;
-  };
+  }, [translations]);
 
-  return (
-    <LanguageContext.Provider value={{ language, setLanguage, t, translations }}>
-      {children}
-    </LanguageContext.Provider>
+  const value = useMemo(
+    () => ({ language, setLanguage, t, translations }),
+    [language, setLanguage, t, translations]
   );
+
+  return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 };
 
 export const useLanguage = () => {
@@ -77,4 +81,3 @@ export const useLanguage = () => {
   }
   return context;
 };
-
