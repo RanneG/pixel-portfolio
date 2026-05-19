@@ -1,7 +1,22 @@
 // Service Worker for 8-Bit Portfolio
-const CACHE_NAME = "pixel-portfolio-v3";
-const STATIC_CACHE = "static-v3";
-const DYNAMIC_CACHE = "dynamic-v3";
+const CACHE_NAME = "pixel-portfolio-v4";
+const STATIC_CACHE = "static-v4";
+const DYNAMIC_CACHE = "dynamic-v4";
+
+function isLocalDevHost(hostname) {
+  return hostname === "localhost" || hostname === "127.0.0.1" || hostname === "[::1]";
+}
+
+/** Vite dev URLs must never be cached or intercepted (causes duplicate React / hook errors). */
+function isViteDevRequest(url) {
+  return (
+    url.pathname.startsWith("/@") ||
+    url.pathname.startsWith("/src/") ||
+    url.pathname.startsWith("/node_modules/") ||
+    url.pathname.includes("@react-refresh") ||
+    url.search.includes("import")
+  );
+}
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -38,6 +53,11 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
+
+  // Never intercept local Vite dev (stale SW cache breaks HMR + React)
+  if (isLocalDevHost(url.hostname) || isViteDevRequest(url)) {
+    return;
+  }
 
   // Skip cross-origin requests
   if (url.origin !== location.origin) {

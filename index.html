@@ -57,6 +57,27 @@
   </head>
   <body class="h-full bg-bg text-foreground">
     <div id="root" class="h-full"></div>
+    <!-- Unregister prod SW + caches before Vite loads (prevents duplicate-React hook errors on localhost) -->
+    <script>
+      (function () {
+        var h = location.hostname;
+        if (h !== "localhost" && h !== "127.0.0.1") return;
+        if ("serviceWorker" in navigator) {
+          navigator.serviceWorker.getRegistrations().then(function (regs) {
+            regs.forEach(function (r) {
+              r.unregister();
+            });
+          });
+        }
+        if ("caches" in window) {
+          caches.keys().then(function (keys) {
+            keys.forEach(function (k) {
+              caches.delete(k);
+            });
+          });
+        }
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
   <style>

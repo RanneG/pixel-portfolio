@@ -140,6 +140,24 @@
   background: var(--accent);
 }
 
+.vibe-coder-browse .vibe-mobile-nav .site-view-nav-btn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 14px 20px;
+  border: none;
+  border-bottom: 1px solid var(--black);
+  border-radius: 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--bg);
+}
+
+.vibe-coder-browse .vibe-mobile-nav .site-view-nav-btn:hover {
+  background: var(--accent);
+}
+
 @media (min-width: 768px) {
   .vibe-coder-browse .vibe-mobile-nav {
     display: none !important;
