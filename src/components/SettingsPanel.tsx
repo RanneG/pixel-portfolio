@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSettings } from "../contexts/SettingsContext";
+import { useSiteViewSwitch } from "../hooks/useSiteViewSwitch";
 import { useLanguage } from "../contexts/LanguageContext";
 import { usePortfolioData } from "../contexts/PortfolioDataContext";
 import { ActionFanDock } from "./ActionFanDock";
@@ -15,10 +15,10 @@ function socialUrl(
 }
 
 const SettingsPanel: React.FC = () => {
-  const { settings, updateSetting } = useSettings();
+  const { settings } = useSettings();
+  const { siteView, switchTo } = useSiteViewSwitch();
   const { language, setLanguage, t } = useLanguage();
   const { data } = usePortfolioData();
-  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const githubUrl = useMemo(
@@ -70,23 +70,17 @@ const SettingsPanel: React.FC = () => {
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={() => {
-                    updateSetting("siteView", "terminal");
-                    navigate("/", { replace: true });
-                  }}
+                  onClick={() => switchTo("terminal")}
                   className="vibe-settings-btn"
-                  aria-pressed={settings.siteView === "terminal"}
+                  aria-pressed={siteView === "terminal"}
                 >
                   {t("settings.viewTerminal")}
                 </button>
                 <button
                   type="button"
-                  onClick={() => {
-                    updateSetting("siteView", "browse");
-                    navigate("/");
-                  }}
+                  onClick={() => switchTo("browse")}
                   className="vibe-settings-btn"
-                  aria-pressed={settings.siteView === "browse"}
+                  aria-pressed={siteView === "browse"}
                 >
                   {t("settings.viewBrowse")}
                 </button>

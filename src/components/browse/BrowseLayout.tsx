@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { usePortfolioData } from "../../contexts/PortfolioDataContext";
+import { SiteViewToggle } from "../SiteViewToggle";
 
 export const BrowseLayout: React.FC = () => {
   const { t } = useLanguage();
@@ -58,6 +59,7 @@ export const BrowseLayout: React.FC = () => {
                 {t(labelKey)}
               </NavLink>
             ))}
+            <SiteViewToggle variant="nav" />
           </div>
         </div>
       </nav>
@@ -68,6 +70,7 @@ export const BrowseLayout: React.FC = () => {
               {t(labelKey)}
             </NavLink>
           ))}
+          <SiteViewToggle variant="nav" />
         </div>
       ) : null}
       <main id="main-content" className="vibe-outlet">

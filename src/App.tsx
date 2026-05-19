@@ -15,6 +15,7 @@ import { PortfolioLoader, PORTFOLIO_LOADER_HOLD_MS } from "./components/Portfoli
 import { initWebVitals } from "./utils/webVitals";
 import { updateMetaTags, generateStructuredData, injectStructuredData } from "./utils/seo";
 import { analytics } from "./utils/analytics";
+import { SiteViewToggle } from "./components/SiteViewToggle";
 
 const SettingsPanel = lazy(() => import("./components/SettingsPanel"));
 
@@ -91,6 +92,7 @@ const AppContent: React.FC = () => {
       <SkipToContent />
       <InstallPrompt />
       {import.meta.env.DEV && <AdminPanel />}
+      <SiteViewToggle variant="floating" />
       <Suspense fallback={null}>
         <SettingsPanel />
       </Suspense>

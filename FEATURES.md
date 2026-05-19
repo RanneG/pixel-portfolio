@@ -72,7 +72,7 @@ Full internationalization support with JSON-based translations.
 - **Type-safe** - Full TypeScript support
 
 ### Adding Translations
-Edit `public/data/translations.json`:
+Edit `src/data/translations.json` (bundled with the app so the first paint never shows raw keys):
 ```json
 {
   "en": { "nav": { "home": "HOME" } },

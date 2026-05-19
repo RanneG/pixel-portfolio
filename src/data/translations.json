@@ -28,6 +28,12 @@
       "viewTerminal": "TERMINAL",
       "viewBrowse": "BROWSE SITE"
     },
+    "siteView": {
+      "openBrowse": "BROWSE SITE",
+      "openTerminal": "TERMINAL",
+      "ariaOpenBrowse": "Open classic browse layout with top navigation",
+      "ariaOpenTerminal": "Open terminal layout"
+    },
     "browse": {
       "brand": "PORTFOLIO",
       "nav": {
@@ -126,6 +132,12 @@
       "viewTerminal": "TERMINAL",
       "viewBrowse": "SITIO WEB"
     },
+    "siteView": {
+      "openBrowse": "SITIO WEB",
+      "openTerminal": "TERMINAL",
+      "ariaOpenBrowse": "Abrir el sitio clásico con menú superior",
+      "ariaOpenTerminal": "Abrir la vista terminal"
+    },
     "browse": {
       "brand": "PORTAFOLIO",
       "nav": {
@@ -223,6 +235,12 @@
       "browseHint": "ターミナルではなく通常のサイトで見たい場合はブラウズモードへ。上メニューとページ分割。ターミナルにもいつでも戻れます。",
       "viewTerminal": "ターミナル",
       "viewBrowse": "ブラウズ"
+    },
+    "siteView": {
+      "openBrowse": "ブラウズ",
+      "openTerminal": "ターミナル",
+      "ariaOpenBrowse": "上部メニューの通常サイト表示に切り替え",
+      "ariaOpenTerminal": "ターミナル表示に切り替え"
     },
     "browse": {
       "brand": "ポートフォリオ",
