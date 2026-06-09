@@ -21,7 +21,7 @@ const WELCOME: Block = {
   type: "welcome",
   lines: [
     "Welcome to Ranne's portfolio terminal.",
-    "Prefer a normal site? Open the menu (bottom-right) → Browse site.",
+    "No internet? Open the Internet desktop icon for the offline dino game.",
     "Type `help` for commands; `help <command>` for flags (e.g. `help experience`).",
     "Send a message with:  contact --send  (then follow the prompts; cancel or abort to exit).",
   ],
@@ -270,7 +270,12 @@ function applyTabCompletionToLine(current: string): string | null {
   return `${completed.trimEnd()} ${tail}`;
 }
 
-export const TerminalHome: React.FC = () => {
+export type TerminalHomeProps = {
+  /** Fills a Win98 desktop window instead of the full-screen terminal view */
+  embedded?: boolean;
+};
+
+export const TerminalHome: React.FC<TerminalHomeProps> = ({ embedded = false }) => {
   const { data: portfolioData, config } = usePortfolioData();
   const { trackFormSubmission } = useAchievementTracker();
   const [state, dispatch] = useReducer(terminalReducer, undefined, initialTerminalState);
@@ -475,7 +480,7 @@ export const TerminalHome: React.FC = () => {
 
   return (
     <section
-      className={styles.container}
+      className={`${styles.container}${embedded ? ` ${styles.containerEmbedded}` : ""}`}
       aria-label="Portfolio terminal"
       role="region"
     >

@@ -10,7 +10,7 @@ export function useSiteViewSwitch() {
     (view: SiteView) => {
       if (settings.siteView === view) return;
       updateSetting("siteView", view);
-      if (view === "terminal") {
+      if (view === "terminal" || view === "desktop") {
         navigate("/", { replace: true });
       } else {
         navigate("/");

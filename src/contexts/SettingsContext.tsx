@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 
-export type SiteView = "terminal" | "browse";
+export type SiteView = "terminal" | "browse" | "desktop";
 
 export interface Settings {
   siteView: SiteView;
@@ -12,7 +12,7 @@ interface SettingsContextType {
 }
 
 const defaultSettings: Settings = {
-  siteView: "browse"
+  siteView: "desktop"
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -24,9 +24,11 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }
       try {
         const parsed = JSON.parse(saved) as Record<string, unknown>;
         const siteView: SiteView =
-          parsed.siteView === "browse" || parsed.siteView === "terminal"
+          parsed.siteView === "browse" ||
+          parsed.siteView === "terminal" ||
+          parsed.siteView === "desktop"
             ? parsed.siteView
-            : "browse";
+            : "desktop";
         return { siteView };
       } catch {
         return defaultSettings;
