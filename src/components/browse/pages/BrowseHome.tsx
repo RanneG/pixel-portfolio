@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { usePortfolioData } from "../../../contexts/PortfolioDataContext";
 import { useLanguage } from "../../../contexts/LanguageContext";
+import { FeaturedProjects } from "../FeaturedProjects";
 
 function socialUrl(
   links: { name: string; url: string }[],
@@ -69,6 +70,8 @@ export const BrowseHome: React.FC = () => {
       <div className="marquee" aria-hidden>
         <div className="marquee-content">{marqueeDup}</div>
       </div>
+
+      <FeaturedProjects />
 
       <section className="services" aria-label="Focus areas">
         <div className="service-box">

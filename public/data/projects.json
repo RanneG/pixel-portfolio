@@ -1,16 +1,44 @@
 {
   "projects": [
     {
+      "title": "STITCH",
+      "difficulty": "LEGENDARY",
+      "status": "IN PROGRESS",
+      "featured": true,
+      "description": "Local-first subscription companion: Tauri + React desktop (stitch-app), Python Flask bridge for RAG over your PDFs, Google sign-in + Gmail discovery, and optional face MFA.",
+      "motivation": "Own your subscription data and search it locally: a desktop shell plus a Python bridge so PDFs and Gmail context stay on your machine, with optional stronger auth — not another siloed SaaS dashboard.",
+      "highlight": "Desktop · voice approve · optional face MFA",
+      "tech": ["TAURI", "REACT", "PYTHON", "FLASK", "RAG", "GOOGLE OAUTH"],
+      "githubUrl": "https://github.com/RanneG/stitch-app",
+      "imageUrl": "/images/projects/stitch.svg",
+      "questId": "ST-001"
+    },
+    {
+      "title": "LINKUP MCP",
+      "difficulty": "LEGENDARY",
+      "status": "IN PROGRESS",
+      "featured": true,
+      "description": "Custom MCP server for Cursor: Linkup web search plus local RAG over your documents (LlamaIndex + Ollama). Powers Stitch's document brain and editor-side tooling.",
+      "motivation": "Keep AI assistance on your machine and in your editor — search the web when needed, answer from your PDFs without shipping them to a cloud chat UI.",
+      "highlight": "stdio MCP for Cursor; Flask bridge for Stitch desktop",
+      "tech": ["PYTHON", "MCP", "LLAMAINDEX", "OLLAMA", "FLASK"],
+      "githubUrl": "https://github.com/RanneG/linkup_mcp",
+      "imageUrl": "/images/projects/linkup-mcp.svg",
+      "questId": "LM-001"
+    },
+    {
       "title": "LUCKY CHARM",
       "difficulty": "LEGENDARY",
       "status": "COMPLETED",
+      "featured": true,
       "description": "Privacy-preserving standup and meeting transcript tool: wallet-first auth, TEE-oriented processing, Props-filtered dashboard — structured themes and actions without verbatim quotes leaving the trust boundary.",
       "motivation": "Teams need standup signal without leaking raw transcripts: wallet-first auth, filtered views, and TEE-oriented framing so structured themes ship without verbatim quotes crossing the trust line.",
-      "highlight": "Wallet-first auth and props-filtered views so themes ship without raw transcripts crossing the trust boundary.",
+      "highlight": "Encode Club hackathon winner",
       "award": "Encode Club hackathon winner",
-      "tech": ["REACT", "VITE", "WALLET AUTH", "TEE", "FLASK", "PROPS FILTER"],
+      "tech": ["REACT", "VITE", "WALLET AUTH", "TEE", "FLASK"],
       "githubUrl": "https://github.com/RanneG/standup-bot",
       "liveUrl": "https://lucky-charm-taupe.vercel.app/",
+      "imageUrl": "/images/projects/lucky-charm.svg",
       "questId": "LC-001"
     },
     {
@@ -34,17 +62,6 @@
       "githubUrl": "https://github.com/RanneG/Arbit",
       "liveUrl": "https://arbit-psi.vercel.app",
       "questId": "AR-001"
-    },
-    {
-      "title": "STITCH",
-      "difficulty": "LEGENDARY",
-      "status": "IN PROGRESS",
-      "description": "Local-first subscription companion: Tauri + React desktop (stitch-app), Python Flask bridge for RAG over your PDFs, Google sign-in + Gmail discovery, and optional face MFA — pairs with the Linkup MCP stack for Cursor.",
-      "motivation": "Own your subscription data and search it locally: a desktop shell plus a Python bridge so PDFs and Gmail context stay on your machine, with optional stronger auth — not another siloed SaaS dashboard.",
-      "highlight": "Companion to RanneG/linkup_mcp (LlamaIndex + Ollama) for editor-side RAG.",
-      "tech": ["TAURI", "VITE", "REACT", "TYPESCRIPT", "PYTHON", "FLASK", "RAG", "OLLAMA", "GOOGLE OAUTH"],
-      "githubUrl": "https://github.com/RanneG/stitch-app",
-      "questId": "ST-001"
     },
     {
       "title": "MINESENTRY",
