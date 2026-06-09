@@ -33,21 +33,32 @@ export const BrowseProjects: React.FC = () => {
           return (
             <article key={p.questId ?? p.title} className="project-card">
               <div className="project-img" aria-hidden>
-                <div
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    background: `linear-gradient(135deg, #05668d 0%, #028090 45%, #00a896 100%)`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontFamily: '"Archivo Black", sans-serif',
-                    fontSize: "2rem",
-                    color: "rgba(255,255,255,0.25)"
-                  }}
-                >
-                  {(p.title || "?").slice(0, 2)}
-                </div>
+                {p.imageUrl ? (
+                  <img
+                    src={p.imageUrl}
+                    alt=""
+                    width={800}
+                    height={450}
+                    loading="lazy"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  />
+                ) : (
+                  <div
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      background: `linear-gradient(135deg, #05668d 0%, #028090 45%, #00a896 100%)`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontFamily: '"Archivo Black", sans-serif',
+                      fontSize: "2rem",
+                      color: "rgba(255,255,255,0.25)"
+                    }}
+                  >
+                    {(p.title || "?").slice(0, 2)}
+                  </div>
+                )}
               </div>
               <div className="project-tags">
                 {tags.map((tag) => (
