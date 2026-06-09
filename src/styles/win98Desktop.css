@@ -768,6 +768,39 @@
   font-size: 11px;
 }
 
+.win98-taskbar-credit {
+  color: inherit;
+  text-decoration: none;
+  font-size: 10px;
+  opacity: 0.85;
+}
+
+.win98-taskbar-credit:hover {
+  text-decoration: underline;
+}
+
+.win98-audio-toggle-wrap {
+  position: fixed;
+  right: 12px;
+  bottom: 12px;
+  z-index: 9999;
+}
+
+.win98-audio-toggle {
+  border: 2px solid #000;
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px #0a0a0a, inset 1px 1px #fff;
+  padding: 4px 8px;
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.win98-audio-toggle-tray {
+  padding: 2px 6px;
+  font-size: 12px;
+}
+
 /* Win98 scrollbars */
 .win98-root *::-webkit-scrollbar {
   width: 16px;

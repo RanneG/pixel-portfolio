@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { BiosScreen } from "./BiosScreen";
 import { LoginScreen } from "./LoginScreen";
 import { DesktopShell, isDesktopBootDone, markDesktopBootDone } from "./DesktopShell";
+import { DesktopAudioToggle } from "./DesktopAudioToggle";
 import type { BootPhase } from "./types";
 
 function initialPhase(): BootPhase {
@@ -18,12 +19,28 @@ export const DesktopExperience: React.FC = () => {
     setPhase("desktop");
   }, []);
 
+  const audioToggle = (
+    <div className="win98-audio-toggle-wrap">
+      <DesktopAudioToggle className="win98-audio-toggle" />
+    </div>
+  );
+
   if (phase === "bios") {
-    return <BiosScreen onEnter={enterLogin} />;
+    return (
+      <>
+        <BiosScreen onEnter={enterLogin} />
+        {audioToggle}
+      </>
+    );
   }
 
   if (phase === "login") {
-    return <LoginScreen onConfirm={enterDesktop} />;
+    return (
+      <>
+        <LoginScreen onConfirm={enterDesktop} />
+        {audioToggle}
+      </>
+    );
   }
 
   return <DesktopShell />;
