@@ -21,6 +21,7 @@ const WELCOME: Block = {
   type: "welcome",
   lines: [
     "Welcome to Ranne's portfolio terminal.",
+    "Prefer a normal site? Open the menu (bottom-right) → Browse site.",
     "No internet? Open the Internet desktop icon for the offline dino game.",
     "Type `help` for commands; `help <command>` for flags (e.g. `help experience`).",
     "Send a message with:  contact --send  (then follow the prompts; cancel or abort to exit).",

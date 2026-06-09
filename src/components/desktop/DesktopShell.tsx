@@ -11,6 +11,7 @@ import { MyComputerContent } from "./windows/MyComputerContent";
 import { TerminalWindowContent } from "./windows/TerminalWindowContent";
 import { MusicWindowContent } from "./windows/MusicWindowContent";
 import { BrowserWindowContent } from "./windows/BrowserWindowContent";
+import { DesktopAudioToggle } from "./DesktopAudioToggle";
 import type { DesktopWindowId, DesktopWindowState } from "./types";
 
 const BOOT_DONE_KEY = "portfolio-desktop-boot-done";
@@ -301,8 +302,18 @@ export const DesktopShell: React.FC = () => {
             </button>
           );
         })}
-        <div className="win98-taskbar-tray" aria-hidden>
-          <span>RG</span>
+        <div className="win98-taskbar-tray">
+          <a
+            className="win98-taskbar-credit"
+            href="https://elevenlabs.io/"
+            target="_blank"
+            rel="noopener noreferrer"
+            title="Voice by ElevenLabs (free tier — attribution)"
+          >
+            11L
+          </a>
+          <DesktopAudioToggle className="win98-audio-toggle win98-audio-toggle-tray" />
+          <span aria-hidden>RG</span>
         </div>
       </nav>
 

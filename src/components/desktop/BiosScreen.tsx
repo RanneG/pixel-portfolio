@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { usePortfolioData } from "../../contexts/PortfolioDataContext";
 import { useLanguage } from "../../contexts/LanguageContext";
+import { playDesktopClip } from "../../utils/desktopAudio";
 
 const BIOS_LOAD_MS = 3800;
 
@@ -25,6 +26,15 @@ export const BiosScreen: React.FC<Props> = ({ onEnter }) => {
   const { t } = useLanguage();
   const exp = yearsExperience(data.workExperience ?? []);
   const [dots, setDots] = useState("");
+  const welcomePlayed = useRef(false);
+
+  useEffect(() => {
+    if (welcomePlayed.current) return;
+    welcomePlayed.current = true;
+    playDesktopClip("/audio/bios-welcome.mp3");
+    const loadingTimer = window.setTimeout(() => playDesktopClip("/audio/bios-loading.mp3"), 1200);
+    return () => window.clearTimeout(loadingTimer);
+  }, []);
 
   useEffect(() => {
     const timer = window.setTimeout(onEnter, BIOS_LOAD_MS);
