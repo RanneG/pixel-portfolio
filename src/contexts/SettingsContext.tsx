@@ -12,7 +12,7 @@ interface SettingsContextType {
 }
 
 const defaultSettings: Settings = {
-  siteView: "terminal"
+  siteView: "browse"
 };
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
@@ -26,7 +26,7 @@ export const SettingsProvider: React.FC<{ children: ReactNode }> = ({ children }
         const siteView: SiteView =
           parsed.siteView === "browse" || parsed.siteView === "terminal"
             ? parsed.siteView
-            : "terminal";
+            : "browse";
         return { siteView };
       } catch {
         return defaultSettings;

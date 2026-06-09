@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Stitch project">
+  <rect width="800" height="450" fill="#028090"/>
+  <rect x="24" y="24" width="752" height="402" fill="none" stroke="#0a0a0a" stroke-width="8"/>
+  <text x="400" y="200" text-anchor="middle" font-family="monospace" font-size="72" font-weight="700" fill="rgba(255,255,255,0.9)">STITCH</text>
+  <text x="400" y="270" text-anchor="middle" font-family="monospace" font-size="28" fill="rgba(255,255,255,0.75)">Local-first subscriptions</text>
+</svg>

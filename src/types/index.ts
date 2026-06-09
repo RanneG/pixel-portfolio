@@ -37,6 +37,10 @@ export interface Project {
   tech: string[];
   githubUrl?: string;
   liveUrl?: string;
+  /** Shown on browse home when true. */
+  featured?: boolean;
+  /** Optional card image (e.g. /images/projects/stitch.svg). */
+  imageUrl?: string;
   questId?: string; // Format: MS-001, AR-001, LC-001
 }
 
