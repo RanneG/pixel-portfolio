@@ -1,0 +1,20 @@
+{
+  "tracks": [
+    {
+      "id": "cruel-angel",
+      "album": "Neon Genesis Evangelion",
+      "artist": "Yoko Takahashi",
+      "title": "A Cruel Angel's Thesis",
+      "coverUrl": "/images/music/evangelion-style-cover.svg",
+      "audioUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
+    },
+    {
+      "id": "forest-drive",
+      "album": "RG-98 Desktop FM",
+      "artist": "SoundHelix",
+      "title": "Forest Wallpaper Drive",
+      "coverUrl": "/images/music/desktop-fm-cover.svg",
+      "audioUrl": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+    }
+  ]
+}

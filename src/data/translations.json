@@ -26,13 +26,93 @@
       "browseTitle": "SITE VIEW",
       "browseHint": "Prefer a straightforward site? Use browse mode for a classic layout with a top menu and separate pages. The terminal stays available anytime.",
       "viewTerminal": "TERMINAL",
-      "viewBrowse": "BROWSE SITE"
+      "viewBrowse": "BROWSE SITE",
+      "viewDesktop": "DESKTOP 98"
     },
     "siteView": {
       "openBrowse": "BROWSE SITE",
       "openTerminal": "TERMINAL",
+      "openDesktop": "DESKTOP 98",
       "ariaOpenBrowse": "Open classic browse layout with top navigation",
-      "ariaOpenTerminal": "Open terminal layout"
+      "ariaOpenTerminal": "Open terminal layout",
+      "ariaOpenDesktop": "Open Windows 98 desktop experience"
+    },
+    "desktop": {
+      "bios": {
+        "welcome": "Welcome to my portfolio website",
+        "hint": "Starting graphical environment...",
+        "loading": "Loading portfolio",
+        "file": "File",
+        "fileValue": "Portfolio Website",
+        "builtWith": "Built with",
+        "specialist": "Specialist",
+        "experience": "Years of Experience",
+        "stack": "Stack",
+        "location": "Location"
+      },
+      "login": {
+        "prompt": "Enter Password",
+        "confirm": "Confirm"
+      },
+      "windows": {
+        "home": "Home",
+        "portfolio": "Portfolio",
+        "contact": "Contact Me",
+        "recycle": "Recycle Bin",
+        "myComputer": "My Computer",
+        "terminal": "Terminal",
+        "music": "Music",
+        "browser": "Internet Explorer"
+      },
+      "icons": {
+        "myComputer": "My Computer",
+        "portfolio": "Portfolio",
+        "terminal": "Terminal",
+        "music": "Music",
+        "browser": "Internet",
+        "recycle": "Recycle Bin"
+      },
+      "browser": {
+        "errorTitle": "Internet Explorer cannot display the webpage",
+        "errorBody": "There is no connection to the internet.",
+        "errorHint": "While offline, you can still play the classic jumping game below.",
+        "gameTitle": "T-Rex Runner",
+        "popOut": "Pop out game",
+        "controls": "Space or ↑ to jump"
+      },
+      "music": {
+        "play": "Play",
+        "pause": "Pause",
+        "previous": "Previous",
+        "next": "Next",
+        "seek": "Seek",
+        "loading": "Loading playlist…",
+        "loadError": "Could not load playlist.",
+        "playError": "Stream unavailable — edit public/data/music.json to point at your own audio."
+      },
+      "home": {
+        "banner": "Full-Stack & Local-First",
+        "available": "Available for hire",
+        "myWork": "My Work",
+        "seeProject": "See Project"
+      },
+      "contact": {
+        "email": "Email",
+        "location": "Location",
+        "timezone": "Timezone"
+      },
+      "recycle": {
+        "hint": "Classic internet artifacts. Nothing was permanently deleted."
+      },
+      "myComputer": {
+        "system": "System Properties",
+        "user": "Registered owner",
+        "os": "Operating system",
+        "cpu": "Processor",
+        "ram": "Installed memory",
+        "drive": "System drive",
+        "note": "This machine runs your portfolio in the browser. No floppy required."
+      }
     },
     "browse": {
       "brand": "PORTFOLIO",
@@ -132,13 +212,93 @@
       "browseTitle": "VISTA DEL SITIO",
       "browseHint": "¿Prefieres un sitio más clásico? Usa el modo exploración: menú superior y páginas separadas. La terminal sigue disponible.",
       "viewTerminal": "TERMINAL",
-      "viewBrowse": "SITIO WEB"
+      "viewBrowse": "SITIO WEB",
+      "viewDesktop": "ESCRITORIO 98"
     },
     "siteView": {
       "openBrowse": "SITIO WEB",
       "openTerminal": "TERMINAL",
+      "openDesktop": "ESCRITORIO 98",
       "ariaOpenBrowse": "Abrir el sitio clásico con menú superior",
-      "ariaOpenTerminal": "Abrir la vista terminal"
+      "ariaOpenTerminal": "Abrir la vista terminal",
+      "ariaOpenDesktop": "Abrir la experiencia de escritorio Windows 98"
+    },
+    "desktop": {
+      "bios": {
+        "welcome": "Bienvenido a mi sitio portfolio",
+        "hint": "Iniciando entorno gráfico...",
+        "loading": "Cargando portfolio",
+        "file": "Archivo",
+        "fileValue": "Sitio Portfolio",
+        "builtWith": "Hecho con",
+        "specialist": "Especialidad",
+        "experience": "Años de experiencia",
+        "stack": "Stack",
+        "location": "Ubicación"
+      },
+      "login": {
+        "prompt": "Introduce contraseña",
+        "confirm": "Confirmar"
+      },
+      "windows": {
+        "home": "Inicio",
+        "portfolio": "Portfolio",
+        "contact": "Contacto",
+        "recycle": "Papelera",
+        "myComputer": "Mi PC",
+        "terminal": "Terminal",
+        "music": "Música",
+        "browser": "Internet Explorer"
+      },
+      "icons": {
+        "myComputer": "Mi PC",
+        "portfolio": "Portfolio",
+        "terminal": "Terminal",
+        "music": "Música",
+        "browser": "Internet",
+        "recycle": "Papelera"
+      },
+      "browser": {
+        "errorTitle": "Internet Explorer no puede mostrar la página",
+        "errorBody": "No hay conexión a internet.",
+        "errorHint": "Sin conexión, puedes jugar al juego del dinosaurio abajo.",
+        "gameTitle": "T-Rex Runner",
+        "popOut": "Abrir juego",
+        "controls": "Espacio o ↑ para saltar"
+      },
+      "music": {
+        "play": "Reproducir",
+        "pause": "Pausa",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "seek": "Posición",
+        "loading": "Cargando lista…",
+        "loadError": "No se pudo cargar la lista.",
+        "playError": "Audio no disponible — edita public/data/music.json."
+      },
+      "home": {
+        "banner": "Full-Stack y local-first",
+        "available": "Disponible",
+        "myWork": "Mis trabajos",
+        "seeProject": "Ver proyecto"
+      },
+      "contact": {
+        "email": "Email",
+        "location": "Ubicación",
+        "timezone": "Zona horaria"
+      },
+      "recycle": {
+        "hint": "Artefactos clásicos de internet. Nada se borró para siempre."
+      },
+      "myComputer": {
+        "system": "Propiedades del sistema",
+        "user": "Propietario",
+        "os": "Sistema operativo",
+        "cpu": "Procesador",
+        "ram": "Memoria instalada",
+        "drive": "Unidad del sistema",
+        "note": "Esta máquina ejecuta tu portfolio en el navegador."
+      }
     },
     "browse": {
       "brand": "PORTAFOLIO",
@@ -238,13 +398,93 @@
       "browseTitle": "表示モード",
       "browseHint": "ターミナルではなく通常のサイトで見たい場合はブラウズモードへ。上メニューとページ分割。ターミナルにもいつでも戻れます。",
       "viewTerminal": "ターミナル",
-      "viewBrowse": "ブラウズ"
+      "viewBrowse": "ブラウズ",
+      "viewDesktop": "デスクトップ98"
     },
     "siteView": {
       "openBrowse": "ブラウズ",
       "openTerminal": "ターミナル",
+      "openDesktop": "デスクトップ98",
       "ariaOpenBrowse": "上部メニューの通常サイト表示に切り替え",
-      "ariaOpenTerminal": "ターミナル表示に切り替え"
+      "ariaOpenTerminal": "ターミナル表示に切り替え",
+      "ariaOpenDesktop": "Windows 98風デスクトップ体験に切り替え"
+    },
+    "desktop": {
+      "bios": {
+        "welcome": "ポートフォリオサイトへようこそ",
+        "hint": "グラフィカル環境を起動中...",
+        "loading": "ポートフォリオを読み込み中",
+        "file": "ファイル",
+        "fileValue": "ポートフォリオサイト",
+        "builtWith": "ビルド",
+        "specialist": "専門",
+        "experience": "経験年数",
+        "stack": "スタック",
+        "location": "所在地"
+      },
+      "login": {
+        "prompt": "パスワードを入力",
+        "confirm": "確認"
+      },
+      "windows": {
+        "home": "ホーム",
+        "portfolio": "作品集",
+        "contact": "連絡",
+        "recycle": "ごみ箱",
+        "myComputer": "マイコンピュータ",
+        "terminal": "ターミナル",
+        "music": "ミュージック",
+        "browser": "Internet Explorer"
+      },
+      "icons": {
+        "myComputer": "マイコンピュータ",
+        "portfolio": "作品集",
+        "terminal": "ターミナル",
+        "music": "ミュージック",
+        "browser": "インターネット",
+        "recycle": "ごみ箱"
+      },
+      "browser": {
+        "errorTitle": "インターネット エクスプローラーはページを表示できません",
+        "errorBody": "インターネットに接続されていません。",
+        "errorHint": "オフライン中は下のダイノゲームで遊べます。",
+        "gameTitle": "T-Rex Runner",
+        "popOut": "ゲームを別窓で開く",
+        "controls": "Space または ↑ でジャンプ"
+      },
+      "music": {
+        "play": "再生",
+        "pause": "一時停止",
+        "previous": "前へ",
+        "next": "次へ",
+        "seek": "シーク",
+        "loading": "プレイリスト読み込み中…",
+        "loadError": "プレイリストを読み込めませんでした。",
+        "playError": "再生できません — public/data/music.json を編集してください。"
+      },
+      "home": {
+        "banner": "フルスタック・ローカルファースト",
+        "available": "依頼可",
+        "myWork": "作品",
+        "seeProject": "見る"
+      },
+      "contact": {
+        "email": "メール",
+        "location": "所在地",
+        "timezone": "タイムゾーン"
+      },
+      "recycle": {
+        "hint": "昔のネットミーム置き場。完全削除はしていません。"
+      },
+      "myComputer": {
+        "system": "システムのプロパティ",
+        "user": "登録所有者",
+        "os": "OS",
+        "cpu": "プロセッサ",
+        "ram": "メモリ",
+        "drive": "システムドライブ",
+        "note": "ブラウザ上で動くポートフォリオです。"
+      }
     },
     "browse": {
       "brand": "ポートフォリオ",

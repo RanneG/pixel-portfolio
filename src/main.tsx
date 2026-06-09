@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import "./styles/vibeBrutalistBrowse.css";
+import "./styles/win98Desktop.css";
 
 async function clearDevServiceWorkersAndCaches(): Promise<void> {
   if (!import.meta.env.DEV) return;

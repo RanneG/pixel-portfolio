@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Album art">
+  <defs>
+    <pattern id="glitch" width="8" height="8" patternUnits="userSpaceOnUse">
+      <rect width="8" height="8" fill="#b8e6f0"/>
+      <rect x="0" y="0" width="4" height="4" fill="#7ec8e3"/>
+      <rect x="4" y="4" width="4" height="4" fill="#d4f1f9"/>
+    </pattern>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#89cff0"/>
+      <stop offset="100%" stop-color="#e8f7fc"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#sky)"/>
+  <rect width="400" height="400" fill="url(#glitch)" opacity="0.45"/>
+  <text x="20" y="40" fill="#1a5f7a" font-family="monospace" font-size="11" opacity="0.35">NERV /// RG-98 /// SYNC</text>
+  <text x="20" y="58" fill="#1a5f7a" font-family="monospace" font-size="11" opacity="0.25">NERV /// RG-98 /// SYNC</text>
+  <text x="20" y="76" fill="#1a5f7a" font-family="monospace" font-size="11" opacity="0.2">NERV /// RG-98 /// SYNC</text>
+  <ellipse cx="200" cy="210" rx="72" ry="88" fill="#f5d0c8"/>
+  <rect x="128" y="118" width="144" height="36" fill="#e8e8e8" opacity="0.9"/>
+  <rect x="148" y="168" width="24" height="8" fill="#c0392b" opacity="0.85"/>
+  <rect x="228" y="168" width="24" height="8" fill="#c0392b" opacity="0.85"/>
+  <path d="M168 200 Q200 230 232 200" fill="none" stroke="#6b4c3a" stroke-width="3"/>
+  <rect x="0" y="180" width="400" height="6" fill="#00ffff" opacity="0.35"/>
+  <rect x="0" y="240" width="400" height="4" fill="#ff0066" opacity="0.3"/>
+  <text x="200" y="360" text-anchor="middle" fill="#0d3d56" font-family="Tahoma,sans-serif" font-size="18" font-weight="bold">ZANKOKU</text>
+</svg>

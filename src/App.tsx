@@ -3,14 +3,13 @@ import { BrowserRouter, useNavigate, useLocation } from "react-router-dom";
 import { SettingsProvider, useSettings } from "./contexts/SettingsContext";
 import { PortfolioDataProvider, usePortfolioData } from "./contexts/PortfolioDataContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import { AchievementsProvider } from "./contexts/AchievementsContext";
-import { AchievementManager } from "./components/AchievementManager";
 import { SkipToContent } from "./components/SkipToContent";
 import { InstallPrompt } from "./components/InstallPrompt";
 import AdminPanel from "./components/AdminPanel";
 import { MatrixBackground } from "./components/terminal/MatrixBackground";
 import { TerminalHome } from "./components/terminal/TerminalHome";
 import { BrowseRoutes } from "./components/browse/BrowseRoutes";
+import { DesktopExperience } from "./components/desktop/DesktopExperience";
 import { PortfolioLoader, PORTFOLIO_LOADER_HOLD_MS } from "./components/PortfolioLoader";
 import { initWebVitals } from "./utils/webVitals";
 import { updateMetaTags, generateStructuredData, injectStructuredData } from "./utils/seo";
@@ -82,7 +81,10 @@ const AppContent: React.FC = () => {
 
   useEffect(() => {
     if (isLoading) return;
-    if (settings.siteView === "terminal" && location.pathname !== "/") {
+    if (
+      (settings.siteView === "terminal" || settings.siteView === "desktop") &&
+      location.pathname !== "/"
+    ) {
       navigate("/", { replace: true });
     }
   }, [isLoading, settings.siteView, location.pathname, navigate]);
@@ -92,10 +94,12 @@ const AppContent: React.FC = () => {
       <SkipToContent />
       <InstallPrompt />
       {import.meta.env.DEV && <AdminPanel />}
-      <SiteViewToggle variant="floating" />
-      <Suspense fallback={null}>
-        <SettingsPanel />
-      </Suspense>
+      {settings.siteView !== "desktop" && <SiteViewToggle variant="floating" />}
+      {settings.siteView !== "desktop" && (
+        <Suspense fallback={null}>
+          <SettingsPanel />
+        </Suspense>
+      )}
       {isLoading ? (
         <div
           id="main-content"
@@ -104,18 +108,18 @@ const AppContent: React.FC = () => {
         >
           LOADING…
         </div>
+      ) : settings.siteView === "desktop" ? (
+        <DesktopExperience />
       ) : settings.siteView === "browse" ? (
         <>
           {browseShellPending && (
-            <PortfolioLoader variant={settings.siteView === "browse" ? "browse" : "dark"} />
+            <PortfolioLoader variant="browse" />
           )}
           <BrowseRoutes />
         </>
       ) : (
         <>
-          {browseShellPending && (
-            <PortfolioLoader variant={settings.siteView === "browse" ? "browse" : "dark"} />
-          )}
+          {browseShellPending && <PortfolioLoader variant="dark" />}
           <div className="relative min-h-screen h-full bg-black text-foreground">
             <MatrixBackground />
             <main
@@ -140,14 +144,11 @@ const App: React.FC = () => {
           v7_relativeSplatPath: true
         }}
       >
-        <AchievementsProvider>
-          <SettingsProvider>
-            <PortfolioDataProvider>
-              <AchievementManager />
-              <AppContent />
-            </PortfolioDataProvider>
-          </SettingsProvider>
-        </AchievementsProvider>
+        <SettingsProvider>
+          <PortfolioDataProvider>
+            <AppContent />
+          </PortfolioDataProvider>
+        </SettingsProvider>
       </BrowserRouter>
     </LanguageProvider>
   );

@@ -84,6 +84,14 @@ const SettingsPanel: React.FC = () => {
                 >
                   {t("settings.viewBrowse")}
                 </button>
+                <button
+                  type="button"
+                  onClick={() => switchTo("desktop")}
+                  className="vibe-settings-btn"
+                  aria-pressed={siteView === "desktop"}
+                >
+                  {t("settings.viewDesktop")}
+                </button>
               </div>
             </div>
 

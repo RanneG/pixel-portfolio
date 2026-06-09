@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Album art">
+  <rect width="400" height="400" fill="#2d5a27"/>
+  <rect x="40" y="280" width="320" height="80" fill="#1e3d1a"/>
+  <circle cx="120" cy="160" r="48" fill="#c0c0c0" stroke="#404040" stroke-width="4"/>
+  <circle cx="120" cy="160" r="12" fill="#404040"/>
+  <rect x="200" y="120" width="160" height="12" fill="#c0c0c0"/>
+  <rect x="200" y="148" width="120" height="12" fill="#808080"/>
+  <rect x="200" y="176" width="140" height="12" fill="#c0c0c0"/>
+  <text x="200" y="340" text-anchor="middle" fill="#fff" font-family="Tahoma,sans-serif" font-size="22" font-weight="bold">RG-98 FM</text>
+</svg>
