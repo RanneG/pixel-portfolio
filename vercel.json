@@ -5,12 +5,8 @@
   "framework": "vite",
   "rewrites": [
     {
-      "source": "/",
-      "destination": "/exe/index.html"
-    },
-    {
       "source": "/((?!api/)(?!assets/)(?!exe/)(?!.*\\..*).*)",
-      "destination": "/index.html"
+      "destination": "/app.html"
     }
   ],
   "headers": [
