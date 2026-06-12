@@ -83,7 +83,10 @@ const AppContent: React.FC = () => {
     if (isLoading) return;
     if (
       (settings.siteView === "terminal" || settings.siteView === "desktop") &&
-      location.pathname !== "/"
+      location.pathname !== "/" &&
+      // "/desktop" is the SPA entry now that "/" serves the static RANNE.EXE
+      // landing (vercel.json rewrite); redirecting would bounce users off it.
+      location.pathname !== "/desktop"
     ) {
       navigate("/", { replace: true });
     }
