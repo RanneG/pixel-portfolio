@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ranne Gerodias — Full-Stack Engineer · RANNE.EXE</title>
+  <meta name="description" content="Full-stack engineer building local-first desktop apps, MCP servers, and RAG. Stitch, linkup_mcp, Tauri, Python — booted as RANNE.EXE." />
+  <meta name="theme-color" content="#07070d" />
+  <link rel="canonical" href="https://rannegerodias.com/" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Ranne Gerodias — RANNE.EXE" />
+  <meta property="og:description" content="Local-first apps · MCP · RAG. A playable portfolio: boot the OS, walk the quest log, hit the save point." />
+  <meta property="og:url" content="https://rannegerodias.com/" />
+  <meta property="og:image" content="https://rannegerodias.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><rect width="16" height="16" fill="%2307070d"/><rect x="2" y="2" width="4" height="4" fill="%2300ffff"/><rect x="10" y="2" width="4" height="4" fill="%23ff3399"/><rect x="2" y="10" width="4" height="4" fill="%2333ff66"/><rect x="10" y="10" width="4" height="4" fill="%23ffd700"/></svg>' />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/exe/styles.css" />
+</head>
+<body>
+
+  <a class="skip-link" href="#stats">Skip to content</a>
+
+  <!-- CRT overlays -->
+  <div class="crt-scanlines" aria-hidden="true"></div>
+  <div class="crt-vignette" aria-hidden="true"></div>
+
+  <!-- XP scroll progress -->
+  <div class="xp" aria-hidden="true"><span class="xp__fill" id="xpFill"></span><span class="xp__label" id="xpLabel">XP 0%</span></div>
+
+  <!-- Pixel cursor follower -->
+  <div class="px-cursor" aria-hidden="true"></div>
+
+  <!-- Achievement toast (konami) -->
+  <div class="achievement" id="achievement" role="status" aria-live="polite">
+    <span class="achievement__icon">★</span>
+    <span><strong>ACHIEVEMENT UNLOCKED</strong><br/>KONAMI INITIATE — you know the old ways.</span>
+  </div>
+
+  <!-- ============ BOOT (preloader) ============ -->
+  <div class="boot" id="boot" aria-hidden="true">
+    <div class="boot__inner" id="bootLines">
+      <pre class="boot__pre" id="bootPre"></pre>
+      <span class="boot__skip">click to skip</span>
+    </div>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav" id="nav">
+    <a class="nav__brand" href="#top">RANNE<span>.EXE</span></a>
+    <nav class="nav__links" aria-label="Sections">
+      <a href="#stats">STATS</a>
+      <a href="#quests">QUESTS</a>
+      <a href="#skills">SKILLS</a>
+      <a href="#career">CAREER</a>
+      <a href="#save">SAVE</a>
+      <a href="/desktop" class="nav__alt">DESKTOP ↗</a>
+    </nav>
+    <a class="btn btn--primary nav__cta" href="mailto:rannegerodias@gmail.com">HIRE ME</a>
+  </header>
+
+  <main id="top">
+
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="hero">
+      <canvas class="hero__canvas" id="heroCanvas" aria-hidden="true"></canvas>
+      <div class="hero__grid" aria-hidden="true"></div>
+
+      <p class="hero__eyebrow reveal">PLAYER 1 — UNITED KINGDOM — UTC+0</p>
+
+      <h1 class="hero__title glitch" data-text="RANNE GERODIAS">RANNE GERODIAS</h1>
+
+      <p class="hero__subtitle reveal"><span class="type" id="heroType">DEVELOPER // DESIGNER // CREATOR</span><span class="caret" aria-hidden="true">█</span></p>
+
+      <p class="hero__motto reveal">“Build tools, not just features.”</p>
+
+      <p class="hero__bio reveal">
+        Full-stack engineer with a DevOps and data background — cloud delivery at
+        scale, enterprise IT, and analytics. Now building <strong>local-first,
+        privacy-aware products</strong>: TypeScript/React and Tauri up front,
+        Python + RAG/Ollama behind, MCP and agent tooling where it earns its place.
+      </p>
+
+      <div class="hero__badges reveal" aria-label="Status">
+        <span class="chip chip--cyan">CAFFEINATED</span>
+        <span class="chip chip--magenta">MOTIVATED</span>
+        <span class="chip chip--green">CREATIVE</span>
+        <span class="chip chip--gold blink">◉ AVAILABLE FOR HIRE</span>
+      </div>
+
+      <div class="hero__actions reveal">
+        <a class="btn btn--primary" href="#quests">PRESS START ▼</a>
+        <a class="btn btn--ghost" href="https://github.com/RanneG" target="_blank" rel="noopener">GITHUB ↗</a>
+      </div>
+
+      <div class="hero__scrollcue" aria-hidden="true">▼ ▼ ▼</div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee__track">
+        <span>LOCAL-FIRST ✦ MCP SERVERS ✦ RAG ON YOUR FILES ✦ TAURI DESKTOP ✦ DEVOPS AT SCALE ✦ BUILD TOOLS NOT JUST FEATURES ✦ </span><span>LOCAL-FIRST ✦ MCP SERVERS ✦ RAG ON YOUR FILES ✦ TAURI DESKTOP ✦ DEVOPS AT SCALE ✦ BUILD TOOLS NOT JUST FEATURES ✦ </span>
+      </div>
+    </div>
+
+    <!-- ============ STATS (character sheet) ============ -->
+    <section class="section stats" id="stats">
+      <header class="section__head">
+        <span class="section__kicker">01 / CHARACTER SHEET</span>
+        <h2 class="section__title">PLAYER STATS</h2>
+      </header>
+
+      <div class="stats__layout">
+        <div class="window stats__card">
+          <div class="window__bar"><span class="window__dots"><i></i><i></i><i></i></span>player.dat</div>
+          <div class="window__body">
+            <div class="stats__id">
+              <span class="stats__avatar" aria-hidden="true">
+                <svg viewBox="0 0 16 16"><rect x="4" y="1" width="8" height="2"/><rect x="3" y="3" width="10" height="5"/><rect x="5" y="5" width="2" height="2" class="px-alt"/><rect x="9" y="5" width="2" height="2" class="px-alt"/><rect x="4" y="9" width="8" height="1"/><rect x="2" y="10" width="12" height="4"/><rect x="5" y="14" width="2" height="2"/><rect x="9" y="14" width="2" height="2"/></svg>
+              </span>
+              <div>
+                <span class="stats__name">RANNE GERODIAS</span>
+                <span class="stats__class">CLASS: ENGINEER · LV. MSc</span>
+              </div>
+            </div>
+
+            <dl class="attr">
+              <div class="attr__row"><dt>STR</dt><dd class="bar" data-fill="70"><span class="bar__fill"></span></dd><dd class="attr__num" data-count="70">0</dd></div>
+              <div class="attr__row"><dt>DEX</dt><dd class="bar" data-fill="84"><span class="bar__fill"></span></dd><dd class="attr__num" data-count="84">0</dd></div>
+              <div class="attr__row"><dt>INT</dt><dd class="bar" data-fill="92"><span class="bar__fill"></span></dd><dd class="attr__num" data-count="92">0</dd></div>
+              <div class="attr__row"><dt>CHA</dt><dd class="bar" data-fill="78"><span class="bar__fill"></span></dd><dd class="attr__num" data-count="78">0</dd></div>
+            </dl>
+          </div>
+        </div>
+
+        <ul class="abilities">
+          <li class="reveal">Ships <em>local-first surfaces</em> where privacy and ownership are part of the product story.</li>
+          <li class="reveal">Automates the boring path — infra, kits, pipelines — so teams stop firefighting the same week.</li>
+          <li class="reveal">Grounds AI in tools you control: <em>RAG on your files, MCP in the editor</em>, agents on your own metal.</li>
+          <li class="reveal">Keeps L2–L4 and endpoint reality in mind when something breaks in prod or on a user laptop.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ QUESTS (pinned horizontal) ============ -->
+    <section class="quests" id="quests">
+      <div class="quests__pin">
+        <header class="section__head quests__head">
+          <span class="section__kicker">02 / QUEST LOG</span>
+          <h2 class="section__title">FEATURED QUESTS</h2>
+          <span class="quests__counter" id="questCounter">QUEST 01 / 04</span>
+        </header>
+
+        <div class="quests__track" id="questTrack">
+
+          <!-- Quest 1: Stitch -->
+          <article class="quest">
+            <div class="window quest__win" data-tilt>
+              <div class="window__bar"><span class="window__dots"><i></i><i></i><i></i></span>stitch.exe — running</div>
+              <div class="window__body quest__body">
+                <div class="quest__meta">
+                  <span class="chip chip--gold">LEGENDARY</span>
+                  <span class="chip chip--cyan">IN PROGRESS</span>
+                  <span class="quest__id">ST-001</span>
+                </div>
+                <h3 class="quest__title">STITCH</h3>
+                <p class="quest__pitch">Own your subscription data — and search it locally.</p>
+                <p class="quest__desc">
+                  Local-first subscription companion: Tauri + React desktop, Python
+                  Flask bridge for RAG over your PDFs, Google sign-in + Gmail
+                  discovery, optional face MFA. Not another siloed SaaS dashboard.
+                </p>
+                <ul class="tags"><li>TAURI</li><li>REACT</li><li>PYTHON</li><li>FLASK</li><li>RAG</li><li>OAUTH</li></ul>
+                <div class="quest__links">
+                  <a class="btn btn--ghost" href="https://github.com/RanneG/stitch-app" target="_blank" rel="noopener">SOURCE ↗</a>
+                </div>
+              </div>
+            </div>
+            <div class="quest__num" aria-hidden="true">01</div>
+          </article>
+
+          <!-- Quest 2: Linkup MCP -->
+          <article class="quest">
+            <div class="window quest__win" data-tilt>
+              <div class="window__bar"><span class="window__dots"><i></i><i></i><i></i></span>linkup_mcp — stdio</div>
+              <div class="window__body quest__body">
+                <div class="quest__meta">
+                  <span class="chip chip--gold">LEGENDARY</span>
+                  <span class="chip chip--cyan">IN PROGRESS</span>
+                  <span class="quest__id">LM-001</span>
+                </div>
+                <h3 class="quest__title">LINKUP MCP</h3>
+                <p class="quest__pitch">AI assistance that stays on your machine, in your editor.</p>
+                <p class="quest__desc">
+                  Custom MCP server for Cursor: Linkup web search plus local RAG over
+                  your documents (LlamaIndex + Ollama). Powers Stitch's document
+                  brain and editor-side tooling.
+                </p>
+                <ul class="tags"><li>PYTHON</li><li>MCP</li><li>LLAMAINDEX</li><li>OLLAMA</li><li>FLASK</li></ul>
+                <div class="quest__links">
+                  <a class="btn btn--ghost" href="https://github.com/RanneG/linkup_mcp" target="_blank" rel="noopener">SOURCE ↗</a>
+                </div>
+              </div>
+            </div>
+            <div class="quest__num" aria-hidden="true">02</div>
+          </article>
+
+          <!-- Quest 3: Lucky Charm -->
+          <article class="quest">
+            <div class="window quest__win" data-tilt>
+              <div class="window__bar"><span class="window__dots"><i></i><i></i><i></i></span>lucky-charm — winner</div>
+              <div class="window__body quest__body">
+                <div class="quest__meta">
+                  <span class="chip chip--gold">LEGENDARY</span>
+                  <span class="chip chip--green">COMPLETED</span>
+                  <span class="quest__id">LC-001</span>
+                </div>
+                <h3 class="quest__title">LUCKY CHARM</h3>
+                <p class="quest__pitch">🏆 Encode Club hackathon winner.</p>
+                <p class="quest__desc">
+                  Privacy-preserving standup tool: wallet-first auth, TEE-oriented
+                  processing, filtered dashboards — structured themes and actions
+                  without verbatim quotes leaving the trust boundary.
+                </p>
+                <ul class="tags"><li>REACT</li><li>VITE</li><li>WALLET AUTH</li><li>TEE</li><li>FLASK</li></ul>
+                <div class="quest__links">
+                  <a class="btn btn--primary" href="https://lucky-charm-taupe.vercel.app/" target="_blank" rel="noopener">PLAY ↗</a>
+                  <a class="btn btn--ghost" href="https://github.com/RanneG/standup-bot" target="_blank" rel="noopener">SOURCE ↗</a>
+                </div>
+              </div>
+            </div>
+            <div class="quest__num" aria-hidden="true">03</div>
+          </article>
+
+          <!-- Quest 4: side quests -->
+          <article class="quest quest--side">
+            <h3 class="quest__sidetitle">SIDE QUESTS</h3>
+            <div class="side-grid">
+              <a class="side-card" data-tilt href="https://autonomi-lake.vercel.app/" target="_blank" rel="noopener">
+                <span class="side-card__head"><span class="chip chip--gold">LEGENDARY</span> AU-001</span>
+                <strong>AUTONOMI</strong>
+                <p>24/7 lending bodyguard on Arc — auto-rebalances USYC/USDC before liquidation surprises.</p>
+              </a>
+              <a class="side-card" data-tilt href="https://arbit-psi.vercel.app" target="_blank" rel="noopener">
+                <span class="side-card__head"><span class="chip chip--gold">LEGENDARY</span> AR-001</span>
+                <strong>ARBIT</strong>
+                <p>Crypto arbitrage dashboard — see edges before fees and latency eat them.</p>
+              </a>
+              <a class="side-card" data-tilt href="https://minesentry.vercel.app/" target="_blank" rel="noopener">
+                <span class="side-card__head"><span class="chip chip--magenta">EPIC</span> MS-001</span>
+                <strong>MINESENTRY</strong>
+                <p>Bitcoin censorship detection — make pool transaction selection observable.</p>
+              </a>
+              <a class="side-card" data-tilt href="https://github.com/RanneG/chatbot-rag-core" target="_blank" rel="noopener">
+                <span class="side-card__head"><span class="chip chip--magenta">EPIC</span> CB-001</span>
+                <strong>CHATBOT RAG CORE</strong>
+                <p>Reusable local-first RAG library — Ollama + LlamaIndex behind a production API.</p>
+              </a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SKILLS (inventory) ============ -->
+    <section class="section skills" id="skills">
+      <header class="section__head">
+        <span class="section__kicker">03 / INVENTORY</span>
+        <h2 class="section__title">SKILL TREE</h2>
+      </header>
+
+      <div class="skills__grid">
+        <div class="skill window reveal" data-tilt>
+          <div class="window__bar window__bar--magenta">CLOUD &amp; DEVOPS <span class="skill__mastery" data-count="86">0</span></div>
+          <div class="window__body">
+            <div class="skill__row"><span>AWS · MULTI-REGION</span><span class="bar bar--sm" data-fill="86"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>TERRAFORM / IaC</span><span class="bar bar--sm" data-fill="88"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>DOCKER / K8S / JENKINS</span><span class="bar bar--sm" data-fill="82"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>CI/CD · PYTHON / JAVA</span><span class="bar bar--sm" data-fill="84"><span class="bar__fill"></span></span></div>
+          </div>
+        </div>
+
+        <div class="skill window reveal" data-tilt>
+          <div class="window__bar window__bar--cyan">AI &amp; MCP <span class="skill__mastery" data-count="88">0</span></div>
+          <div class="window__body">
+            <div class="skill__row"><span>OLLAMA / LOCAL LLMS</span><span class="bar bar--sm" data-fill="86"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>LLAMAINDEX / RAG</span><span class="bar bar--sm" data-fill="88"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>MCP / CURSOR TOOLING</span><span class="bar bar--sm" data-fill="85"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>AGENT ORCHESTRATION</span><span class="bar bar--sm" data-fill="72"><span class="bar__fill"></span></span></div>
+          </div>
+        </div>
+
+        <div class="skill window reveal" data-tilt>
+          <div class="window__bar window__bar--green">PRODUCT / STACK <span class="skill__mastery" data-count="87">0</span></div>
+          <div class="window__body">
+            <div class="skill__row"><span>TYPESCRIPT / REACT</span><span class="bar bar--sm" data-fill="88"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>TAURI / VITE</span><span class="bar bar--sm" data-fill="86"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>FLASK / PYTHON APIs</span><span class="bar bar--sm" data-fill="84"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>TAILWIND / LOCAL-FIRST UX</span><span class="bar bar--sm" data-fill="82"><span class="bar__fill"></span></span></div>
+          </div>
+        </div>
+
+        <div class="skill window reveal" data-tilt>
+          <div class="window__bar window__bar--cyan">DATA &amp; SCRIPTING <span class="skill__mastery" data-count="82">0</span></div>
+          <div class="window__body">
+            <div class="skill__row"><span>PYTHON</span><span class="bar bar--sm" data-fill="88"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>SQL</span><span class="bar bar--sm" data-fill="85"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>BASH</span><span class="bar bar--sm" data-fill="80"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>SAS</span><span class="bar bar--sm" data-fill="68"><span class="bar__fill"></span></span></div>
+          </div>
+        </div>
+
+        <div class="skill window reveal" data-tilt>
+          <div class="window__bar window__bar--magenta">NETWORK &amp; ENDPOINTS <span class="skill__mastery" data-count="80">0</span></div>
+          <div class="window__body">
+            <div class="skill__row"><span>WI-FI / LAN / DHCP / DNS</span><span class="bar bar--sm" data-fill="82"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>VoIP / CONFERENCING</span><span class="bar bar--sm" data-fill="76"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>WIN / MAC / LINUX</span><span class="bar bar--sm" data-fill="84"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>INTUNE / SNOW / AD / M365</span><span class="bar bar--sm" data-fill="80"><span class="bar__fill"></span></span></div>
+          </div>
+        </div>
+
+        <div class="skill window reveal" data-tilt>
+          <div class="window__bar window__bar--green">PROCESS &amp; CLIENT <span class="skill__mastery" data-count="84">0</span></div>
+          <div class="window__body">
+            <div class="skill__row"><span>AGILE / SCRUM / RUNBOOKS</span><span class="bar bar--sm" data-fill="86"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>STAKEHOLDER REPORTING</span><span class="bar bar--sm" data-fill="82"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>TEAM SCHEDULING &amp; OPS</span><span class="bar bar--sm" data-fill="80"><span class="bar__fill"></span></span></div>
+            <div class="skill__row"><span>TECH WRITING / ITSM</span><span class="bar bar--sm" data-fill="86"><span class="bar__fill"></span></span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CAREER (terminal log) ============ -->
+    <section class="section career" id="career">
+      <header class="section__head">
+        <span class="section__kicker">04 / SAVE HISTORY</span>
+        <h2 class="section__title">CAREER.LOG</h2>
+      </header>
+
+      <div class="window terminal">
+        <div class="window__bar"><span class="window__dots"><i></i><i></i><i></i></span>C:\CAREER — VT323 terminal</div>
+        <div class="window__body terminal__body">
+
+          <div class="job reveal">
+            <p class="job__cmd">C:\CAREER&gt; <strong>cantium.exe</strong> --role "HELP DESK ENGINEER" <span class="job__date">[FEB 2026 — NOW]</span></p>
+            <p class="job__line">First-line support across Windows/macOS/Linux — M365, VPN, security tooling. Hands-on repairs, network triage, VoIP and conference rooms. Logged in Intune, ServiceNow, AD.</p>
+          </div>
+
+          <div class="job reveal">
+            <p class="job__cmd">C:\CAREER&gt; <strong>dome.exe</strong> --role "MANAGER" <span class="job__date">[JUN 2025 — FEB 2026]</span></p>
+            <p class="job__line">Recruited, trained and led a team; kept suppliers, stock and scheduling predictable through busy periods.</p>
+          </div>
+
+          <div class="job reveal">
+            <p class="job__cmd">C:\CAREER&gt; <strong>deloitte.exe</strong> --role "JUNIOR DEVOPS ENGINEER" <span class="job__date">[DEC 2021 — JUL 2023]</span></p>
+            <p class="job__line">Automated multi-region AWS provisioning as IaC, wired into Jenkins with Python and Java — cut a long manual process to roughly a day. Agile delivery, docs and SOPs across AWS, Terraform, Docker, K8s.</p>
+          </div>
+
+          <div class="job reveal">
+            <p class="job__cmd">C:\CAREER&gt; <strong>greenstone.exe</strong> --role "JUNIOR PRODUCTION PROGRAMMER" <span class="job__date">[OCT 2019 — MAR 2020]</span></p>
+            <p class="job__line">Automated database workflows with Bash, Python, SAS, SQL; helped migrate source control into GitHub.</p>
+          </div>
+
+          <div class="job reveal">
+            <p class="job__cmd">C:\CAREER&gt; <strong>katalyze.exe</strong> --role "DATA ANALYST" <span class="job__date">[JUL 2019 — OCT 2019]</span></p>
+            <p class="job__line">Python for deployment automation and monitoring; designed and tuned SQL for faster retrieval.</p>
+          </div>
+
+          <div class="job reveal">
+            <p class="job__cmd">C:\CAREER&gt; <strong>dwp.exe</strong> --role "SUPPORT ANALYST" <span class="job__date">[DEC 2018 — MAY 2019]</span></p>
+            <p class="job__line">Reports and visualisations so stakeholders could act on evidence; improved data collection practices.</p>
+          </div>
+
+          <div class="job reveal">
+            <p class="job__cmd">C:\CAREER&gt; <strong>type</strong> education.txt</p>
+            <p class="job__line">UNIVERSITY OF KENT — COMPUTER SCIENCE MSc (2020–21) · MATHEMATICS BSc (2015–19)</p>
+            <p class="job__cmd job__cmd--cursor">C:\CAREER&gt; <span class="caret">█</span></p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SAVE POINT (contact) ============ -->
+    <section class="section save" id="save">
+      <div class="save__inner">
+        <span class="section__kicker">05 / SAVE POINT</span>
+        <h2 class="section__title save__title">SAVE YOUR PROGRESS?</h2>
+
+        <span class="save__floppy reveal" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M3 3h15l3 3v15H3V3zm3 0v6h10V3H6zm8 1.5h2V7h-2V4.5zM6 12v7h12v-7H6z"/></svg>
+        </span>
+
+        <p class="save__copy reveal">
+          Hiring for local-first product work, MCP/RAG tooling, or DevOps that
+          actually removes toil? The save point is right here.
+        </p>
+
+        <div class="save__actions reveal">
+          <a class="btn btn--primary btn--lg" href="mailto:rannegerodias@gmail.com">▸ SAVE — EMAIL ME</a>
+          <a class="btn btn--ghost" href="https://github.com/RanneG" target="_blank" rel="noopener">GITHUB ↗</a>
+          <a class="btn btn--ghost" href="https://www.linkedin.com/in/ranne-gerodias-809460108/" target="_blank" rel="noopener">LINKEDIN ↗</a>
+        </div>
+
+        <p class="save__coin blink reveal">INSERT COIN TO CONTINUE — RESPONSE TIME: FAST</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>© 2026 RANNE GERODIAS — BUILT WITH PIXELS &amp; PATIENCE</span>
+      <a class="footer__link" href="/desktop">SWITCH TO DESKTOP MODE →</a>
+      <span class="footer__hint">PSST: ↑ ↑ ↓ ↓ ← → ← → B A</span>
+    </footer>
+
+  </main>
+
+  <!-- Win98 taskbar -->
+  <div class="taskbar" aria-hidden="true">
+    <button class="taskbar__start" id="taskbarStart" type="button">▞ START</button>
+    <span class="taskbar__app">RANNE.EXE — portfolio</span>
+    <span class="taskbar__spacer"></span>
+    <span class="taskbar__led"><i></i> HIREABLE</span>
+    <span class="taskbar__clock" id="taskbarClock">00:00</span>
+  </div>
+
+  <script src="/exe/vendor/gsap.min.js"></script>
+  <script src="/exe/vendor/ScrollTrigger.min.js"></script>
+  <script src="/exe/vendor/lenis.min.js"></script>
+  <script src="/exe/vendor/three.min.js"></script>
+  <script src="/exe/script.js"></script>
+</body>
+</html>
