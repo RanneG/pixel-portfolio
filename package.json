@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "vite",
     "dev:clean": "vite --force",
-    "build": "vite build",
+    "build": "vite build && node scripts/postbuild-exe.mjs",
     "preview": "vite preview",
     "lint": "echo \"no linter configured\"",
     "test": "echo \"no tests configured\"",
