@@ -1,199 +1,83 @@
-name: CI/CD Pipeline
+name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
-    branches: [main, develop]
-
-# Prevent direct pushes to main (enforced by branch protection)
-# This workflow will still run but branch protection will block merges
 
 jobs:
-  test:
-    name: Test & Lint
+  build:
+    name: Lint and build
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: "22"
+          cache: npm
 
-      - name: Install dependencies
+      - name: Install
         run: npm ci
 
-      - name: Run linter
-        run: npm run lint || echo "No lint script found"
+      - name: Lint
+        run: npm run lint
 
-      - name: Run tests
-        run: npm test || echo "No test script found"
-
-      - name: Check build
+      - name: Build
         run: npm run build
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-artifacts
-          path: dist/
-          retention-days: 1
-
-  preview:
-    name: Preview Deployment
-    runs-on: ubuntu-latest
-    needs: test
-    if: github.event_name == 'pull_request'
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "18"
-          cache: "npm"
-
-      - name: Check Vercel Secrets
-        id: check-secrets
-        run: |
-          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
-            echo "⚠️  Vercel secrets are not configured. Preview deployment will be skipped."
-            echo ""
-            echo "To enable preview deployments, add these secrets to your repository:"
-            echo "1. Go to: Settings → Secrets and variables → Actions"
-            echo "2. Add the following repository secrets:"
-            echo "   - VERCEL_TOKEN: Get from https://vercel.com/account/tokens"
-            echo "   - VERCEL_ORG_ID: Get from Vercel project settings"
-            echo "   - VERCEL_PROJECT_ID: Get from Vercel project settings"
-            echo ""
-            echo "See DEPLOYMENT.md for detailed setup instructions."
-            echo "skip_deployment=true" >> $GITHUB_OUTPUT
-            exit 0
-          else
-            echo "✅ Vercel secrets are configured"
-            echo "skip_deployment=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Install Vercel CLI
-        if: steps.check-secrets.outputs.skip_deployment == 'false'
-        run: npm install -g vercel@latest
-
-      - name: Pull Vercel Environment Information
-        if: steps.check-secrets.outputs.skip_deployment == 'false'
-        run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Build Project
-        if: steps.check-secrets.outputs.skip_deployment == 'false'
-        run: vercel build --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Deploy to Vercel Preview
-        if: steps.check-secrets.outputs.skip_deployment == 'false'
-        id: deploy
-        run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Comment PR with preview URL
-        if: steps.check-secrets.outputs.skip_deployment == 'false' && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const output = `## 🚀 Preview Deployment
-            
-            Your changes have been deployed to a preview environment.
-            
-            **Preview URL:** ${{ steps.deploy.outputs.preview-url }}
-            
-            This preview will be updated automatically when you push new commits.`;
-
   deploy:
-    name: Production Deployment
+    name: Production deploy
     runs-on: ubuntu-latest
-    needs: test
+    needs: build
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
-          cache: "npm"
+          node-version: "22"
+          cache: npm
 
-      - name: Check Vercel Secrets
+      - name: Check Vercel secrets
         id: check-secrets
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
-          if [ -z "${{ secrets.VERCEL_TOKEN }}" ] || [ -z "${{ secrets.VERCEL_ORG_ID }}" ] || [ -z "${{ secrets.VERCEL_PROJECT_ID }}" ]; then
-            echo "⚠️  Vercel secrets are not configured. Production deployment will be skipped."
-            echo ""
-            echo "To enable production deployments, add these secrets to your repository:"
-            echo "1. Go to: Settings → Secrets and variables → Actions"
-            echo "2. Add the following repository secrets:"
-            echo "   - VERCEL_TOKEN: Get from https://vercel.com/account/tokens"
-            echo "   - VERCEL_ORG_ID: Get from Vercel project settings"
-            echo "   - VERCEL_PROJECT_ID: Get from Vercel project settings"
-            echo ""
-            echo "See DEPLOYMENT.md for detailed setup instructions."
-            echo "skip_deployment=true" >> $GITHUB_OUTPUT
-            exit 0
+          if [ -z "$VERCEL_TOKEN" ] || [ -z "$VERCEL_ORG_ID" ] || [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "Vercel secrets are not set. Skipping the CLI deploy."
+            echo "skip_deployment=true" >> "$GITHUB_OUTPUT"
           else
-            echo "✅ Vercel secrets are configured"
-            echo "skip_deployment=false" >> $GITHUB_OUTPUT
+            echo "skip_deployment=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Install Vercel CLI
         if: steps.check-secrets.outputs.skip_deployment == 'false'
         run: npm install -g vercel@latest
 
-      - name: Pull Vercel Environment Information
+      - name: Pull Vercel project settings
         if: steps.check-secrets.outputs.skip_deployment == 'false'
         run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Build Project
+      - name: Build for Vercel
         if: steps.check-secrets.outputs.skip_deployment == 'false'
         run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      - name: Deploy to Vercel Production
+      - name: Deploy to production
         if: steps.check-secrets.outputs.skip_deployment == 'false'
-        id: deploy
         run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
-      - name: Create GitHub Release
-        if: steps.check-secrets.outputs.skip_deployment == 'false' && success()
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ github.run_number }}
-          release_name: Release v${{ github.run_number }}
-          body: |
-            Automated production deployment
-            
-            **Deployed from:** ${{ github.sha }}
-            **Deployed by:** ${{ github.actor }}
-            **Deployment URL:** ${{ steps.deploy.outputs.url }}
-
