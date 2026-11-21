@@ -45,9 +45,9 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en-GB" className={`${archivo.variable} dark h-full antialiased`}>
-      {/* Small screens scroll the page between two sticky bars; large screens
-          are a fixed, game-style viewport where the content area scrolls. */}
-      <body className="flex min-h-dvh flex-col lg:h-dvh lg:overflow-hidden">
+      {/* A fixed frame at every size. The bars stay put and the content
+          scrolls between them, so the menu never covers the last lines. */}
+      <body className="flex h-dvh flex-col overflow-hidden">
         <a
           href="#content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-primary-foreground"
@@ -60,12 +60,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </Suspense>
         <main
           id="content"
-          className="flex flex-1 flex-col lg:min-h-0 lg:overflow-y-auto"
+          className="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain pb-2"
         >
           {children}
         </main>
         <Suspense
-          fallback={<div className="sticky bottom-0 h-14 shrink-0 bg-black lg:h-16" />}
+          fallback={<div className="sticky bottom-0 h-16 shrink-0 border-t border-white/10 bg-black" />}
         >
           <MenuBar />
         </Suspense>

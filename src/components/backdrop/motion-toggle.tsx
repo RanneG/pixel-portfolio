@@ -21,7 +21,7 @@ export function MotionToggle() {
       size="icon"
       aria-label={label}
       title={label}
-      className="text-white/70 hover:text-white"
+      className="size-10 text-white/70 hover:text-white lg:size-8"
       onClick={() => setMotionPaused(!paused)}
     >
       {paused ? <Play /> : <Pause />}
