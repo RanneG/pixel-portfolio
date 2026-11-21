@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 
 import { ProjectList } from "@/components/project-list";
-import { Screen } from "@/components/screen";
+import { ProjectsScreen } from "@/components/projects-screen";
 import { projects } from "@/content/projects";
 
 const listItems = projects.map(
@@ -17,13 +17,13 @@ const listItems = projects.map(
 
 export default function ProjectsLayout({ children }: LayoutProps<"/projects">) {
   return (
-    <Screen title="Projects" summary={`${projects.length} projects, newest work first`} fill>
+    <ProjectsScreen count={projects.length}>
       <div className="grid gap-3 lg:h-full lg:grid-cols-[22rem_minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)]">
         <Suspense fallback={<div className="panel hidden lg:block" />}>
           <ProjectList projects={listItems} />
         </Suspense>
         {children}
       </div>
-    </Screen>
+    </ProjectsScreen>
   );
 }

@@ -103,15 +103,15 @@ export function MenuBar() {
       // desaturated behind a section. It lives here, in the persistent layout,
       // because previously visited screens stay in the DOM while hidden.
       data-screen={isTitleScreen ? "title" : "section"}
-      className="menu-bar sticky bottom-0 z-30 flex shrink-0 items-stretch justify-between gap-6 bg-black px-1 pb-[env(safe-area-inset-bottom)] min-[400px]:px-2 sm:px-6"
+      className="menu-bar sticky bottom-0 z-30 flex shrink-0 items-stretch justify-between gap-6 border-t border-white/10 bg-black px-1 pb-[env(safe-area-inset-bottom)] sm:border-t-0 sm:px-6"
     >
       <nav aria-label="Main menu" className="min-w-0 flex-1 lg:flex-none">
-        <ul className="flex h-14 items-stretch justify-between gap-0 sm:justify-start sm:gap-2 lg:h-16">
+        <ul className="grid h-16 grid-cols-5 items-stretch sm:flex sm:h-14 sm:justify-start sm:gap-2 lg:h-16">
           {menu.map((item, index) => {
             const isCurrent = !isTitleScreen && index === sectionIndex;
             const isHighlighted = index === highlighted;
             return (
-              <li key={item.href} className="flex">
+              <li key={item.href} className="flex min-w-0">
                 <Link
                   href={item.href}
                   aria-current={isCurrent ? "page" : undefined}
@@ -122,14 +122,22 @@ export function MenuBar() {
                     if (isTitleScreen) setCursor(index);
                   }}
                   className={cn(
-                    "menu-type flex items-center px-[clamp(0.25rem,1.6vw,0.5rem)] text-[clamp(0.6875rem,3.6vw,0.9375rem)] whitespace-nowrap outline-none transition-colors duration-150 sm:px-3 sm:text-lg lg:text-xl",
+                    "menu-type relative flex h-full w-full items-center justify-center px-0.5 text-[0.8125rem] leading-none whitespace-nowrap outline-none transition-colors duration-150 sm:w-auto sm:justify-start sm:px-3 sm:text-lg lg:text-xl",
                     "focus-visible:bg-white/10",
                     isHighlighted
                       ? "text-primary"
-                      : "text-white/85 hover:text-white",
+                      : "text-white/75 hover:text-white",
                   )}
                 >
-                  {item.label}
+                  <span
+                    className={cn(
+                      "absolute top-0 left-1/2 h-0.5 w-5 -translate-x-1/2 bg-primary sm:hidden",
+                      !isHighlighted && "hidden",
+                    )}
+                    aria-hidden="true"
+                  />
+                  <span className="sm:hidden">{item.short}</span>
+                  <span className="hidden sm:inline">{item.label}</span>
                 </Link>
               </li>
             );

@@ -8,11 +8,12 @@ import { Button } from "@/components/ui/button";
 type CopyButtonProps = {
   value: string;
   label: string;
+  className?: string;
 };
 
 type CopyState = "idle" | "copied" | "failed";
 
-export function CopyButton({ value, label }: CopyButtonProps) {
+export function CopyButton({ value, label, className }: CopyButtonProps) {
   const [state, setState] = useState<CopyState>("idle");
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export function CopyButton({ value, label }: CopyButtonProps) {
   }
 
   return (
-    <Button variant="outline" size="lg" onClick={copy}>
+    <Button variant="outline" size="lg" className={className} onClick={copy}>
       {state === "copied" ? (
         <Check data-icon="inline-start" />
       ) : state === "failed" ? (

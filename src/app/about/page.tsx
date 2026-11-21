@@ -21,14 +21,20 @@ export default function AboutPage() {
               <p key={paragraph}>{paragraph}</p>
             ))}
           </div>
-          <div className="mt-7 flex flex-wrap gap-2">
-            <Button size="lg" nativeButton={false} render={<Link href="/projects" />}>
+          <div className="mt-7 flex flex-col gap-2 min-[420px]:flex-row min-[420px]:flex-wrap">
+            <Button
+              size="lg"
+              className="h-11 w-full min-[420px]:w-auto"
+              nativeButton={false}
+              render={<Link href="/projects" />}
+            >
               See my projects
               <ArrowRight data-icon="inline-end" />
             </Button>
             <Button
               size="lg"
               variant="outline"
+              className="h-11 w-full min-[420px]:w-auto"
               nativeButton={false}
               render={<Link href="/contact" />}
             >

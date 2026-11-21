@@ -19,11 +19,11 @@ export const site = {
 } as const;
 
 export const menu = [
-  { href: "/about", label: "About Me" },
-  { href: "/projects", label: "Projects" },
-  { href: "/roles", label: "Roles" },
-  { href: "/skills", label: "Skills" },
-  { href: "/contact", label: "Contact" },
+  { href: "/about", label: "About Me", short: "About" },
+  { href: "/projects", label: "Projects", short: "Projects" },
+  { href: "/roles", label: "Roles", short: "Roles" },
+  { href: "/skills", label: "Skills", short: "Skills" },
+  { href: "/contact", label: "Contact", short: "Contact" },
 ] as const;
 
 export const about = {

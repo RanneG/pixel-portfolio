@@ -84,10 +84,11 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
       </div>
 
       {hasLinks || project.note ? (
-        <div className="flex flex-wrap items-center gap-2 border-t border-border px-5 py-4 sm:px-7 lg:px-8">
+        <div className="flex flex-col gap-2 border-t border-border px-5 py-4 min-[420px]:flex-row min-[420px]:flex-wrap min-[420px]:items-center sm:px-7 lg:px-8">
           {project.links.live ? (
             <Button
               size="lg"
+              className="h-11 w-full min-[420px]:w-auto"
               nativeButton={false}
               render={
                 <a href={project.links.live} target="_blank" rel="noopener noreferrer" />
@@ -101,6 +102,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
             <Button
               size="lg"
               variant={project.links.live ? "outline" : "default"}
+              className="h-11 w-full min-[420px]:w-auto"
               nativeButton={false}
               render={
                 <a href={project.links.source} target="_blank" rel="noopener noreferrer" />

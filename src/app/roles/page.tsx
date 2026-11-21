@@ -20,7 +20,7 @@ export default function RolesPage() {
               <li
                 key={role.id}
                 id={role.id}
-                className="grid scroll-mt-14 gap-x-8 gap-y-2 px-5 py-4 target:bg-primary/10 sm:px-7 md:grid-cols-[10rem_minmax(0,1fr)] lg:scroll-mt-4"
+                className="grid scroll-mt-4 gap-x-8 gap-y-2 px-4 py-4 target:bg-primary/10 sm:px-7 md:grid-cols-[10rem_minmax(0,1fr)]"
               >
                 <p className="label-type flex flex-wrap items-center gap-x-2 gap-y-1 self-start pt-1 text-white/60 md:flex-col md:items-start">
                   <span className="whitespace-nowrap">

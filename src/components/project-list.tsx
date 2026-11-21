@@ -85,7 +85,7 @@ export function ProjectList({ projects }: ProjectListProps) {
                 aria-current={isActive && !isIndex ? "page" : undefined}
                 data-active={isActive}
                 className={cn(
-                  "group flex items-center gap-3 px-4 py-3 outline-none lg:py-2 transition-colors duration-100",
+                  "group flex items-center gap-3 px-4 py-3.5 outline-none transition-colors duration-100 active:bg-white/10 lg:py-2",
                   "hover:bg-white/10 focus-visible:bg-white/10",
                   "lg:data-[active=true]:bg-white lg:data-[active=true]:text-black",
                 )}
@@ -97,7 +97,7 @@ export function ProjectList({ projects }: ProjectListProps) {
                   <span className="menu-type block text-base leading-tight">
                     {project.title}
                   </span>
-                  <span className="mt-0.5 block text-[0.8125rem] leading-snug text-white/65 lg:hidden">
+                  <span className="mt-0.5 line-clamp-2 block text-[0.8125rem] leading-snug text-white/65 lg:hidden">
                     {project.tagline}
                   </span>
                   <span className="mt-0.5 hidden text-xs text-white/55 lg:block lg:group-data-[active=true]:text-black/60">

@@ -26,19 +26,24 @@ export default function ContactPage() {
             that removes toil? Email is the quickest way to reach me.
           </p>
           <h2 className="label-type mt-7 text-primary">Email</h2>
-          <p className="mt-1 text-xl font-semibold break-all text-white select-all sm:text-2xl">
+          <p className="mt-1 text-lg font-semibold break-words text-white select-all sm:text-2xl">
             {site.email}
           </p>
-          <div className="mt-5 flex flex-wrap gap-2">
+          <div className="mt-5 flex flex-col gap-2 min-[420px]:flex-row min-[420px]:flex-wrap">
             <Button
               size="lg"
+              className="h-11 w-full min-[420px]:w-auto"
               nativeButton={false}
               render={<a href={`mailto:${site.email}`} />}
             >
               <Mail data-icon="inline-start" />
               Write an email
             </Button>
-            <CopyButton value={site.email} label="Copy address" />
+            <CopyButton
+              value={site.email}
+              label="Copy address"
+              className="h-11 w-full min-[420px]:w-auto"
+            />
           </div>
         </section>
 
