@@ -78,6 +78,6 @@ scripts          Background video preparation
 
 ## Deploying
 
-www.rannegerodias.com is the Vercel project connected to [RanneG/pixel-portfolio](https://github.com/RanneG/pixel-portfolio). A push to `main` there builds this Next.js app. `vercel.json` tells Vercel to build with Next.js rather than the previous Vite setup.
+www.rannegerodias.com is the Vercel project connected to [RanneG/pixel-portfolio](https://github.com/RanneG/pixel-portfolio). A push to `main` there builds this Next.js app. `vercel.json` forces the Next.js preset and clears the old Vite output directory (`dist`). The dashboard Framework Preset stays locked while that file is present.
 
 The canonical address used for metadata and the sitemap is `site.url` in `src/content/site.ts`. Locally, `npm run build` then `npm run start` serves the production build.
